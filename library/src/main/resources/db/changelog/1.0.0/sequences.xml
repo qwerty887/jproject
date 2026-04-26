@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="create sequence fle_seq" author="${author}">
+        <createSequence sequenceName="fle_seq" startValue="1" incrementBy="1"/>
+    </changeSet>
+
+    <changeSet id="create sequence fleh_seq" author="${author}">
+        <createSequence sequenceName="fleh_seq" startValue="1" incrementBy="1"/>
+    </changeSet>
+
+    <changeSet id="create sequence lnk_seq" author="${author}">
+        <createSequence sequenceName="lnk_seq" startValue="1" incrementBy="1"/>
+    </changeSet>
+
+    <changeSet id="create sequence lnkh_seq" author="${author}">
+        <createSequence sequenceName="lnkh_seq" startValue="1" incrementBy="1"/>
+    </changeSet>
+
+    <changeSet id="create sequence flgh_seq" author="${author}">
+        <createSequence sequenceName="flgh_seq" startValue="1" incrementBy="1"/>
+    </changeSet>
+
+    <changeSet id="create sequence fleg_seq" author="${author}">
+        <createSequence sequenceName="fleg_seq" startValue="1" incrementBy="1"/>
+    </changeSet>
+
+    <changeSet id="create sequence err_seq" author="${author}">
+        <createSequence sequenceName="err_seq" startValue="1" incrementBy="1"/>
+    </changeSet>
+
+    <changeSet id="create sequence flgr_seq" author="${author}">
+        <createSequence sequenceName="flgr_seq" startValue="1" incrementBy="1"/>
+    </changeSet>
+
+    <changeSet id="create sequence prcd_seq" author="${author}">
+        <createSequence sequenceName="prcd_seq" startValue="1" incrementBy="1"/>
+    </changeSet>
+
+    <changeSet id="create sequence prlk_seq" author="${author}">
+        <createSequence sequenceName="prlk_seq" startValue="1" incrementBy="1"/>
+    </changeSet>
+
+</databaseChangeLog>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="create index uk_fle_md5" author="${author}">
+        <createIndex indexName="uk_fle_md5" tableName="file" unique="true">
+            <column name="md5"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="create index uk_fleg_flgr" author="${author}">
+        <createIndex indexName="uk_fleg_flgr" tableName="fleg_flgr" unique="true">
+            <column name="fleg_fleg_id"/>
+            <column name="flgr_flgr_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="create index uk_fleg_fleh" author="${author}">
+        <createIndex indexName="uk_fleg_fleh" tableName="fleg_fleh" unique="true">
+            <column name="fleg_fleg_id"/>
+            <column name="fleh_fleh_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="create index uk_file_group_rule" author="${author}">
+        <createIndex indexName="uk_file_group_rule" tableName="file_group_rule" unique="true">
+            <column name="flat_flat_id"/>
+            <column name="flgc_flgc_id"/>
+            <column name="value"/>
+            <column name="del_date"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="create index uk_process_lock" author="${author}">
+        <createIndex indexName="uk_process_lock" tableName="process_lock" unique="true">
+            <column name="prcd_prcd_id"/>
+        </createIndex>
+    </changeSet>
+
+</databaseChangeLog>

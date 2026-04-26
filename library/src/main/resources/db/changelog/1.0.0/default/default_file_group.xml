@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="Add default value in dict file_group" author="${author}">
+        <insert tableName="file_group">
+            <column name="fleg_id" value="0" />
+            <column name="name" value="default" />
+            <column name="link_path" value="/default/default" />
+        </insert>
+        <insert tableName="file_group">
+            <column name="fleg_id" value="1" />
+            <column name="name" value="pictures" />
+            <column name="link_path" value="/default/pictures" />
+        </insert>
+        <insert tableName="file_group">
+            <column name="fleg_id" value="2" />
+            <column name="name" value="videos" />
+            <column name="link_path" value="/default/videos" />
+        </insert>
+        <insert tableName="file_group">
+            <column name="fleg_id" value="3" />
+            <column name="name" value="archives" />
+            <column name="link_path" value="/default/archives" />
+        </insert>
+        <insert tableName="file_group">
+            <column name="fleg_id" value="4" />
+            <column name="name" value="torrents" />
+            <column name="link_path" value="/default/torrents" />
+        </insert>
+        <insert tableName="file_group">
+            <column name="fleg_id" value="5" />
+            <column name="name" value="docs" />
+            <column name="link_path" value="/default/docs" />
+        </insert>
+        <insert tableName="file_group">
+            <column name="fleg_id" value="6" />
+            <column name="name" value="guitarPro" />
+            <column name="link_path" value="/default/guitarPro" />
+        </insert>
+        <insert tableName="file_group">
+            <column name="fleg_id" value="7" />
+            <column name="name" value="graphics" />
+            <column name="link_path" value="/default/graphics" />
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>

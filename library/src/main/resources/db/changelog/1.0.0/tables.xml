@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="create table file_type" author="${author}">
+        <createTable tableName="file_type">
+            <column name="flet_id" type="int4">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar(2000)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create table link_status" author="${author}">
+        <createTable tableName="link_status">
+            <column name="lnks_id" type="int4">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar(2000)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create table file_status" author="${author}">
+        <createTable tableName="file_status">
+            <column name="fles_id" type="int4">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar(2000)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create table error" author="${author}">
+        <createTable tableName="error">
+            <column name="err_id" type="int4">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="error_date" type="timestamptz">
+                <constraints nullable="false"/>
+            </column>
+            <column name="message" type="varchar(2000)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create table file_group" author="${author}">
+        <createTable tableName="file_group">
+            <column name="fleg_id" type="int4">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar(2000)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="link_path" type="varchar(2000)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="del_date" type="timestamptz">
+                <constraints nullable="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create table file_attribute" author="${author}">
+        <createTable tableName="file_attribute">
+            <column name="flat_id" type="int4">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar(2000)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="type" type="varchar(2000)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create table file_group_condition" author="${author}">
+        <createTable tableName="file_group_condition">
+            <column name="flgc_id" type="int4">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="def" type="varchar(20)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create table file_group_rule" author="${author}">
+        <createTable tableName="file_group_rule">
+            <column name="flgr_id" type="int4">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="flat_flat_id" type="int4">
+                <constraints foreignKeyName="fk_file_group_rule_file_attribute" references="file_attribute(flat_id)"/>
+            </column>
+            <column name="flgc_flgc_id" type="int4">
+                <constraints foreignKeyName="fk_file_group_rule_file_group_condition" references="file_group_condition(flgc_id)"/>
+            </column>
+            <column name="value" type="varchar(2000)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="del_date" type="timestamptz">
+                <constraints nullable="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create table file" author="${author}">
+        <createTable tableName="file">
+            <column name="fle_id" type="int4">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="flet_flet_id" type="int4">
+                <constraints nullable="false" foreignKeyName="fk_file_file_type" references="file_type(flet_id)"/>
+            </column>
+            <column name="content_type" type="varchar(2000)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="md5" type="varchar(2000)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="bytes" type="int8">
+                <constraints nullable="true"/>
+            </column>
+            <column name="del_date" type="timestamptz">
+                <constraints nullable="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create table file_hist" author="${author}">
+        <createTable tableName="file_hist">
+            <column name="fleh_id" type="int4">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="fle_fle_id" type="int4">
+                <constraints nullable="false" foreignKeyName="fk_file_hist_file" references="file(fle_id)"/>
+            </column>
+            <column name="path" type="varchar(2000)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="creation_time" type="timestamptz">
+                <constraints nullable="true"/>
+            </column>
+            <column name="last_modified_time" type="timestamptz">
+                <constraints nullable="true"/>
+            </column>
+            <column name="fles_fles_id" type="int4">
+                <constraints nullable="false" foreignKeyName="fk_link_hist_file_status" references="file_status(fles_id)"/>
+            </column>
+            <column name="err_err_id" type="int4">
+                <constraints nullable="true" foreignKeyName="fk_file_hist_error" references="error(err_id)"/>
+            </column>
+            <column name="start_date" type="timestamptz" defaultValueDate="now()">
+                <constraints nullable="false"/>
+            </column>
+            <column name="end_date" type="timestamptz">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create table link" author="${author}">
+        <createTable tableName="link">
+            <column name="lnk_id" type="int4">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="fle_fle_id" type="int4">
+                <constraints nullable="false" foreignKeyName="fk_link_hist_file" references="file(fle_id)"/>
+            </column>
+            <column name="del_date" type="timestamptz">
+                <constraints nullable="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create table link_hist" author="${author}">
+        <createTable tableName="link_hist">
+            <column name="lnkh_id" type="int4">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="lnk_lnk_id" type="int4">
+                <constraints nullable="false" foreignKeyName="fk_link_hist_link" references="link(lnk_id)"/>
+            </column>
+            <column name="path" type="varchar(2000)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="lnks_lnks_id" type="int4">
+                <constraints nullable="false" foreignKeyName="fk_link_hist_link_status" references="link_status(lnks_id)"/>
+            </column>
+            <column name="err_err_id" type="int4">
+                <constraints nullable="true" foreignKeyName="fk_link_hist_error" references="error(err_id)"/>
+            </column>
+            <column name="start_date" type="timestamptz" defaultValueDate="now()">
+                <constraints nullable="false"/>
+            </column>
+            <column name="end_date" type="timestamptz">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="create table fleg_flgr" author="${author}">
+        <createTable tableName="fleg_flgr">
+            <column name="fleg_fleg_id" type="int4">
+                <constraints foreignKeyName="fk_fleg_flgr_file_group" references="file_group(fleg_id)"/>
+            </column>
+            <column name="flgr_flgr_id" type="int4">
+                <constraints foreignKeyName="fk_fleg_flgr_file_group_rule" references="file_group_rule(flgr_id)"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create table fleg_fleh" author="${author}">
+        <createTable tableName="fleg_fleh">
+            <column name="fleg_fleg_id" type="int4">
+                <constraints foreignKeyName="fk_fleg_fleh_file_group" references="file_group(fleg_id)"/>
+            </column>
+            <column name="fleh_fleh_id" type="int4">
+                <constraints foreignKeyName="fk_fleg_fleh_file_hist" references="file_hist(fleh_id)"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create table process_type" author="${author}">
+        <createTable tableName="process_type">
+            <column name="pctp_id" type="int4">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar(2000)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create table process_status" author="${author}">
+        <createTable tableName="process_status">
+            <column name="pcst_id" type="int4">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar(2000)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create table process" author="${author}">
+        <createTable tableName="process">
+            <column name="prcd_id" type="int4">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="prcd_prcd_id" type="int4">
+                <constraints foreignKeyName="fk_process_process" references="process(prcd_id)"/>
+            </column>
+            <column name="pctp_pctp_id" type="int4">
+                <constraints foreignKeyName="fk_process_process_type" references="process_type(pctp_id)"/>
+            </column>
+            <column name="pcst_pcst_id" type="int4">
+                <constraints foreignKeyName="fk_process_process_status" references="process_status(pcst_id)"/>
+            </column>
+            <column name="object_count" type="int4">
+                <constraints nullable="true"/>
+            </column>
+            <column name="attempts_remaining" type="int4" defaultValueNumeric="5">
+                <constraints nullable="true"/>
+            </column>
+            <column name="param" type="text">
+                <constraints nullable="false"/>
+            </column>
+            <column name="create_date" type="timestamptz" defaultValueDate="now()">
+                <constraints nullable="false"/>
+            </column>
+            <column name="start_date" type="timestamptz" defaultValueDate="now()">
+                <constraints nullable="true"/>
+            </column>
+            <column name="end_date" type="timestamptz">
+                <constraints nullable="true"/>
+            </column>
+            <column name="err_err_id" type="int4">
+                <constraints foreignKeyName="fk_process_error" references="error(err_id)"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create table process_lock" author="${author}">
+        <createTable tableName="process_lock">
+            <column name="prlk_id" type="int4">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="prcd_prcd_id" type="int4">
+                <constraints foreignKeyName="fk_process_block_process" references="process(prcd_id)"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+</databaseChangeLog>

@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="create sequence fle_seq" author="${author}">
+        <createSequence sequenceName="fle_seq" startValue="1" incrementBy="1"/>
+    </changeSet>
+
+    <changeSet id="Fill dict link_status" author="${author}">
+        <insert tableName="link_status">
+            <column name="lnks_id" value="0" />
+            <column name="name" value="?" />
+        </insert>
+        <insert tableName="link_status">
+            <column name="lnks_id" value="1" />
+            <column name="name" value="process" />
+        </insert>
+        <insert tableName="link_status">
+            <column name="lnks_id" value="2" />
+            <column name="name" value="valid" />
+        </insert>
+        <insert tableName="link_status">
+            <column name="lnks_id" value="3" />
+            <column name="name" value="invalid" />
+        </insert>
+        <insert tableName="link_status">
+            <column name="lnks_id" value="4" />
+            <column name="name" value="delete" />
+        </insert>
+    </changeSet>
+
+    <changeSet id="Fill dict file_status" author="${author}">
+        <insert tableName="file_status">
+            <column name="fles_id" value="0" />
+            <column name="name" value="?" />
+        </insert>
+        <insert tableName="file_status">
+            <column name="fles_id" value="1" />
+            <column name="name" value="valid" />
+        </insert>
+        <insert tableName="file_status">
+            <column name="fles_id" value="2" />
+            <column name="name" value="invalid" />
+        </insert>
+        <insert tableName="file_status">
+            <column name="fles_id" value="3" />
+            <column name="name" value="move" />
+        </insert>
+        <insert tableName="file_status">
+            <column name="fles_id" value="4" />
+            <column name="name" value="delete" />
+        </insert>
+        <insert tableName="file_status">
+            <column name="fles_id" value="5" />
+            <column name="name" value="update" />
+        </insert>
+    </changeSet>
+
+    <changeSet id="Fill dict file_type" author="${author}">
+        <insert tableName="file_type">
+            <column name="flet_id" value="0" />
+            <column name="name" value="?" />
+        </insert>
+        <insert tableName="file_type">
+            <column name="flet_id" value="1" />
+            <column name="name" value="file" />
+        </insert>
+        <insert tableName="file_type">
+            <column name="flet_id" value="2" />
+            <column name="name" value="directory" />
+        </insert>
+        <insert tableName="file_type">
+            <column name="flet_id" value="3" />
+            <column name="name" value="link" />
+        </insert>
+    </changeSet>
+
+    <changeSet id="Add default value in dict file_attribute" author="${author}">
+        <insert tableName="file_attribute">
+            <column name="flat_id" value="0" />
+            <column name="name" value="?" />
+            <column name="type" value="?" />
+        </insert>
+        <insert tableName="file_attribute">
+            <column name="flat_id" value="1" />
+            <column name="name" value="Path" />
+            <column name="type" value="String" />
+        </insert>
+        <insert tableName="file_attribute">
+            <column name="flat_id" value="2" />
+            <column name="name" value="Absolute path" />
+            <column name="type" value="String" />
+        </insert>
+        <insert tableName="file_attribute">
+            <column name="flat_id" value="3" />
+            <column name="name" value="Creation time" />
+            <column name="type" value="Instant" />
+        </insert>
+        <insert tableName="file_attribute">
+            <column name="flat_id" value="4" />
+            <column name="name" value="Last modified time" />
+            <column name="type" value="Instant" />
+        </insert>
+        <insert tableName="file_attribute">
+            <column name="flat_id" value="5" />
+            <column name="name" value="Bytes" />
+            <column name="type" value="Integer" />
+        </insert>
+        <insert tableName="file_attribute">
+            <column name="flat_id" value="6" />
+            <column name="name" value="Content type" />
+            <column name="type" value="String" />
+        </insert>
+        <insert tableName="file_attribute">
+            <column name="flat_id" value="7" />
+            <column name="name" value="File name" />
+            <column name="type" value="String" />
+        </insert>
+        <insert tableName="file_attribute">
+            <column name="flat_id" value="8" />
+            <column name="name" value="File extension" />
+            <column name="type" value="String" />
+        </insert>
+    </changeSet>
+
+
+    <changeSet id="Add default value in dict file_group_condition" author="${author}">
+        <insert tableName="file_group_condition">
+            <column name="flgc_id" value="0" />
+            <column name="def" value="?" />
+        </insert>
+        <insert tableName="file_group_condition">
+            <column name="flgc_id" value="1" />
+            <column name="def" value="regexp" />
+        </insert>
+        <insert tableName="file_group_condition">
+            <column name="flgc_id" value="2" />
+            <column name="def" value="equal" />
+        </insert>
+        <insert tableName="file_group_condition">
+            <column name="flgc_id" value="3" />
+            <column name="def" value="not equal" />
+        </insert>
+        <insert tableName="file_group_condition">
+            <column name="flgc_id" value="4" />
+            <column name="def" value="less" />
+        </insert>
+        <insert tableName="file_group_condition">
+            <column name="flgc_id" value="5" />
+            <column name="def" value="greater" />
+        </insert>
+    </changeSet>
+
+    <changeSet id="Fill dict process_status" author="${author}">
+        <insert tableName="process_status">
+            <column name="pcst_id" value="0" />
+            <column name="name" value="?" />
+        </insert>
+        <insert tableName="process_status">
+            <column name="pcst_id" value="1" />
+            <column name="name" value="wait" />
+        </insert>
+        <insert tableName="process_status">
+            <column name="pcst_id" value="2" />
+            <column name="name" value="lock" />
+        </insert>
+        <insert tableName="process_status">
+            <column name="pcst_id" value="3" />
+            <column name="name" value="process" />
+        </insert>
+        <insert tableName="process_status">
+            <column name="pcst_id" value="4" />
+            <column name="name" value="error" />
+        </insert>
+        <insert tableName="process_status">
+            <column name="pcst_id" value="5" />
+            <column name="name" value="complete" />
+        </insert>
+    </changeSet>
+
+    <changeSet id="Fill dict process_type" author="${author}">
+        <insert tableName="process_type">
+            <column name="pctp_id" value="0" />
+            <column name="name" value="?" />
+        </insert>
+        <insert tableName="process_type">
+            <column name="pctp_id" value="1" />
+            <column name="name" value="file fetching" />
+        </insert>
+        <insert tableName="process_type">
+            <column name="pctp_id" value="2" />
+            <column name="name" value="file scanning" />
+        </insert>
+        <insert tableName="process_type">
+            <column name="pctp_id" value="3" />
+            <column name="name" value="file verification" />
+        </insert>
+        <insert tableName="process_type">
+            <column name="pctp_id" value="4" />
+            <column name="name" value="file grouping" />
+        </insert>
+        <insert tableName="process_type">
+            <column name="pctp_id" value="5" />
+            <column name="name" value="file linking" />
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>

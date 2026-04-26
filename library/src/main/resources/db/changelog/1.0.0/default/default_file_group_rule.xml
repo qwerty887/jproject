@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="Add default value in dict file_group_rule" author="${author}">
+        <insert tableName="file_group_rule">
+            <column name="flgr_id" value="1" />
+            <column name="flat_flat_id" value="8" />
+            <column name="flgc_flgc_id" value="1" />
+            <column name="value" value="(?i:jpeg)|(?i:jpg)|(?i:png)|(?i:gif)|(?i:svg)|(?i:tiff)|(?i:webp)|(?i:raw)|(?i:heic)|(?i:heif)" />
+        </insert>
+        <insert tableName="file_group_rule">
+            <column name="flgr_id" value="2" />
+            <column name="flat_flat_id" value="8" />
+            <column name="flgc_flgc_id" value="1" />
+            <column name="value" value="(?i:mp4)|(?i:mov)|(?i:mkv)|(?i:avi)|(?i:wmv)|(?i:webm)|(?i:srt)" />
+        </insert>
+        <insert tableName="file_group_rule">
+            <column name="flgr_id" value="3" />
+            <column name="flat_flat_id" value="8" />
+            <column name="flgc_flgc_id" value="1" />
+            <column name="value" value="(?i:zip)|(?i:rar)|(?i:tar)|(?i:gz )|(?i:iso)|(?i:cab)|(?i:7z)|(?i:arg)|(?i:lzh)" />
+        </insert>
+        <insert tableName="file_group_rule">
+            <column name="flgr_id" value="4" />
+            <column name="flat_flat_id" value="8" />
+            <column name="flgc_flgc_id" value="1" />
+            <column name="value" value="(?i:torrent)" />
+        </insert>
+        <insert tableName="file_group_rule">
+            <column name="flgr_id" value="5" />
+            <column name="flat_flat_id" value="8" />
+            <column name="flgc_flgc_id" value="1" />
+            <column name="value" value="(?i:pdf)|(?i:doc)|(?i:docx)|(?i:xls)|(?i:xlst)|(?i:txt)|(?i:json)|(?i:html)|(?i:htm)|(?i:ini)" />
+        </insert>
+        <insert tableName="file_group_rule">
+            <column name="flgr_id" value="6" />
+            <column name="flat_flat_id" value="8" />
+            <column name="flgc_flgc_id" value="1" />
+            <column name="value" value="(?i:gp5)|(?i:gp3)|(?i:gp4)|(?i:gpx)|(?i:gtp)" />
+        </insert>
+        <insert tableName="file_group_rule">
+            <column name="flgr_id" value="7" />
+            <column name="flat_flat_id" value="8" />
+            <column name="flgc_flgc_id" value="1" />
+            <column name="value" value="(?i:skp)|(?i:3ds)|(?i:rbz)|(?i:max)" />
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>
