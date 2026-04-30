@@ -59,15 +59,7 @@ public class BaseGroupActionService implements IBaseGroupActionService {
             final FlegFleh flegFleh = new FlegFleh();
             flegFleh.setId(pk);
 
-            logger.info("flegFlegId={} flehFlehId={}", entity.getId(), this.tFileHist.getId());
-            /* TODO возникают дубли: когда дубли в одной транзиации, падаем
-            flegFlegId=6 flehFlehId=1029
-            flegFlegId=6 flehFlehId=1031
-            flegFlegId=6 flehFlehId=1031
-            flegFlegId=6 flehFlehId=1031
-             */
-
-            dao.persist(flegFleh); // TODO возникает исключение
+            dao.persist(flegFleh);
         }
 
         logger.debug("Group service: complete");
