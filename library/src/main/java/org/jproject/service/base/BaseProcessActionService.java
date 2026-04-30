@@ -60,12 +60,10 @@ public class BaseProcessActionService implements IBaseProcessActionService {
                             DaoUtils.withTransactionVoid(
                                     () -> new DaoWorker(entityManagerFactory),
                                     daoIn -> {
-                                        // TODO  could not extract ResultSet [ERROR: current transaction is aborted, commands ignored until end of transaction block] [select nextval('err_seq')]
                                         daoIn.updateProcessStatus(process, EProcessStatus.ERROR, 0, createError(daoIn, e.getMessage()));
                                         daoIn.deleteProcessLock(process);
                                     }
                             );
-                            //System.exit(0); // TODO убрать после отладки
                             return true;
                         }
                     }
@@ -101,7 +99,7 @@ public class BaseProcessActionService implements IBaseProcessActionService {
             process.setProcessType(param.getProcessType());
             process.setParam((new ObjectMapper()).writeValueAsString(param));
             process.setCreateDate(TimeUtils.getCurrentTime());
-            process.setAttemptsRemaining(5); // TODO вынести в параметры: количество попыток обработки
+            process.setAttemptsRemaining(5); // количество попыток обработки - 5
             dao.persist(process);
             return process;
         } catch (JsonProcessingException e) {

@@ -156,9 +156,6 @@
             <column name="fles_fles_id" type="int4">
                 <constraints nullable="false" foreignKeyName="fk_link_hist_file_status" references="file_status(fles_id)"/>
             </column>
-            <column name="err_err_id" type="int4">
-                <constraints nullable="true" foreignKeyName="fk_file_hist_error" references="error(err_id)"/>
-            </column>
             <column name="start_date" type="timestamptz" defaultValueDate="now()">
                 <constraints nullable="false"/>
             </column>
@@ -195,9 +192,6 @@
             </column>
             <column name="lnks_lnks_id" type="int4">
                 <constraints nullable="false" foreignKeyName="fk_link_hist_link_status" references="link_status(lnks_id)"/>
-            </column>
-            <column name="err_err_id" type="int4">
-                <constraints nullable="true" foreignKeyName="fk_link_hist_error" references="error(err_id)"/>
             </column>
             <column name="start_date" type="timestamptz" defaultValueDate="now()">
                 <constraints nullable="false"/>

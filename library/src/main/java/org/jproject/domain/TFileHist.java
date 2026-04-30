@@ -11,7 +11,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -47,10 +46,6 @@ public class TFileHist extends AbstractHistEntity<Integer> {
 
     @Column(name = "last_modified_time")
     private Instant lastModifiedTime;
-
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "err_err_id")
-    private TError error;
 
     @Override
     public boolean equals(Object o) {
@@ -116,14 +111,6 @@ public class TFileHist extends AbstractHistEntity<Integer> {
 
     public void setFileStatus(EFileStatus fileStatus) {
         this.fileStatus = fileStatus;
-    }
-
-    public TError getError() {
-        return error;
-    }
-
-    public void setError(TError error) {
-        this.error = error;
     }
 
 }

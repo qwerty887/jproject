@@ -4,7 +4,6 @@ import org.apache.commons.io.FilenameUtils;
 import org.jproject.dao.DaoWorker;
 import org.jproject.domain.EFileStatus;
 import org.jproject.domain.ELinkStatus;
-import org.jproject.domain.TError;
 import org.jproject.domain.TFile;
 import org.jproject.domain.TFileGroup;
 import org.jproject.domain.TFileHist;
@@ -146,14 +145,6 @@ public class BaseLinkActionService implements IBaseLinkActionService {
         return link.setLinkHist(linkHist);
     }
 
-    private TError createError(String errMessage) {
-        final TError error = new TError();
-        error.setDate(TimeUtils.getCurrentTime());
-        error.setMessage(errMessage);
-
-        return this.dao.persist(error);
-    }
-
     private TLinkHist createLinkHist(TLink link, String linkPath) {
         final TLinkHist linkHist = new TLinkHist();
 
@@ -165,7 +156,6 @@ public class BaseLinkActionService implements IBaseLinkActionService {
             linkHist.setLinkStatus(this.targetStatus);
             action(linkPath);
         } catch (AppException e) {
-            linkHist.setError(createError(e.getMessage()));
             linkHist.setLinkStatus(ELinkStatus.INVALID);
         }
 

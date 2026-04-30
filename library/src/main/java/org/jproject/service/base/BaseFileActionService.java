@@ -4,7 +4,6 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.jproject.dao.DaoWorker;
 import org.jproject.domain.EFileStatus;
 import org.jproject.domain.EFileType;
-import org.jproject.domain.TError;
 import org.jproject.domain.TFile;
 import org.jproject.domain.TFileHist;
 import org.jproject.exception.AppException;
@@ -77,11 +76,6 @@ public class BaseFileActionService implements IBaseFileActionService {
         final TFile result = updateFile(this.path, this.md5);
         logger.debug("File service: complete");
         return result;
-    }
-
-    @Override
-    public void preAction(TFile tfile ) {
-        throw new RuntimeException("You need to override the run preAction method");
     }
 
     @Override
@@ -178,7 +172,6 @@ public class BaseFileActionService implements IBaseFileActionService {
                 this.dao.closeFileHist(fileHist);
             }
 
-            preAction(tfile);
             tfile.setFileHist(createFileHist(tfile, path));
             return tfile;
         } else {
@@ -201,14 +194,6 @@ public class BaseFileActionService implements IBaseFileActionService {
         return tfile.setFileHist(fileHist);
     }
 
-    private TError createError(String errMessage) {
-        final TError error = new TError();
-        error.setDate(TimeUtils.getCurrentTime());
-        error.setMessage(errMessage);
-
-        return this.dao.persist(error);
-    }
-
     private TFileHist createFileHist(TFile tfile, Path path) {
         final TFileHist fileHist = new TFileHist();
 
@@ -223,7 +208,6 @@ public class BaseFileActionService implements IBaseFileActionService {
             action(tfile);
         } catch (AppException e) {
             e.printStackTrace();
-            fileHist.setError(createError(e.getMessage()));
             fileHist.setFileStatus(EFileStatus.INVALID);
         }
 

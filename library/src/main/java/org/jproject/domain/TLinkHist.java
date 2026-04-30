@@ -36,10 +36,6 @@ public class TLinkHist extends AbstractHistEntity<Integer> {
     @Column(name = "lnks_lnks_id", nullable = false)
     private ELinkStatus linkStatus;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "err_err_id")
-    private TError error;
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -87,15 +83,6 @@ public class TLinkHist extends AbstractHistEntity<Integer> {
 
     public TLinkHist setLinkStatus(ELinkStatus linkStatus) {
         this.linkStatus = linkStatus;
-        return this;
-    }
-
-    public TError getError() {
-        return error;
-    }
-
-    public TLinkHist setError(TError error) {
-        this.error = error;
         return this;
     }
 }

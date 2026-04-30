@@ -64,12 +64,6 @@ public class ScheduleService extends BaseScheduleService {
 
                 final Integer threadCount = appParameters.get(EAppParameters.PROCESS_FILE_GROUPING_COUNT, Integer.class);
                 add(new FileGroupService(entityManagerFactory, fileGroupList, fileGroupDefault), threadCount);
-                //add(new FileGroupService(entityManagerFactory, null, null), threadCount);
-            }
-            case FILE_VERIFICATION -> {
-                final Integer threadCount = appParameters.get(EAppParameters.PROCESS_FILE_VERIFICATION_COUNT, Integer.class);
-                // TODO Доделать
-                throw new NotSupportedException("Process type " + processType + " not support");
             }
             case FILE_LINKING -> {
                 final Integer threadCount = appParameters.get(EAppParameters.PROCESS_FILE_LINKING_COUNT, Integer.class);

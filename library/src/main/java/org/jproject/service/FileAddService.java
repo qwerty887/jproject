@@ -14,13 +14,6 @@ public class FileAddService extends BaseFileActionService {
     }
 
     @Override
-    public void preAction(TFile tFile) {
-        // удаляем связку с группами, соответствующей предыдущему историческому состоянию файла
-        // TODO добавить удаление линка
-        super.getDao().deleteFlegFleh(tFile);
-    }
-
-    @Override
     public void action(TFile tFile) {
     }
 }

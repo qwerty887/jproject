@@ -37,9 +37,9 @@ public class FileGroupService extends BaseProcessActionService implements Runnab
     @Override
     public int action(DaoWorker dao, TProcess process) {
         final FileGroupingProcessParameters param = getParam(process.getParam(), FileGroupingProcessParameters.class);
-        final List<TFile> files = dao.getFiles(param.getFiles());
+        final List<TFile> files = dao.getFiles(param.getFiles(), DtoGroupFileParameters.class);
 
-        // files.stream().collect(Collectors.toMap(TFile::getId, c -> c.getFileHist().getId()))
+        dao.deleteFlegFleh(files);
 
         final List<List<TFileGroup>> result = files.stream()
              .map(file -> {

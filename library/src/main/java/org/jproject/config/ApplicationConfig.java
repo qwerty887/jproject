@@ -1,6 +1,5 @@
 package org.jproject.config;
 
-import org.jproject.domain.EFileType;
 import org.jproject.parameters.AppParameters;
 import org.jproject.parameters.EAppParameters;
 import org.springframework.beans.factory.annotation.Value;

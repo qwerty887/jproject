@@ -7,9 +7,8 @@ public enum EProcessType {
     UNKNOWN(0),
     FILE_FETCHING(1),
     FILE_SCANNING(2),
-    FILE_VERIFICATION(3),
-    FILE_GROUPING(4),
-    FILE_LINKING(5),
+    FILE_GROUPING(3),
+    FILE_LINKING(4),
     ;
 
     private final int id;

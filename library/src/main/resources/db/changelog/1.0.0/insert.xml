@@ -195,14 +195,10 @@
         </insert>
         <insert tableName="process_type">
             <column name="pctp_id" value="3" />
-            <column name="name" value="file verification" />
-        </insert>
-        <insert tableName="process_type">
-            <column name="pctp_id" value="4" />
             <column name="name" value="file grouping" />
         </insert>
         <insert tableName="process_type">
-            <column name="pctp_id" value="5" />
+            <column name="pctp_id" value="4" />
             <column name="name" value="file linking" />
         </insert>
     </changeSet>

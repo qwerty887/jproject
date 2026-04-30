@@ -8,7 +8,10 @@ import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.CriteriaUpdate;
+import jakarta.persistence.criteria.Join;
+import jakarta.persistence.criteria.JoinType;
 import jakarta.persistence.criteria.Root;
+import jakarta.persistence.metamodel.SingularAttribute;
 import org.jproject.domain.AbstractDeleteEntity;
 import org.jproject.domain.AbstractDeleteEntity_;
 import org.jproject.domain.AbstractHistEntity_;
@@ -63,10 +66,6 @@ public class DaoBase implements IDao {
         getEntityManager().persist(entity);
         getEntityManager().flush();
         return entity;
-    }
-
-    public void sessionClear() {
-        entityManager.clear();
     }
 
     private <T> TypedQuery<T> getTypedQuery(Specification<T> specification, Class<T> clazz, Consumer<TypedQuery<T>> queryModifier) {
@@ -127,5 +126,12 @@ public class DaoBase implements IDao {
         getEntityManager().createQuery(update).executeUpdate();
     }
 
+    public <X, Y> Join<X, Y> getOrCreateJoin(Root<X> root, SingularAttribute<X, Y> attribute, JoinType joinType) {
+        return root.getJoins().stream()
+                .filter(j -> j.getAttribute().equals(attribute))
+                .findFirst()
+                .map(j -> (Join<X, Y>) j)
+                .orElseGet(() -> root.join(attribute, joinType));
+    }
 
 }
