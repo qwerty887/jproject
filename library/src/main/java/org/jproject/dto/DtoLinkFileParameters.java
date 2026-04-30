@@ -1,40 +1,38 @@
 package org.jproject.dto;
 
-import org.jproject.domain.TFile;
-
-import java.nio.file.Path;
+import org.jproject.domain.FlegFleh;
 
 public class DtoLinkFileParameters {
 
-    String md5;
-    Path path;
+    Integer flegId;
+    Integer flehId;
 
     public DtoLinkFileParameters() {
 
     }
 
-    public DtoLinkFileParameters(String md5, Path path) {
-        this.md5 = md5;
-        this.path = path;
+    public DtoLinkFileParameters(Integer flegId, Integer flehId) {
+        this.flegId = flegId;
+        this.flehId = flehId;
     }
 
-    public static DtoLinkFileParameters of(TFile tfile) {
-        return new DtoLinkFileParameters(tfile.getMd5(), tfile.getFileHist().getPath());
+    public static DtoLinkFileParameters of(FlegFleh.PK pk) {
+        return new DtoLinkFileParameters(pk.getFlegFlegId(), pk.getFlehFlehId());
     }
 
-    public String getMd5() {
-        return md5;
+    public Integer getFlegId() {
+        return flegId;
     }
 
-    public void setMd5(String md5) {
-        this.md5 = md5;
+    public void setFlegId(Integer flegId) {
+        this.flegId = flegId;
     }
 
-    public Path getPath() {
-        return path;
+    public Integer getFlehId() {
+        return flehId;
     }
 
-    public void setPath(Path path) {
-        this.path = path;
+    public void setFlehId(Integer flehId) {
+        this.flehId = flehId;
     }
 }

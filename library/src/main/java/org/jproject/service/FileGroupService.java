@@ -4,6 +4,7 @@ import jakarta.persistence.EntityManagerFactory;
 import jakarta.transaction.NotSupportedException;
 import org.jproject.dao.DaoWorker;
 import org.jproject.domain.EProcessType;
+import org.jproject.domain.FlegFleh;
 import org.jproject.domain.TFile;
 import org.jproject.domain.TFileGroup;
 import org.jproject.domain.TProcess;
@@ -11,6 +12,7 @@ import org.jproject.dto.DtoGroupFileParameters;
 import org.jproject.dto.DtoLinkFileParameters;
 import org.jproject.exception.NotSupportExceptionApp;
 import org.jproject.parameters.process.FileGroupingProcessParameters;
+import org.jproject.parameters.process.FileLinkingProcessParameters;
 import org.jproject.service.base.BaseGroupActionService;
 import org.jproject.service.base.BaseProcessActionService;
 import org.slf4j.Logger;
@@ -40,19 +42,18 @@ public class FileGroupService extends BaseProcessActionService implements Runnab
 
         dao.deleteFlegFleh(files);
 
-        final List<TFileGroup> result = new ArrayList<>();
+        final List<DtoLinkFileParameters> result = new ArrayList<>();
         for (TFile file: files) {
             try {
-                final List<TFileGroup> list = (new BaseGroupActionService(dao, file, fileGroupList, fileGroupDefault)).apply();
-                result.addAll(list);
+                final List<FlegFleh.PK> list = (new BaseGroupActionService(dao, file, fileGroupList, fileGroupDefault)).apply();
+                result.addAll(list.stream().map(DtoLinkFileParameters::of).toList());
             } catch (NotSupportedException e) {
                 e.printStackTrace();
                 throw new NotSupportExceptionApp(e.getMessage());
             }
         }
 
-        // DtoLinkFileParameters
-
+        add(dao, process, new FileLinkingProcessParameters(result));
         return result.size();
     }
 

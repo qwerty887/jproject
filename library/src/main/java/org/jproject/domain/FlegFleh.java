@@ -56,8 +56,16 @@ public class FlegFleh implements IBaseEntity<FlegFleh.PK> {
                     .toHashCode();
         }
 
+        public Integer getFlegFlegId() {
+            return this.flegFlegId;
+        }
+
         public void setFlegFlegId(Integer flegFlegId) {
             this.flegFlegId = flegFlegId;
+        }
+
+        public Integer getFlehFlehId() {
+            return this.flehFlehId;
         }
 
         public void setFlehFlehId(Integer flehFlehId) {

@@ -28,13 +28,14 @@ public class ScheduleService extends BaseScheduleService {
         add(EProcessType.FILE_FETCHING);
         add(EProcessType.FILE_SCANNING);
         add(EProcessType.FILE_GROUPING);
-        // TODO добавить остальные процессы
+        add(EProcessType.FILE_LINKING);
     }
 
     public void execute(EProcessType processType) throws NotSupportedException {
         switch (processType) {
             case FILE_FETCHING -> execute(new FileFetchService(entityManagerFactory));
             case FILE_SCANNING -> execute(new FileScanService(entityManagerFactory));
+            case FILE_LINKING  -> execute(new LinkService(entityManagerFactory));
             // TODO доделать для остальных процессов
             default -> throw new NotSupportedException("Process type " + processType + " not support");
         }
@@ -67,8 +68,7 @@ public class ScheduleService extends BaseScheduleService {
             }
             case FILE_LINKING -> {
                 final Integer threadCount = appParameters.get(EAppParameters.PROCESS_FILE_LINKING_COUNT, Integer.class);
-                // TODO Доделать
-                throw new NotSupportedException("Process type " + processType + " not support");
+                add(new LinkService(entityManagerFactory), threadCount);
             }
             default -> throw new NotSupportedException("Process type " + processType + " not support");
         }

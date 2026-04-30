@@ -46,12 +46,13 @@ public class BaseGroupActionService implements IBaseGroupActionService {
     }
 
     @Override
-    public List<TFileGroup> apply() throws NotSupportedException {
+    public List<FlegFleh.PK> apply() throws NotSupportedException {
         logger.debug("Group service: start");
 
-        final List<TFileGroup> results = getMatches();
+        final List<TFileGroup> matches = getMatches();
+        final List<FlegFleh.PK> result = new ArrayList<>();
 
-        for (TFileGroup entity: results) {
+        for (TFileGroup entity: matches) {
             final FlegFleh.PK pk = new FlegFleh.PK();
             pk.setFlegFlegId(entity.getId());
             pk.setFlehFlehId(this.tFileHist.getId());
@@ -60,11 +61,13 @@ public class BaseGroupActionService implements IBaseGroupActionService {
             flegFleh.setId(pk);
 
             dao.persist(flegFleh);
+
+            result.add(pk);
         }
 
         logger.debug("Group service: complete");
 
-        return results;
+        return result;
     }
 
     private List<TFileGroup> getMatches() throws NotSupportedException {
