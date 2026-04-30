@@ -4,7 +4,7 @@ import jakarta.persistence.EntityManagerFactory;
 import org.jproject.dao.DaoWorker;
 import org.jproject.domain.EProcessType;
 import org.jproject.domain.TProcess;
-import org.jproject.dto.DtoScanFileParameters;
+import org.jproject.dto.parameters.DtoScanFileParameters;
 import org.jproject.parameters.process.FileFetchingProcessParameters;
 import org.jproject.parameters.process.FileScanningProcessParameters;
 import org.jproject.exception.AppException;

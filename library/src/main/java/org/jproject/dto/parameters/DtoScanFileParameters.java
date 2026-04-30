@@ -1,4 +1,4 @@
-package org.jproject.dto;
+package org.jproject.dto.parameters;
 
 import java.nio.file.Path;
 

@@ -45,7 +45,7 @@ public class BaseProcessActionService implements IBaseProcessActionService {
                         }
 
                         logger.info("Process service: lock: prcd_id = " + prcdIdLock);
-                        final TProcess process = dao.getProcess(prcdIdLock, EProcessStatus.LOCK)
+                        final TProcess process = dao.getProcess(dao.getProcessSpec(prcdIdLock, EProcessStatus.LOCK))
                                 .orElseThrow(() -> new RuntimeException("Process not found: prcd_id = " + prcdIdLock));
 
                         try {
@@ -87,11 +87,11 @@ public class BaseProcessActionService implements IBaseProcessActionService {
         }
     }
 
-    protected <T extends BaseProcessParam> TProcess add(DaoWorker dao, T param) {
+    public <T extends BaseProcessParam> TProcess add(DaoWorker dao, T param) {
         return add(dao, null, param);
     }
 
-    protected <T extends BaseProcessParam> TProcess add(DaoWorker dao, TProcess parentProcess, T param) {
+    public <T extends BaseProcessParam> TProcess add(DaoWorker dao, TProcess parentProcess, T param) {
         try {
             final TProcess process = new TProcess();
             process.setProcess(parentProcess);

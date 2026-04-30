@@ -1,7 +1,7 @@
 package org.jproject.parameters.process;
 
 import org.jproject.domain.EProcessType;
-import org.jproject.dto.DtoGroupFileParameters;
+import org.jproject.dto.parameters.DtoGroupFileParameters;
 import org.jproject.parameters.process.base.BaseProcessParam;
 
 import java.util.List;

@@ -32,8 +32,8 @@ import org.jproject.domain.TProcess;
 import org.jproject.domain.TProcessLock;
 import org.jproject.domain.TProcessLock_;
 import org.jproject.domain.TProcess_;
-import org.jproject.dto.DtoGroupFileParameters;
-import org.jproject.dto.DtoScanFileParameters;
+import org.jproject.dto.parameters.DtoGroupFileParameters;
+import org.jproject.dto.parameters.DtoScanFileParameters;
 import org.jproject.exception.NotSupportExceptionApp;
 import org.jproject.utils.TimeUtils;
 import org.springframework.data.jpa.domain.Specification;
@@ -317,19 +317,38 @@ public class DaoWorker extends DaoBase {
                     TLinkHist.class);
     }
 
+    public Specification<TProcess> getProcessSpec(Integer id) {
+        return (root, query, cb) ->
+                cb.equal(root.get(TProcess_.id), id);
+    }
 
-    public Optional<TProcess> getProcess(Integer prcdId, EProcessStatus processStatus) {
+    public Specification<TProcess> getProcessSpec(Integer id, EProcessStatus processStatus) {
+        return (root, query, cb) ->
+                cb.and(
+                        cb.equal(root.get(TProcess_.id), id),
+                        cb.equal(root.get(TProcess_.processStatus), processStatus)
+                );
+    }
+
+    public Specification<TProcess> getProcessSpec(EProcessStatus processStatus) {
+        return (root, query, cb) ->
+                cb.equal(root.get(TProcess_.processStatus), processStatus);
+    }
+
+    public Optional<TProcess> getProcess(Specification<TProcess> spec) {
         final CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
         final CriteriaQuery<TProcess> cq = cb.createQuery(TProcess.class);
         final Root<TProcess> root = cq.from(TProcess.class);
-
-        cq.where(
-                cb.and(
-                        cb.equal(root.get(TProcess_.id), prcdId),
-                        cb.equal(root.get(TProcess_.processStatus), processStatus)
-                    )
-                );
-
+        cq.where(spec.toPredicate(root, cq, cb));
         return getSingleResult(getEntityManager().createQuery(cq));
     }
+
+    public List<TProcess> getProcesses(Specification<TProcess> spec) {
+        final CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+        final CriteriaQuery<TProcess> cq = cb.createQuery(TProcess.class);
+        final Root<TProcess> root = cq.from(TProcess.class);
+        cq.where(spec.toPredicate(root, cq, cb));
+        return getEntityManager().createQuery(cq).getResultList();
+    }
+
 }
