@@ -4,6 +4,7 @@ import jakarta.persistence.EntityManagerFactory;
 import org.jproject.dao.DaoWorker;
 import org.jproject.domain.EProcessStatus;
 import org.jproject.dto.controllers.DtoProcessStatus;
+import org.jproject.dto.parameters.DtoFetchFileParameters;
 import org.jproject.parameters.process.FileFetchingProcessParameters;
 import org.jproject.service.FileFetchService;
 import org.jproject.utils.DaoUtils;
@@ -30,10 +31,11 @@ public class ProcessController {
 
     @PostMapping(path = "/fetch/add", produces = "application/json")
     @ResponseStatus(HttpStatus.CREATED)
-    public DtoProcessStatus addFetch(@RequestBody FileFetchingProcessParameters param) {
+    public DtoProcessStatus addFetch(@RequestBody List<DtoFetchFileParameters> params) {
+        final FileFetchingProcessParameters parameters = new FileFetchingProcessParameters(params);
         return DaoUtils.withTransaction(
                     () -> new DaoWorker(entityManagerFactory),
-                    dao -> DtoProcessStatus.of(new FileFetchService(entityManagerFactory).add(dao, param))
+                    dao -> DtoProcessStatus.of(new FileFetchService(entityManagerFactory).add(dao, parameters))
                     );
     }
 

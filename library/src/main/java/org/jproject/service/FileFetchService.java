@@ -4,6 +4,7 @@ import jakarta.persistence.EntityManagerFactory;
 import org.jproject.dao.DaoWorker;
 import org.jproject.domain.EProcessType;
 import org.jproject.domain.TProcess;
+import org.jproject.dto.parameters.DtoFetchFileParameters;
 import org.jproject.dto.parameters.DtoScanFileParameters;
 import org.jproject.parameters.process.FileFetchingProcessParameters;
 import org.jproject.parameters.process.FileScanningProcessParameters;
@@ -30,6 +31,15 @@ public class FileFetchService extends BaseProcessActionService implements Runnab
     @Override
     public int action(DaoWorker dao, TProcess process) {
         final FileFetchingProcessParameters param = getParam(process.getParam(), FileFetchingProcessParameters.class);
+
+        int count=0;
+        for (DtoFetchFileParameters p: param.getFiles()) {
+            count = count + createScanProcess(dao, process, p);
+        }
+        return count;
+    }
+
+    private int createScanProcess(DaoWorker dao, TProcess process, DtoFetchFileParameters param) {
         try {
             // TODO правила группировки:
             // TODO файлы с одинаковым размеров в одну пачку, чтобы снизить количество возникающих ошибок unique constraint
@@ -58,6 +68,7 @@ public class FileFetchService extends BaseProcessActionService implements Runnab
 
             return params.size();
         } catch (IOException e) {
+            e.printStackTrace();
             throw new AppException(e.getMessage());
         }
     }
