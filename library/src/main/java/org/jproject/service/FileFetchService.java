@@ -6,6 +6,7 @@ import org.jproject.domain.EProcessType;
 import org.jproject.domain.TProcess;
 import org.jproject.dto.parameters.DtoFetchFileParameters;
 import org.jproject.dto.parameters.DtoScanFileParameters;
+import org.jproject.parameters.AppParameters;
 import org.jproject.parameters.process.FileFetchingProcessParameters;
 import org.jproject.parameters.process.FileScanningProcessParameters;
 import org.jproject.exception.AppException;
@@ -22,10 +23,11 @@ import java.util.List;
 public class FileFetchService extends BaseProcessActionService implements Runnable {
 
     private static final Logger logger = LoggerFactory.getLogger(FileFetchService.class);
-    private final Integer packSize = 1000; // TODO вынести в параметры
+    private final Integer packSize;
 
-    public FileFetchService(EntityManagerFactory entityManagerFactory) {
+    public FileFetchService(EntityManagerFactory entityManagerFactory, Integer packSize) {
         super(entityManagerFactory, EProcessType.FILE_FETCHING);
+        this.packSize = packSize;
     }
 
     @Override

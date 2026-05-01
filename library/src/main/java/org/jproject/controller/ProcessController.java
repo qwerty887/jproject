@@ -5,6 +5,8 @@ import org.jproject.dao.DaoWorker;
 import org.jproject.domain.EProcessStatus;
 import org.jproject.dto.controllers.DtoProcessStatus;
 import org.jproject.dto.parameters.DtoFetchFileParameters;
+import org.jproject.parameters.AppParameters;
+import org.jproject.parameters.EAppParameters;
 import org.jproject.parameters.process.FileFetchingProcessParameters;
 import org.jproject.service.FileFetchService;
 import org.jproject.utils.DaoUtils;
@@ -24,18 +26,21 @@ import java.util.List;
 public class ProcessController {
 
     private final EntityManagerFactory entityManagerFactory;
+    private final AppParameters appParameters;
 
-    public ProcessController(EntityManagerFactory entityManagerFactory) {
+    public ProcessController(EntityManagerFactory entityManagerFactory,  AppParameters appParameters) {
         this.entityManagerFactory = entityManagerFactory;
+        this.appParameters = appParameters;
     }
 
     @PostMapping(path = "/fetch/add", produces = "application/json")
     @ResponseStatus(HttpStatus.CREATED)
     public DtoProcessStatus addFetch(@RequestBody List<DtoFetchFileParameters> params) {
         final FileFetchingProcessParameters parameters = new FileFetchingProcessParameters(params);
+        final Integer packSize = appParameters.get(EAppParameters.PROCESS_PACK_SIZE, Integer.class);
         return DaoUtils.withTransaction(
                     () -> new DaoWorker(entityManagerFactory),
-                    dao -> DtoProcessStatus.of(new FileFetchService(entityManagerFactory).add(dao, parameters))
+                    dao -> DtoProcessStatus.of(new FileFetchService(entityManagerFactory, packSize).add(dao, parameters))
                     );
     }
 

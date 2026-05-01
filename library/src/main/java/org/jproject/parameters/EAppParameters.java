@@ -4,6 +4,7 @@ package org.jproject.parameters;
 public enum EAppParameters {
     SCHEDULER_TIMEOUT,
     POOL_SIZE,
+    PROCESS_PACK_SIZE,
     PROCESS_FILE_FETCHING_COUNT,
     PROCESS_FILE_SCANNING_COUNT,
     PROCESS_FILE_VERIFICATION_COUNT,

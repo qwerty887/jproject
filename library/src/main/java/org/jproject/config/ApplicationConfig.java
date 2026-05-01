@@ -52,6 +52,9 @@ public class ApplicationConfig {
     @Value( "${process.fileLinking.count:1}" )
     private Integer processFileLinkingCount;
 
+    @Value( "${process.pack.size:1}" )
+    private Integer packSize;
+
     @Bean
     public DataSource dataSource() {
         return DataSourceBuilder.create()
@@ -88,6 +91,7 @@ public class ApplicationConfig {
         final AppParameters appParameters = new AppParameters();
         appParameters.set(EAppParameters.SCHEDULER_TIMEOUT, schedulerTimeout);
         appParameters.set(EAppParameters.POOL_SIZE, poolSize);
+        appParameters.set(EAppParameters.PROCESS_PACK_SIZE, packSize);
         appParameters.set(EAppParameters.PROCESS_FILE_FETCHING_COUNT, processFileFetchingCount);
         appParameters.set(EAppParameters.PROCESS_FILE_SCANNING_COUNT, processFileScanningCount);
         appParameters.set(EAppParameters.PROCESS_FILE_VERIFICATION_COUNT, processFileVerificationCount);

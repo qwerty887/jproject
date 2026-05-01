@@ -33,7 +33,10 @@ public class ScheduleService extends BaseScheduleService {
 
     public void execute(EProcessType processType) throws NotSupportedException {
         switch (processType) {
-            case FILE_FETCHING -> execute(new FileFetchService(entityManagerFactory));
+            case FILE_FETCHING -> {
+                final Integer packSize = appParameters.get(EAppParameters.PROCESS_PACK_SIZE, Integer.class);
+                execute(new FileFetchService(entityManagerFactory, packSize));
+            }
             case FILE_SCANNING -> execute(new FileScanService(entityManagerFactory));
             case FILE_LINKING  -> execute(new LinkService(entityManagerFactory));
             // TODO доделать для остальных процессов
@@ -45,7 +48,8 @@ public class ScheduleService extends BaseScheduleService {
         switch (processType) {
             case FILE_FETCHING -> {
                 final Integer threadCount = appParameters.get(EAppParameters.PROCESS_FILE_FETCHING_COUNT, Integer.class);
-                add(new FileFetchService(entityManagerFactory), threadCount);
+                final Integer packSize = appParameters.get(EAppParameters.PROCESS_PACK_SIZE, Integer.class);
+                add(new FileFetchService(entityManagerFactory, packSize), threadCount);
             }
             case FILE_SCANNING -> {
                 final Integer threadCount = appParameters.get(EAppParameters.PROCESS_FILE_SCANNING_COUNT, Integer.class);
