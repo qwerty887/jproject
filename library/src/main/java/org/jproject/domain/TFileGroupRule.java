@@ -34,7 +34,6 @@ public class TFileGroupRule extends AbstractDeleteEntity<Integer> {
     @Column(name = "flgc_flgc_id", nullable = false)
     private EFileCondition fileCondition;
 
-    // TODO поменять в тип Object для последующе конверции в другой тип??
     @Column(name = "value", nullable = false)
     private Object value;
 

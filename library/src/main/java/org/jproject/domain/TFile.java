@@ -13,10 +13,12 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.hibernate.annotations.Immutable;
 import org.hibernate.annotations.SQLRestriction;
 
 @Entity
 @Table(name = "FILE")
+@Immutable
 @SQLRestriction("del_date is null")
 public class TFile extends AbstractDeleteEntity<Integer> {
     @Id
