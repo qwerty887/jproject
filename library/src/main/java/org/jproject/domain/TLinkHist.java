@@ -63,26 +63,23 @@ public class TLinkHist extends AbstractHistEntity<Integer> {
         return link;
     }
 
-    public TLinkHist setLink(TLink link) {
+    public void setLink(TLink link) {
         this.link = link;
-        return this;
     }
 
     public String getPath() {
         return path;
     }
 
-    public TLinkHist setPath(String path) {
+    public void setPath(String path) {
         this.path = path;
-        return this;
     }
 
     public ELinkStatus getLinkStatus() {
         return linkStatus;
     }
 
-    public TLinkHist setLinkStatus(ELinkStatus linkStatus) {
+    public void setLinkStatus(ELinkStatus linkStatus) {
         this.linkStatus = linkStatus;
-        return this;
     }
 }

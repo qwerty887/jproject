@@ -60,17 +60,15 @@ public class TLink extends AbstractDeleteEntity<Integer> {
         return file;
     }
 
-    public TLink setFile(TFile file) {
+    public void setFile(TFile file) {
         this.file = file;
-        return this;
     }
 
     public TLinkHist getLinkHist() {
         return linkHist;
     }
 
-    public TLink setLinkHist(TLinkHist linkHist) {
+    public void setLinkHist(TLinkHist linkHist) {
         this.linkHist = linkHist;
-        return this;
     }
 }

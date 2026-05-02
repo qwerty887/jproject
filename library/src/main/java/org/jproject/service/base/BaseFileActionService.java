@@ -191,7 +191,8 @@ public class BaseFileActionService implements IBaseFileActionService {
         this.dao.persist(tfile);
 
         final TFileHist fileHist = createFileHist(tfile, path.toAbsolutePath());
-        return tfile.setFileHist(fileHist);
+        tfile.setFileHist(fileHist);
+        return tfile;
     }
 
     private TFileHist createFileHist(TFile tfile, Path path) {

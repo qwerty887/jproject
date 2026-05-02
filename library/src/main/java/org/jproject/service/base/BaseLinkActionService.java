@@ -123,7 +123,9 @@ public class BaseLinkActionService implements IBaseLinkActionService {
                 this.dao.closeLinkHist(linkHist);
             }
 
-            return link.setLinkHist(createLinkHist(link, this.linkPath));
+            link.setLinkHist(createLinkHist(link, this.linkPath));
+
+            return link;
         } else {
             if (!this.targetStatus.equals(ELinkStatus.DELETE)) {
                 final TLink result = this.dao.getLink(this.file).orElse(createLink(this.file, this.linkPath));
@@ -142,7 +144,8 @@ public class BaseLinkActionService implements IBaseLinkActionService {
         this.dao.persist(link);
 
         final TLinkHist linkHist = createLinkHist(link, linkPath);
-        return link.setLinkHist(linkHist);
+        link.setLinkHist(linkHist);
+        return link;
     }
 
     private TLinkHist createLinkHist(TLink link, String linkPath) {

@@ -13,11 +13,9 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.hibernate.annotations.Immutable;
 import org.hibernate.annotations.SQLRestriction;
 
 @Entity
-@Immutable // entity was modified, but it won't be updated because the property is immutable.
 @Table(name = "FILE")
 @SQLRestriction("del_date is null")
 public class TFile extends AbstractDeleteEntity<Integer> {
@@ -80,35 +78,31 @@ public class TFile extends AbstractDeleteEntity<Integer> {
         return contentType;
     }
 
-    public TFile setContentType(String contentType) {
+    public void setContentType(String contentType) {
         this.contentType = contentType;
-        return this;
     }
 
     public String getMd5() {
         return md5;
     }
 
-    public TFile setMd5(String md5) {
+    public void setMd5(String md5) {
         this.md5 = md5;
-        return this;
     }
 
     public Long getBytes() {
         return bytes;
     }
 
-    public TFile setBytes(Long bytes) {
+    public void setBytes(Long bytes) {
         this.bytes = bytes;
-        return this;
     }
 
     public TFileHist getFileHist() {
         return fileHist;
     }
 
-    public TFile setFileHist(TFileHist fileHist) {
+    public void setFileHist(TFileHist fileHist) {
         this.fileHist = fileHist;
-        return this;
     }
 }

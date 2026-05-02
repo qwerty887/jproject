@@ -82,27 +82,8 @@ public class TFileHist extends AbstractHistEntity<Integer> {
         return path;
     }
 
-    public TFileHist setPath(Path path) {
+    public void setPath(Path path) {
         this.path = path;
-        return this;
-    }
-
-    public Instant getCreationTime() {
-        return creationTime;
-    }
-
-    public TFileHist setCreationTime(Instant creationTime) {
-        this.creationTime = creationTime;
-        return this;
-    }
-
-    public Instant getLastModifiedTime() {
-        return lastModifiedTime;
-    }
-
-    public TFileHist setLastModifiedTime(Instant lastModifiedTime) {
-        this.lastModifiedTime = lastModifiedTime;
-        return this;
     }
 
     public EFileStatus getFileStatus() {
@@ -113,4 +94,19 @@ public class TFileHist extends AbstractHistEntity<Integer> {
         this.fileStatus = fileStatus;
     }
 
+    public Instant getCreationTime() {
+        return creationTime;
+    }
+
+    public void setCreationTime(Instant creationTime) {
+        this.creationTime = creationTime;
+    }
+
+    public Instant getLastModifiedTime() {
+        return lastModifiedTime;
+    }
+
+    public void setLastModifiedTime(Instant lastModifiedTime) {
+        this.lastModifiedTime = lastModifiedTime;
+    }
 }

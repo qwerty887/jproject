@@ -29,9 +29,4 @@ public class BaseScheduleService implements IBaseScheduleService {
             threadPoolTaskScheduler.schedule(process, trigger);
         }
     }
-
-    @Override
-    public <T extends Runnable> void execute(T process) {
-        threadPoolTaskScheduler.execute(process);
-    }
 }

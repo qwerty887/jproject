@@ -31,19 +31,6 @@ public class ScheduleService extends BaseScheduleService {
         add(EProcessType.FILE_LINKING);
     }
 
-    public void execute(EProcessType processType) throws NotSupportedException {
-        switch (processType) {
-            case FILE_FETCHING -> {
-                final Integer packSize = appParameters.get(EAppParameters.PROCESS_PACK_SIZE, Integer.class);
-                execute(new FileFetchService(entityManagerFactory, packSize));
-            }
-            case FILE_SCANNING -> execute(new FileScanService(entityManagerFactory));
-            case FILE_LINKING  -> execute(new LinkService(entityManagerFactory));
-            // TODO доделать для остальных процессов
-            default -> throw new NotSupportedException("Process type " + processType + " not support");
-        }
-    }
-
     public void add(EProcessType processType) throws NotSupportedException {
         switch (processType) {
             case FILE_FETCHING -> {

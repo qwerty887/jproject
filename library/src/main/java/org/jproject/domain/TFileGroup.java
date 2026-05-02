@@ -87,8 +87,7 @@ public class TFileGroup extends AbstractDeleteEntity<Integer> {
         return fileGroupRules;
     }
 
-    public TFileGroup setFileGroupRules(List<TFileGroupRule> fileGroupRules) {
+    public void setFileGroupRules(List<TFileGroupRule> fileGroupRules) {
         this.fileGroupRules = fileGroupRules;
-        return this;
     }
 }
