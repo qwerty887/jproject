@@ -25,6 +25,8 @@ public class LinkService extends BaseProcessActionService implements Runnable {
         final FileLinkingProcessParameters param = getParam(process.getParam(), FileLinkingProcessParameters.class);
         final List<FlegFleh> flegFlehList = dao.getFlegFleh(param.getFiles());
 
+        // TODO получить перечень линка
+
         for (FlegFleh flegFleh: flegFlehList) {
             flegFleh.getFileGroup(); // TFileGroup
             flegFleh.getFileHist();  // TFileHist

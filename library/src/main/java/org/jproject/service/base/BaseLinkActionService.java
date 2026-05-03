@@ -7,6 +7,7 @@ import org.jproject.domain.ELinkStatus;
 import org.jproject.domain.TFile;
 import org.jproject.domain.TFileGroup;
 import org.jproject.domain.TFileHist;
+import org.jproject.domain.TFileHist_;
 import org.jproject.domain.TLink;
 import org.jproject.domain.TLinkHist;
 import org.jproject.exception.AppException;
@@ -20,34 +21,19 @@ public class BaseLinkActionService implements IBaseLinkActionService {
 
     private static final Logger logger = LoggerFactory.getLogger(BaseLinkActionService.class);
 
-    private final TFileHist fileHist;
-    private final TLink link;
     private final DaoWorker dao;
     private final ELinkStatus targetStatus;
 
-    private final TFile file;
     private final TFileGroup fileGroup;
-    private final String linkFolderPath;
-    private final String linkPath;
+    private final TFileHist fileHist;
 
-    public BaseLinkActionService(DaoWorker dao, TFile file, TLink link, ELinkStatus targetStatus) {
+    public BaseLinkActionService(DaoWorker dao, TFileGroup fileGroup, TFileHist fileHist, ELinkStatus targetStatus) {
         logger.debug("Link service: init");
 
         this.dao = dao;
-        this.link = link;
         this.targetStatus = targetStatus;
-
-        this.file = file;
-        this.fileHist = file.getFileHist();
-        // TODO исправить
-        //this.fileGroupMember = getFileGroupMember(fileHist);
-        //this.fileGroup = getFileGroup(fileGroupMember);
-        //this.linkFolderPath = getLinkFolderPath(fileGroup);
-        //this.linkPath = getLinkPath(fileHist, linkFolderPath);
-        //this.fileGroupMember = null;
-        this.fileGroup = null;
-        this.linkFolderPath = null;
-        this.linkPath = null;
+        this.fileGroup = fileGroup;
+        this.fileHist = fileHist;
     }
 
     @Override
@@ -64,10 +50,11 @@ public class BaseLinkActionService implements IBaseLinkActionService {
             return null;
         }
 
-        final TLink result = updateLink(this.link);
+        // final TLink result = updateLink(this.link);
         logger.debug("Link service: complete");
 
-        return result;
+        //return result;
+        return null;
     }
 
     @Override
@@ -118,6 +105,8 @@ public class BaseLinkActionService implements IBaseLinkActionService {
     */
 
     private TLink updateLink(TLink link) {
+        return null;
+        /*
         if (link != null) {
             logger.debug("Action: link updated: lnk_id = {}", link.getId());
 
@@ -140,6 +129,7 @@ public class BaseLinkActionService implements IBaseLinkActionService {
                 return null;
             }
         }
+        */
     }
 
     private TLink createLink(TFile file, String linkPath) {
