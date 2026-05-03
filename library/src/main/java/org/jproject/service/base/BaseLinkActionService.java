@@ -75,12 +75,14 @@ public class BaseLinkActionService implements IBaseLinkActionService {
         throw new RuntimeException("You need to override the run method");
     }
 
+    /*
     private TFile getFile(TFileHist fileHist) {
         final TFile result = Optional.ofNullable(fileHist).map(TFileHist::getFile)
                 .orElseThrow(() -> new RuntimeException("File not found"));
         logger.debug("Get file: fle_id = {}", result.getId());
         return result;
     }
+    */
 
     /*
     private TFileGroupMember getFileGroupMember(TFileHist fileHist) {
@@ -100,6 +102,7 @@ public class BaseLinkActionService implements IBaseLinkActionService {
     }
     */
 
+    /*
     private String getLinkFolderPath(TFileGroup fileGroup) {
         final String result = Optional.ofNullable(fileGroup).map(TFileGroup::getLinkPath)
                 .orElseThrow(() -> new RuntimeException("Link path not found"));
@@ -112,6 +115,7 @@ public class BaseLinkActionService implements IBaseLinkActionService {
         logger.debug("Get link path: {}", result);
         return result;
     }
+    */
 
     private TLink updateLink(TLink link) {
         if (link != null) {

@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Query;
 import jakarta.persistence.Tuple;
+import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaDelete;
 import jakarta.persistence.criteria.CriteriaQuery;
@@ -33,6 +34,7 @@ import org.jproject.domain.TProcessLock;
 import org.jproject.domain.TProcessLock_;
 import org.jproject.domain.TProcess_;
 import org.jproject.dto.parameters.DtoGroupFileParameters;
+import org.jproject.dto.parameters.DtoLinkFileParameters;
 import org.jproject.dto.parameters.DtoScanFileParameters;
 import org.jproject.exception.NotSupportExceptionApp;
 import org.jproject.utils.TimeUtils;
@@ -349,6 +351,58 @@ public class DaoWorker extends DaoBase {
         final Root<TProcess> root = cq.from(TProcess.class);
         cq.where(spec.toPredicate(root, cq, cb));
         return getEntityManager().createQuery(cq).getResultList();
+    }
+
+    private Specification<FlegFleh> getFlegFlehSpec(Integer flegId, Integer flehId) {
+        return (root, query, cb) -> {
+            final Join<FlegFleh, TFileGroup> joinGroup = getOrCreateJoin(root, FlegFleh_.fileGroup, JoinType.INNER);
+            final Join<FlegFleh, TFileHist> joinHist = getOrCreateJoin(root, FlegFleh_.fileHist, JoinType.INNER);
+            return cb.and(
+                    cb.equal(joinGroup.get(TFileGroup_.id), flegId),
+                    cb.equal(joinHist.get(TFileHist_.id), flehId)
+            );
+        };
+    }
+
+    private Specification<FlegFleh> getFlegFlehSpec(List<Integer> flegIdList, List<Integer> flehIdList) {
+        return (root, query, cb) -> {
+            final Join<FlegFleh, TFileGroup> joinGroup = getOrCreateJoin(root, FlegFleh_.fileGroup, JoinType.INNER);
+            final Join<FlegFleh, TFileHist> joinHist = getOrCreateJoin(root, FlegFleh_.fileHist, JoinType.INNER);
+            return cb.and(
+                    joinGroup.get(TFileGroup_.id).in(flegIdList),
+                    joinHist.get(TFileHist_.id).in(flehIdList)
+            );
+        };
+    }
+
+    public TypedQuery<FlegFleh> getFlegFleh(Specification<FlegFleh> spec) {
+        final CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+        final CriteriaQuery<FlegFleh> cq = cb.createQuery(FlegFleh.class);
+        final Root<FlegFleh> root = cq.from(FlegFleh.class);
+        cq.where(spec.toPredicate(root, cq, cb));
+        return getEntityManager().createQuery(cq);
+    }
+
+    public List<FlegFleh> getFlegFleh(List<DtoLinkFileParameters> paramList) {
+        final List<List<DtoLinkFileParameters>> partitions = Lists.partition(paramList, PARTITION_SIZE);
+
+        final List<FlegFleh> result = new ArrayList<>();
+
+        for (List<DtoLinkFileParameters> list: partitions) {
+            final List<DtoLinkFileParameters> list2 = list.stream().map(c -> (DtoLinkFileParameters) c).toList();
+            final List<Integer> flegIdList = list2.stream().map(DtoLinkFileParameters::getFlegId).toList();
+            final List<Integer> flehIdList = list2.stream().map(DtoLinkFileParameters::getFlehId).toList();
+            result.addAll(getFlegFleh(getFlegFlehSpec(flegIdList, flehIdList)).getResultList());
+        }
+        return result;
+    }
+
+    public List<FlegFleh> getFlegFleh(List<Integer> flegIdList, List<Integer> flehIdList) {
+        return getFlegFleh(getFlegFlehSpec(flegIdList, flehIdList)).getResultList();
+    }
+
+    public Optional<FlegFleh> getFlegFleh(Integer flegId, Integer flehId) {
+        return getSingleResult(getFlegFleh(getFlegFlehSpec(flegId, flehId)));
     }
 
 }

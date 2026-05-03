@@ -3,11 +3,14 @@ package org.jproject.service;
 import jakarta.persistence.EntityManagerFactory;
 import org.jproject.dao.DaoWorker;
 import org.jproject.domain.EProcessType;
+import org.jproject.domain.FlegFleh;
 import org.jproject.domain.TProcess;
 import org.jproject.parameters.process.FileLinkingProcessParameters;
 import org.jproject.service.base.BaseProcessActionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.List;
 
 public class LinkService extends BaseProcessActionService implements Runnable {
 
@@ -20,6 +23,12 @@ public class LinkService extends BaseProcessActionService implements Runnable {
     @Override
     public int action(DaoWorker dao, TProcess process) {
         final FileLinkingProcessParameters param = getParam(process.getParam(), FileLinkingProcessParameters.class);
+        final List<FlegFleh> flegFlehList = dao.getFlegFleh(param.getFiles());
+
+        for (FlegFleh flegFleh: flegFlehList) {
+            flegFleh.getFileGroup(); // TFileGroup
+            flegFleh.getFileHist();  // TFileHist
+        }
 
         return 0;
     }
