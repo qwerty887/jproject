@@ -29,6 +29,7 @@ public class ScheduleService extends BaseScheduleService {
         add(EProcessType.FILE_SCANNING);
         add(EProcessType.FILE_GROUPING);
         add(EProcessType.FILE_LINKING);
+        add(EProcessType.VACUUM);
     }
 
     public void add(EProcessType processType) throws NotSupportedException {
@@ -60,6 +61,9 @@ public class ScheduleService extends BaseScheduleService {
             case FILE_LINKING -> {
                 final Integer threadCount = appParameters.get(EAppParameters.PROCESS_FILE_LINKING_COUNT, Integer.class);
                 add(new LinkService(entityManagerFactory), threadCount);
+            }
+            case VACUUM -> {
+                add(new VacuumService(entityManagerFactory), 1); // процесс vacuum выполняется только один
             }
             default -> throw new NotSupportedException("Process type " + processType + " not support");
         }

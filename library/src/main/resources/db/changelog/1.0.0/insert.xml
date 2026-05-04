@@ -178,6 +178,10 @@
             <column name="pctp_id" value="4" />
             <column name="name" value="file linking" />
         </insert>
+        <insert tableName="process_type">
+            <column name="pctp_id" value="5" />
+            <column name="name" value="vacuum" />
+        </insert>
     </changeSet>
 
 </databaseChangeLog>

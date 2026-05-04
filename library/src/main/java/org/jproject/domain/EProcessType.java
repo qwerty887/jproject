@@ -9,6 +9,7 @@ public enum EProcessType {
     FILE_SCANNING(2),
     FILE_GROUPING(3),
     FILE_LINKING(4),
+    VACUUM(5),
     ;
 
     private final int id;

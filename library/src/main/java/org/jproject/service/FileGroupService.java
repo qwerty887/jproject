@@ -41,9 +41,6 @@ public class FileGroupService extends BaseProcessActionService implements Runnab
         final FileGroupingProcessParameters param = getParam(process.getParam(), FileGroupingProcessParameters.class);
         final List<TFile> files = dao.getFiles(param.getFiles(), DtoGroupFileParameters.class);
 
-        dao.deleteFlegFleh(files);
-        // TODO добавить удаление линков
-
         /*
         final String linkFolder = fileGroup.getLinkPath();
         final String fileName = FilenameUtils.getName(fileHist.getPath().toAbsolutePath().toString());

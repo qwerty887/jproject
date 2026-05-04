@@ -8,7 +8,9 @@ import org.jproject.dto.parameters.DtoFetchFileParameters;
 import org.jproject.parameters.AppParameters;
 import org.jproject.parameters.EAppParameters;
 import org.jproject.parameters.process.FileFetchingProcessParameters;
+import org.jproject.parameters.process.VacuumProcessParameters;
 import org.jproject.service.FileFetchService;
+import org.jproject.service.VacuumService;
 import org.jproject.utils.DaoUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -42,6 +44,16 @@ public class ProcessController {
                     () -> new DaoWorker(entityManagerFactory),
                     dao -> DtoProcessStatus.of(new FileFetchService(entityManagerFactory, packSize).add(dao, parameters))
                     );
+    }
+
+    @PostMapping(path = "/vacuum/add", produces = "application/json")
+    @ResponseStatus(HttpStatus.CREATED)
+    public DtoProcessStatus addVacuum() {
+        final VacuumProcessParameters parameters = new VacuumProcessParameters(); // процесс без параметров
+        return DaoUtils.withTransaction(
+                () -> new DaoWorker(entityManagerFactory),
+                dao -> DtoProcessStatus.of(new VacuumService(entityManagerFactory).add(dao, parameters))
+        );
     }
 
     @GetMapping(path = "/{id}", produces = "application/json")
