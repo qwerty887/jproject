@@ -29,11 +29,15 @@ public class BaseVacuumService implements IBaseVacuumService {
             }
 
             if (!path.toFile().exists()) {
-                final FileDeleteService fileDeleteService = new FileDeleteService(dao, path);
+                final FileDeleteService fileDeleteService = new FileDeleteService(dao, file);
                 fileDeleteService.apply();
                 count++;
             }
         }
+
+        // TODO удаление связок с группами
+        // TODO удаление связок с линками
+        // TODO удаление линков
         return count;
     }
 }

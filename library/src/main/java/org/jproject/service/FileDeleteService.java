@@ -12,8 +12,8 @@ public class FileDeleteService extends BaseFileActionService {
 
     private final DaoWorker dao;
 
-    public FileDeleteService(DaoWorker dao, Path path) {
-        super(dao, path, EFileStatus.DELETE);
+    public FileDeleteService(DaoWorker dao, TFile file) {
+        super(dao, file, EFileStatus.DELETE);
         this.dao = dao;
     }
 
