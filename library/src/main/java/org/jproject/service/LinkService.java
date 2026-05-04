@@ -22,6 +22,8 @@ public class LinkService extends BaseProcessActionService implements Runnable {
 
     @Override
     public int action(DaoWorker dao, TProcess process) {
+        final FileLinkingProcessParameters param = getParam(process.getParam(), FileLinkingProcessParameters.class);
+        // final List<FlegFleh> flegFlehList = dao.getFlegFleh(param.getFiles());
         return 0;
         /*
         final FileLinkingProcessParameters param = getParam(process.getParam(), FileLinkingProcessParameters.class);
