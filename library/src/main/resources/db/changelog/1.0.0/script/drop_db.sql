@@ -21,6 +21,7 @@ BEGIN
     drop table if exists process_status cascade;
     drop table if exists process cascade;
     drop table if exists process_lock cascade;
+    drop table if exists fleh_lnk cascade;
 
     drop sequence if exists fle_seq;
     drop sequence if exists lnk_seq;

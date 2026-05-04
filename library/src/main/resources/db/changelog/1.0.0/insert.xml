@@ -8,29 +8,6 @@
         <createSequence sequenceName="fle_seq" startValue="1" incrementBy="1"/>
     </changeSet>
 
-    <changeSet id="Fill dict link_status" author="${author}">
-        <insert tableName="link_status">
-            <column name="lnks_id" value="0" />
-            <column name="name" value="?" />
-        </insert>
-        <insert tableName="link_status">
-            <column name="lnks_id" value="1" />
-            <column name="name" value="process" />
-        </insert>
-        <insert tableName="link_status">
-            <column name="lnks_id" value="2" />
-            <column name="name" value="valid" />
-        </insert>
-        <insert tableName="link_status">
-            <column name="lnks_id" value="3" />
-            <column name="name" value="invalid" />
-        </insert>
-        <insert tableName="link_status">
-            <column name="lnks_id" value="4" />
-            <column name="name" value="delete" />
-        </insert>
-    </changeSet>
-
     <changeSet id="Fill dict file_status" author="${author}">
         <insert tableName="file_status">
             <column name="fles_id" value="0" />

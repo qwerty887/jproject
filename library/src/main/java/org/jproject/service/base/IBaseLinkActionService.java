@@ -5,5 +5,5 @@ import org.jproject.domain.TLink;
 public interface IBaseLinkActionService {
 
     TLink apply();
-    boolean action(String linkPath);
+    boolean action(TLink link);
 }

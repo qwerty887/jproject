@@ -3,37 +3,32 @@ package org.jproject.service.base;
 import org.apache.commons.io.FilenameUtils;
 import org.jproject.dao.DaoWorker;
 import org.jproject.domain.EFileStatus;
-import org.jproject.domain.ELinkStatus;
-import org.jproject.domain.TFile;
+import org.jproject.domain.FlegFleh;
+import org.jproject.domain.FlehLnk;
 import org.jproject.domain.TFileGroup;
 import org.jproject.domain.TFileHist;
-import org.jproject.domain.TFileHist_;
 import org.jproject.domain.TLink;
-import org.jproject.domain.TLinkHist;
-import org.jproject.exception.AppException;
-import org.jproject.utils.TimeUtils;
 
-import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.nio.file.Path;
 
 public class BaseLinkActionService implements IBaseLinkActionService {
 
     private static final Logger logger = LoggerFactory.getLogger(BaseLinkActionService.class);
 
     private final DaoWorker dao;
-    private final ELinkStatus targetStatus;
 
     private final TFileGroup fileGroup;
     private final TFileHist fileHist;
 
-    public BaseLinkActionService(DaoWorker dao, TFileGroup fileGroup, TFileHist fileHist, ELinkStatus targetStatus) {
+    public BaseLinkActionService(DaoWorker dao, FlegFleh flegFleh) {
         logger.debug("Link service: init");
 
         this.dao = dao;
-        this.targetStatus = targetStatus;
-        this.fileGroup = fileGroup;
-        this.fileHist = fileHist;
+        this.fileGroup = flegFleh.getFileGroup();
+        this.fileHist = flegFleh.getFileHist();
     }
 
     @Override
@@ -50,112 +45,36 @@ public class BaseLinkActionService implements IBaseLinkActionService {
             return null;
         }
 
-        // final TLink result = updateLink(this.link);
+        final TLink result = createLink();
         logger.debug("Link service: complete");
 
-        //return result;
-        return null;
+        return result;
     }
 
     @Override
-    public boolean action(String linkPath) {
+    public boolean action(TLink link) {
         throw new RuntimeException("You need to override the run method");
     }
 
-    /*
-    private TFile getFile(TFileHist fileHist) {
-        final TFile result = Optional.ofNullable(fileHist).map(TFileHist::getFile)
-                .orElseThrow(() -> new RuntimeException("File not found"));
-        logger.debug("Get file: fle_id = {}", result.getId());
-        return result;
-    }
-    */
+    private TLink createLink() {
+        final String linkFolder = fileGroup.getLinkPath();
+        final String fileName = FilenameUtils.getName(fileHist.getPath().toAbsolutePath().toString());
+        final Path linkPath = Path.of(FilenameUtils.concat(linkFolder, fileName));
 
-    /*
-    private TFileGroupMember getFileGroupMember(TFileHist fileHist) {
-        final TFileGroupMember result = Optional.ofNullable(fileHist).map(TFileHist::getFileGroupMember)
-                .orElseThrow(() -> new RuntimeException("File group member not found"));
-        logger.debug("Get file group member: flgm_id = {}", result.getId());
-        return result;
-    }
-    */
-
-    /*
-    private TFileGroup getFileGroup(TFileGroupHist fileGroupMember) {
-        final TFileGroup result = Optional.ofNullable(fileGroupMember).map(TFileGroupHist::getFileGroup)
-                .orElseThrow(() -> new RuntimeException("File group not found"));
-        logger.debug("Get file group: fleg_id = {}", result.getId());
-        return result;
-    }
-    */
-
-    /*
-    private String getLinkFolderPath(TFileGroup fileGroup) {
-        final String result = Optional.ofNullable(fileGroup).map(TFileGroup::getLinkPath)
-                .orElseThrow(() -> new RuntimeException("Link path not found"));
-        logger.debug("Get link folder path: {}", result);
-        return result;
-    }
-
-    private String getLinkPath(TFileHist fileHist, String linkFolderPath) {
-        final String result = FilenameUtils.concat(linkFolderPath, FilenameUtils.getName(fileHist.getPath().toFile().getAbsolutePath())); // TODO имя файла нормально как-то найти
-        logger.debug("Get link path: {}", result);
-        return result;
-    }
-    */
-
-    private TLink updateLink(TLink link) {
-        return null;
-        /*
-        if (link != null) {
-            logger.debug("Action: link updated: lnk_id = {}", link.getId());
-
-            final TLinkHist linkHist = link.getLinkHist();
-
-            if (linkHist != null) {
-                this.dao.closeLinkHist(linkHist);
-            }
-
-            link.setLinkHist(createLinkHist(link, this.linkPath));
-
-            return link;
-        } else {
-            if (!this.targetStatus.equals(ELinkStatus.DELETE)) {
-                final TLink result = this.dao.getLink(this.file).orElse(createLink(this.file, this.linkPath));
-                logger.debug("Action: link created: lnk_id = {}", result.getId());
-                return result;
-            } else {
-                logger.debug("Nothing to change: link not found, target status: {}", ELinkStatus.DELETE);
-                return null;
-            }
-        }
-        */
-    }
-
-    private TLink createLink(TFile file, String linkPath) {
         final TLink link = new TLink();
-        link.setFile(file);
+        link.setPath(linkPath);
         this.dao.persist(link);
 
-        final TLinkHist linkHist = createLinkHist(link, linkPath);
-        link.setLinkHist(linkHist);
+        final FlehLnk.PK pk = new FlehLnk.PK();
+        pk.setFlehFlehId(fileHist.getId());
+        pk.setLnkLnkId(link.getId());
+
+        final FlehLnk flehLnk = new FlehLnk();
+        flehLnk.setId(pk);
+        dao.persist(flehLnk);
+
+        action(link);
+
         return link;
-    }
-
-    private TLinkHist createLinkHist(TLink link, String linkPath) {
-        final TLinkHist linkHist = new TLinkHist();
-
-        try {
-            linkHist.setLink(link);
-            linkHist.setPath(linkPath);
-            linkHist.setStartDate(TimeUtils.getCurrentTime());
-            linkHist.setEndDate(TimeUtils.getMaxTime());
-            linkHist.setLinkStatus(this.targetStatus);
-            action(linkPath);
-        } catch (AppException e) {
-            linkHist.setLinkStatus(ELinkStatus.INVALID);
-        }
-
-        return this.dao.persist(linkHist);
     }
 }

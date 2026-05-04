@@ -7,6 +7,7 @@ import org.jproject.domain.EProcessType;
 import org.jproject.domain.FlegFleh;
 import org.jproject.domain.TFile;
 import org.jproject.domain.TFileGroup;
+import org.jproject.domain.TFileHist;
 import org.jproject.domain.TProcess;
 import org.jproject.dto.parameters.DtoGroupFileParameters;
 import org.jproject.dto.parameters.DtoLinkFileParameters;
@@ -41,6 +42,7 @@ public class FileGroupService extends BaseProcessActionService implements Runnab
         final List<TFile> files = dao.getFiles(param.getFiles(), DtoGroupFileParameters.class);
 
         dao.deleteFlegFleh(files);
+        // TODO добавить удаление линков
 
         final List<DtoLinkFileParameters> result = new ArrayList<>();
         for (TFile file: files) {

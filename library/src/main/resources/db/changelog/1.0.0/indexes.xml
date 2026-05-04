@@ -39,4 +39,11 @@
         </createIndex>
     </changeSet>
 
+    <changeSet id="create index uk_link_path" author="${author}">
+        <createIndex indexName="uk_link_path" tableName="link" unique="true">
+            <column name="path"/>
+            <column name="del_date"/>
+        </createIndex>
+    </changeSet>
+
 </databaseChangeLog>

@@ -1,17 +1,16 @@
 package org.jproject.domain;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
-import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.hibernate.annotations.SQLRestriction;
+
+import java.nio.file.Path;
 
 @Entity
 @Table(name = "LINK")
@@ -23,28 +22,9 @@ public class TLink extends AbstractDeleteEntity<Integer> {
     @Column(name = "lnk_id", nullable = false)
     private Integer id;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "fle_fle_id", nullable = false)
-    private TFile file;
-
-    // TODO ошибка. Сделать так же как с файлами
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "lnk_id", referencedColumnName = "lnk_lnk_id", nullable = false)
-    private TLinkHist linkHist;
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        TLink that = (TLink) o;
-
-        return new EqualsBuilder()
-                .append(getId(), that.getId())
-                .append(getDelDate(), that.getDelDate())
-                .isEquals()
-                && that.getFile().equals(getFile());
-    }
+    @Column(name = "path", nullable = false)
+    @Convert(converter = ConverterPathToString.class)
+    private Path path;
 
     @Override
     public Integer getId() {
@@ -56,19 +36,11 @@ public class TLink extends AbstractDeleteEntity<Integer> {
         this.id = id;
     }
 
-    public TFile getFile() {
-        return file;
+    public Path getPath() {
+        return path;
     }
 
-    public void setFile(TFile file) {
-        this.file = file;
-    }
-
-    public TLinkHist getLinkHist() {
-        return linkHist;
-    }
-
-    public void setLinkHist(TLinkHist linkHist) {
-        this.linkHist = linkHist;
+    public void setPath(Path path) {
+        this.path = path;
     }
 }

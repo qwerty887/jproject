@@ -15,17 +15,6 @@
         </createTable>
     </changeSet>
 
-    <changeSet id="create table link_status" author="${author}">
-        <createTable tableName="link_status">
-            <column name="lnks_id" type="int4">
-                <constraints primaryKey="true" nullable="false"/>
-            </column>
-            <column name="name" type="varchar(2000)">
-                <constraints nullable="false"/>
-            </column>
-        </createTable>
-    </changeSet>
-
     <changeSet id="create table file_status" author="${author}">
         <createTable tableName="file_status">
             <column name="fles_id" type="int4">
@@ -170,8 +159,8 @@
             <column name="lnk_id" type="int4">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="fle_fle_id" type="int4">
-                <constraints nullable="false" foreignKeyName="fk_link_hist_file" references="file(fle_id)"/>
+            <column name="path" type="varchar(2000)">
+                <constraints nullable="false"/>
             </column>
             <column name="del_date" type="timestamptz">
                 <constraints nullable="true"/>
@@ -179,28 +168,6 @@
         </createTable>
     </changeSet>
 
-    <changeSet id="create table link_hist" author="${author}">
-        <createTable tableName="link_hist">
-            <column name="lnkh_id" type="int4">
-                <constraints primaryKey="true" nullable="false"/>
-            </column>
-            <column name="lnk_lnk_id" type="int4">
-                <constraints nullable="false" foreignKeyName="fk_link_hist_link" references="link(lnk_id)"/>
-            </column>
-            <column name="path" type="varchar(2000)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="lnks_lnks_id" type="int4">
-                <constraints nullable="false" foreignKeyName="fk_link_hist_link_status" references="link_status(lnks_id)"/>
-            </column>
-            <column name="start_date" type="timestamptz" defaultValueDate="now()">
-                <constraints nullable="false"/>
-            </column>
-            <column name="end_date" type="timestamptz">
-                <constraints nullable="false"/>
-            </column>
-        </createTable>
-    </changeSet>
     <changeSet id="create table fleg_flgr" author="${author}">
         <createTable tableName="fleg_flgr">
             <column name="fleg_fleg_id" type="int4">
@@ -219,6 +186,17 @@
             </column>
             <column name="fleh_fleh_id" type="int4">
                 <constraints foreignKeyName="fk_fleg_fleh_file_hist" references="file_hist(fleh_id)"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create table fleh_lnk" author="${author}">
+        <createTable tableName="fleh_lnk">
+            <column name="fleh_fleh_id" type="int4">
+                <constraints foreignKeyName="fk_fleh_lnk_file_hist" references="file_hist(fleh_id)"/>
+            </column>
+            <column name="lnk_lnk_id" type="int4">
+                <constraints foreignKeyName="fk_fleh_lnk_link" references="link(lnk_id)"/>
             </column>
         </createTable>
     </changeSet>

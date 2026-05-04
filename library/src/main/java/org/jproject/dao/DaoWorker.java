@@ -26,8 +26,6 @@ import org.jproject.domain.TFileHist;
 import org.jproject.domain.TFileHist_;
 import org.jproject.domain.TFile_;
 import org.jproject.domain.TLink;
-import org.jproject.domain.TLinkHist;
-import org.jproject.domain.TLinkHist_;
 import org.jproject.domain.TLink_;
 import org.jproject.domain.TProcess;
 import org.jproject.domain.TProcessLock;
@@ -277,8 +275,8 @@ public class DaoWorker extends DaoBase {
         final CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
         final CriteriaQuery<TLink> cq = cb.createQuery(TLink.class);
         final Root<TLink> root = cq.from(TLink.class);
-        root.fetch(TLink_.LINK_HIST, JoinType.INNER);
-        cq.where(cb.equal(root.get(TLink_.FILE), file));
+        // root.fetch(TLink_.LINK_HIST, JoinType.INNER);
+        // cq.where(cb.equal(root.get(TLink_.FILE), file));
         return getSingleResult(getEntityManager().createQuery(cq));
     }
 
@@ -311,12 +309,6 @@ public class DaoWorker extends DaoBase {
         closeEntity(entity,
                    (root, cq, cb) -> cb.equal(root.get(TFileHist_.ID), entity.getId()),
                     TFileHist.class);
-    }
-
-    public void closeLinkHist(TLinkHist entity) {
-        closeEntity(entity,
-                    (root, cq, cb) -> cb.equal(root.get(TLinkHist_.ID), entity.getId()),
-                    TLinkHist.class);
     }
 
     public Specification<TProcess> getProcessSpec(Integer id) {
