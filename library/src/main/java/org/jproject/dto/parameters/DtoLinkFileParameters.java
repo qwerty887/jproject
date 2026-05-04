@@ -1,38 +1,46 @@
 package org.jproject.dto.parameters;
 
-import org.jproject.domain.FlegFleh;
+import org.jproject.domain.TFile;
+import org.jproject.domain.TFileGroup;
+import org.jproject.dto.controllers.DtoFile;
+import org.jproject.dto.controllers.DtoFileGroup;
+
+import java.util.List;
 
 public class DtoLinkFileParameters {
 
-    Integer flegId;
-    Integer flehId;
+    DtoFile file;
+    List<DtoFileGroup> fileGroupList;
 
     public DtoLinkFileParameters() {
 
     }
 
-    public DtoLinkFileParameters(Integer flegId, Integer flehId) {
-        this.flegId = flegId;
-        this.flehId = flehId;
+    public DtoLinkFileParameters(DtoFile file, List<DtoFileGroup> fileGroupList) {
+        this.file = file;
+        this.fileGroupList = fileGroupList;
     }
 
-    public static DtoLinkFileParameters of(FlegFleh.PK pk) {
-        return new DtoLinkFileParameters(pk.getFlegFlegId(), pk.getFlehFlehId());
+    public static DtoLinkFileParameters of(TFile tFile, List<TFileGroup> tFileGroupList) {
+        return new DtoLinkFileParameters(
+                DtoFile.of(tFile),
+                tFileGroupList.stream().map(DtoFileGroup::of).toList()
+        );
     }
 
-    public Integer getFlegId() {
-        return flegId;
+    public DtoFile getFile() {
+        return file;
     }
 
-    public void setFlegId(Integer flegId) {
-        this.flegId = flegId;
+    public void setFile(DtoFile file) {
+        this.file = file;
     }
 
-    public Integer getFlehId() {
-        return flehId;
+    public List<DtoFileGroup> getFileGroupList() {
+        return fileGroupList;
     }
 
-    public void setFlehId(Integer flehId) {
-        this.flehId = flehId;
+    public void setFileGroupList(List<DtoFileGroup> fileGroupList) {
+        this.fileGroupList = fileGroupList;
     }
 }

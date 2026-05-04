@@ -375,6 +375,7 @@ public class DaoWorker extends DaoBase {
         return getEntityManager().createQuery(cq);
     }
 
+    /*
     public List<FlegFleh> getFlegFleh(List<DtoLinkFileParameters> paramList) {
         final List<List<DtoLinkFileParameters>> partitions = Lists.partition(paramList, PARTITION_SIZE);
 
@@ -388,6 +389,7 @@ public class DaoWorker extends DaoBase {
         }
         return result;
     }
+    */
 
     public List<FlegFleh> getFlegFleh(List<Integer> flegIdList, List<Integer> flehIdList) {
         return getFlegFleh(getFlegFlehSpec(flegIdList, flehIdList)).getResultList();

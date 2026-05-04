@@ -44,11 +44,17 @@ public class FileGroupService extends BaseProcessActionService implements Runnab
         dao.deleteFlegFleh(files);
         // TODO добавить удаление линков
 
+        /*
+        final String linkFolder = fileGroup.getLinkPath();
+        final String fileName = FilenameUtils.getName(fileHist.getPath().toAbsolutePath().toString());
+        final Path linkPath = Path.of(FilenameUtils.concat(linkFolder, fileName));
+         */
+
         final List<DtoLinkFileParameters> result = new ArrayList<>();
         for (TFile file: files) {
             try {
-                final List<FlegFleh.PK> list = (new BaseGroupActionService(dao, file, fileGroupList, fileGroupDefault)).apply();
-                result.addAll(list.stream().map(DtoLinkFileParameters::of).toList());
+                final List<TFileGroup> list = (new BaseGroupActionService(dao, file, fileGroupList, fileGroupDefault)).apply();
+                result.add(DtoLinkFileParameters.of(file, list));
             } catch (NotSupportedException e) {
                 e.printStackTrace();
                 throw new NotSupportExceptionApp(e.getMessage());

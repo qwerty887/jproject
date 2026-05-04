@@ -1,6 +1,8 @@
 package org.jproject.service.base;
 
 import jakarta.transaction.NotSupportedException;
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.hibernate.annotations.Immutable;
 import org.jproject.dao.DaoWorker;
 import org.jproject.domain.EFileAttribute;
 import org.jproject.domain.EFileCondition;
@@ -16,6 +18,7 @@ import java.nio.file.Path;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -46,11 +49,10 @@ public class BaseGroupActionService implements IBaseGroupActionService {
     }
 
     @Override
-    public List<FlegFleh.PK> apply() throws NotSupportedException {
+    public List<TFileGroup> apply() throws NotSupportedException {
         logger.debug("Group service: start");
 
         final List<TFileGroup> matches = getMatches();
-        final List<FlegFleh.PK> result = new ArrayList<>();
 
         for (TFileGroup entity: matches) {
             final FlegFleh.PK pk = new FlegFleh.PK();
@@ -61,13 +63,11 @@ public class BaseGroupActionService implements IBaseGroupActionService {
             flegFleh.setId(pk);
 
             dao.persist(flegFleh);
-
-            result.add(pk);
         }
 
         logger.debug("Group service: complete");
 
-        return result;
+        return matches;
     }
 
     private List<TFileGroup> getMatches() throws NotSupportedException {

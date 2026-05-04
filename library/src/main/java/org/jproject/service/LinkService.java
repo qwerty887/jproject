@@ -22,6 +22,8 @@ public class LinkService extends BaseProcessActionService implements Runnable {
 
     @Override
     public int action(DaoWorker dao, TProcess process) {
+        return 0;
+        /*
         final FileLinkingProcessParameters param = getParam(process.getParam(), FileLinkingProcessParameters.class);
         final List<FlegFleh> flegFlehList = dao.getFlegFleh(param.getFiles());
 
@@ -30,6 +32,7 @@ public class LinkService extends BaseProcessActionService implements Runnable {
         }
 
         return flegFlehList.size();
+        */
     }
 
     @Override
