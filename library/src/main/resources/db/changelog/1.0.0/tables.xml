@@ -190,17 +190,6 @@
         </createTable>
     </changeSet>
 
-    <changeSet id="create table fleg_fleh" author="${author}">
-        <createTable tableName="fleg_fleh">
-            <column name="fleg_fleg_id" type="int4">
-                <constraints foreignKeyName="fk_fleg_fleh_file_group" references="file_group(fleg_id)"/>
-            </column>
-            <column name="fleh_fleh_id" type="int4">
-                <constraints foreignKeyName="fk_fleg_fleh_file_hist" references="file_hist(fleh_id)"/>
-            </column>
-        </createTable>
-    </changeSet>
-
     <changeSet id="create table process_type" author="${author}">
         <createTable tableName="process_type">
             <column name="pctp_id" type="int4">
@@ -285,6 +274,26 @@
             </column>
             <column name="lnks_lnks_id" type="int4">
                 <constraints nullable="false" foreignKeyName="fk_link_hist_link_status" references="link_status(lnks_id)"/>
+            </column>
+            <column name="start_date" type="timestamptz" defaultValueDate="now()">
+                <constraints nullable="false"/>
+            </column>
+            <column name="end_date" type="timestamptz">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create table file_group_hist" author="${author}">
+        <createTable tableName="file_group_hist">
+            <column name="flgh_id" type="int4">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="fleg_fleg_id" type="int4">
+                <constraints foreignKeyName="fk_fleg_fleh_file_group" references="file_group(fleg_id)"/>
+            </column>
+            <column name="fleh_fleh_id" type="int4">
+                <constraints foreignKeyName="fk_fleg_fleh_file_hist" references="file_hist(fleh_id)"/>
             </column>
             <column name="start_date" type="timestamptz" defaultValueDate="now()">
                 <constraints nullable="false"/>

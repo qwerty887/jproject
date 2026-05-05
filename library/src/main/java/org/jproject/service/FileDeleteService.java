@@ -5,8 +5,6 @@ import org.jproject.domain.EFileStatus;
 import org.jproject.domain.TFile;
 import org.jproject.service.base.BaseFileActionService;
 
-import java.util.List;
-
 public class FileDeleteService extends BaseFileActionService {
 
     private final DaoWorker dao;
@@ -18,7 +16,6 @@ public class FileDeleteService extends BaseFileActionService {
 
     @Override
     public void action(TFile tFile) {
-        dao.deleteFlegFleh(List.of(tFile));
         // TODO удалить связку с линком
     }
 }

@@ -1,12 +1,10 @@
 package org.jproject.service.base;
 
 import jakarta.transaction.NotSupportedException;
-import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.hibernate.annotations.Immutable;
 import org.jproject.dao.DaoWorker;
 import org.jproject.domain.EFileAttribute;
 import org.jproject.domain.EFileCondition;
-import org.jproject.domain.FlegFleh;
+import org.jproject.domain.FileGroupHist;
 import org.jproject.domain.TFile;
 import org.jproject.domain.TFileGroup;
 import org.jproject.domain.TFileGroupRule;
@@ -18,12 +16,9 @@ import java.nio.file.Path;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 public class BaseGroupActionService implements IBaseGroupActionService {
 
@@ -54,16 +49,18 @@ public class BaseGroupActionService implements IBaseGroupActionService {
 
         final List<TFileGroup> matches = getMatches();
 
+        /*
         for (TFileGroup entity: matches) {
-            final FlegFleh.PK pk = new FlegFleh.PK();
+            final FileGroupHist.PK pk = new FileGroupHist.PK();
             pk.setFlegFlegId(entity.getId());
             pk.setFlehFlehId(this.tFileHist.getId());
 
-            final FlegFleh flegFleh = new FlegFleh();
+            final FileGroupHist flegFleh = new FileGroupHist();
             flegFleh.setId(pk);
 
             dao.persist(flegFleh);
         }
+        */
 
         logger.debug("Group service: complete");
 

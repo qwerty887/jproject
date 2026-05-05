@@ -16,8 +16,7 @@ import org.jproject.domain.EFileStatus;
 import org.jproject.domain.EFileType;
 import org.jproject.domain.EProcessStatus;
 import org.jproject.domain.EProcessType;
-import org.jproject.domain.FlegFleh;
-import org.jproject.domain.FlegFleh_;
+import org.jproject.domain.FileGroupHist;
 import org.jproject.domain.TError;
 import org.jproject.domain.TFile;
 import org.jproject.domain.TFileGroup;
@@ -26,13 +25,11 @@ import org.jproject.domain.TFileHist;
 import org.jproject.domain.TFileHist_;
 import org.jproject.domain.TFile_;
 import org.jproject.domain.TLink;
-import org.jproject.domain.TLink_;
 import org.jproject.domain.TProcess;
 import org.jproject.domain.TProcessLock;
 import org.jproject.domain.TProcessLock_;
 import org.jproject.domain.TProcess_;
 import org.jproject.dto.parameters.DtoGroupFileParameters;
-import org.jproject.dto.parameters.DtoLinkFileParameters;
 import org.jproject.dto.parameters.DtoScanFileParameters;
 import org.jproject.exception.NotSupportExceptionApp;
 import org.jproject.utils.TimeUtils;
@@ -275,25 +272,6 @@ public class DaoWorker extends DaoBase {
         return getSingleResult(getEntityManager().createQuery(cq));
     }
 
-    public void deleteFlegFleh(List<TFile> tFileList) {
-        final List<TFileHist> fileHistList = tFileList
-                .stream()
-                .filter(c -> c.getFileHist() != null)
-                .map(TFile::getFileHist)
-                .toList();
-
-        final List<List<TFileHist>> partitions = Lists.partition(fileHistList, PARTITION_SIZE);
-
-        for (List<TFileHist> list: partitions) {
-            final CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
-            final CriteriaDelete<FlegFleh> cd = cb.createCriteriaDelete(FlegFleh.class);
-            final Root<FlegFleh> root = cd.from(FlegFleh.class);
-
-            cd.where(root.get(FlegFleh_.fileHist).in(list));
-            getEntityManager().createQuery(cd).executeUpdate();
-        }
-    }
-
     public Optional<TFileGroup> getFileGroup(TFileGroup entity) {
         return findEntity(
                     (root, cq, cb) -> cb.equal(root.get(TFileGroup_.id), entity),
@@ -340,58 +318,11 @@ public class DaoWorker extends DaoBase {
         return getEntityManager().createQuery(cq).getResultList();
     }
 
-    private Specification<FlegFleh> getFlegFlehSpec(Integer flegId, Integer flehId) {
-        return (root, query, cb) -> {
-            final Join<FlegFleh, TFileGroup> joinGroup = getOrCreateJoin(root, FlegFleh_.fileGroup, JoinType.INNER);
-            final Join<FlegFleh, TFileHist> joinHist = getOrCreateJoin(root, FlegFleh_.fileHist, JoinType.INNER);
-            return cb.and(
-                    cb.equal(joinGroup.get(TFileGroup_.id), flegId),
-                    cb.equal(joinHist.get(TFileHist_.id), flehId)
-            );
-        };
-    }
-
-    private Specification<FlegFleh> getFlegFlehSpec(List<Integer> flegIdList, List<Integer> flehIdList) {
-        return (root, query, cb) -> {
-            final Join<FlegFleh, TFileGroup> joinGroup = getOrCreateJoin(root, FlegFleh_.fileGroup, JoinType.INNER);
-            final Join<FlegFleh, TFileHist> joinHist = getOrCreateJoin(root, FlegFleh_.fileHist, JoinType.INNER);
-            return cb.and(
-                    joinGroup.get(TFileGroup_.id).in(flegIdList),
-                    joinHist.get(TFileHist_.id).in(flehIdList)
-            );
-        };
-    }
-
-    public TypedQuery<FlegFleh> getFlegFleh(Specification<FlegFleh> spec) {
+    public TypedQuery<FileGroupHist> getFlegFleh(Specification<FileGroupHist> spec) {
         final CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
-        final CriteriaQuery<FlegFleh> cq = cb.createQuery(FlegFleh.class);
-        final Root<FlegFleh> root = cq.from(FlegFleh.class);
+        final CriteriaQuery<FileGroupHist> cq = cb.createQuery(FileGroupHist.class);
+        final Root<FileGroupHist> root = cq.from(FileGroupHist.class);
         cq.where(spec.toPredicate(root, cq, cb));
         return getEntityManager().createQuery(cq);
     }
-
-    /*
-    public List<FlegFleh> getFlegFleh(List<DtoLinkFileParameters> paramList) {
-        final List<List<DtoLinkFileParameters>> partitions = Lists.partition(paramList, PARTITION_SIZE);
-
-        final List<FlegFleh> result = new ArrayList<>();
-
-        for (List<DtoLinkFileParameters> list: partitions) {
-            final List<DtoLinkFileParameters> list2 = list.stream().map(c -> (DtoLinkFileParameters) c).toList();
-            final List<Integer> flegIdList = list2.stream().map(DtoLinkFileParameters::getFlegId).toList();
-            final List<Integer> flehIdList = list2.stream().map(DtoLinkFileParameters::getFlehId).toList();
-            result.addAll(getFlegFleh(getFlegFlehSpec(flegIdList, flehIdList)).getResultList());
-        }
-        return result;
-    }
-    */
-
-    public List<FlegFleh> getFlegFleh(List<Integer> flegIdList, List<Integer> flehIdList) {
-        return getFlegFleh(getFlegFlehSpec(flegIdList, flehIdList)).getResultList();
-    }
-
-    public Optional<FlegFleh> getFlegFleh(Integer flegId, Integer flehId) {
-        return getSingleResult(getFlegFleh(getFlegFlehSpec(flegId, flehId)));
-    }
-
 }

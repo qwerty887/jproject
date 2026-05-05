@@ -2,7 +2,7 @@ package org.jproject.service.base;
 
 import org.jproject.dao.DaoWorker;
 import org.jproject.domain.EFileStatus;
-import org.jproject.domain.FlegFleh;
+import org.jproject.domain.FileGroupHist;
 import org.jproject.domain.TFileGroup;
 import org.jproject.domain.TFileHist;
 import org.jproject.domain.TLink;
@@ -19,12 +19,12 @@ public class BaseLinkActionService implements IBaseLinkActionService {
     private final TFileGroup fileGroup;
     private final TFileHist fileHist;
 
-    public BaseLinkActionService(DaoWorker dao, FlegFleh flegFleh) {
+    public BaseLinkActionService(DaoWorker dao, FileGroupHist flegFleh) {
         logger.debug("Link service: init");
 
         this.dao = dao;
-        this.fileGroup = flegFleh.getFileGroup();
-        this.fileHist = flegFleh.getFileHist();
+        this.fileGroup = null;
+        this.fileHist = null;
     }
 
     @Override
