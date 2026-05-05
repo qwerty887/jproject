@@ -11,11 +11,11 @@ public class FileGroupingProcessParameters extends BaseProcessParam {
     List<DtoGroupFileParameters> files;
 
     public FileGroupingProcessParameters() {
-        super(EProcessType.FILE_GROUPING);
+        super(EProcessType.GROUP);
     }
 
     public FileGroupingProcessParameters(List<DtoGroupFileParameters> files) {
-        super(EProcessType.FILE_GROUPING);
+        super(EProcessType.GROUP);
         this.files = files;
     }
 

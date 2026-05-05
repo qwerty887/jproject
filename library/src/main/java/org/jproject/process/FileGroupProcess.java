@@ -29,7 +29,7 @@ public class FileGroupProcess extends BaseProcessActionService implements Runnab
     private final Optional<TFileGroup> fileGroupDefault;
 
     public FileGroupProcess(EntityManagerFactory entityManagerFactory, List<TFileGroup> fileGroupList, Optional<TFileGroup> fileGroupDefault) {
-        super(entityManagerFactory, EProcessType.FILE_GROUPING);
+        super(entityManagerFactory, EProcessType.GROUP);
         this.fileGroupList = fileGroupList;
         this.fileGroupDefault = fileGroupDefault;
     }

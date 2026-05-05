@@ -4,10 +4,6 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
 
-    <changeSet id="create sequence fle_seq" author="${author}">
-        <createSequence sequenceName="fle_seq" startValue="1" incrementBy="1"/>
-    </changeSet>
-
     <changeSet id="Fill dict file_status" author="${author}">
         <insert tableName="file_status">
             <column name="fles_id" value="0" />
@@ -148,19 +144,19 @@
         </insert>
         <insert tableName="process_type">
             <column name="pctp_id" value="1" />
-            <column name="name" value="file fetching" />
+            <column name="name" value="fetch" />
         </insert>
         <insert tableName="process_type">
             <column name="pctp_id" value="2" />
-            <column name="name" value="file scanning" />
+            <column name="name" value="scan" />
         </insert>
         <insert tableName="process_type">
             <column name="pctp_id" value="3" />
-            <column name="name" value="file grouping" />
+            <column name="name" value="group" />
         </insert>
         <insert tableName="process_type">
             <column name="pctp_id" value="4" />
-            <column name="name" value="file linking" />
+            <column name="name" value="link" />
         </insert>
         <insert tableName="process_type">
             <column name="pctp_id" value="5" />

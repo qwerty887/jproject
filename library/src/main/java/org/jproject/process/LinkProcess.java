@@ -14,7 +14,7 @@ public class LinkProcess extends BaseProcessActionService implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(LinkProcess.class);
 
     public LinkProcess(EntityManagerFactory entityManagerFactory) {
-        super(entityManagerFactory, EProcessType.FILE_LINKING);
+        super(entityManagerFactory, EProcessType.LINK);
     }
 
     @Override

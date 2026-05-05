@@ -11,11 +11,11 @@ public class FileScanningProcessParameters extends BaseProcessParam {
     List<DtoScanFileParameters> files;
 
     public FileScanningProcessParameters() {
-        super(EProcessType.FILE_SCANNING);
+        super(EProcessType.SCAN);
     }
 
     public FileScanningProcessParameters(List<DtoScanFileParameters> files) {
-        super(EProcessType.FILE_SCANNING);
+        super(EProcessType.SCAN);
         this.files = files;
     }
 

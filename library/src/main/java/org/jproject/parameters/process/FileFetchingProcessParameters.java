@@ -11,11 +11,11 @@ public class FileFetchingProcessParameters extends BaseProcessParam {
     List<DtoFetchFileParameters> files;
 
     public FileFetchingProcessParameters() {
-        super(EProcessType.FILE_FETCHING);
+        super(EProcessType.FETCH);
     }
 
     public FileFetchingProcessParameters(List<DtoFetchFileParameters> files) {
-        super(EProcessType.FILE_FETCHING);
+        super(EProcessType.FETCH);
         this.files = files;
     }
 

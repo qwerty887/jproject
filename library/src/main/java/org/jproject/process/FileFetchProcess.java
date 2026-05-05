@@ -25,7 +25,7 @@ public class FileFetchProcess extends BaseProcessActionService implements Runnab
     private final Integer packSize;
 
     public FileFetchProcess(EntityManagerFactory entityManagerFactory, Integer packSize) {
-        super(entityManagerFactory, EProcessType.FILE_FETCHING);
+        super(entityManagerFactory, EProcessType.FETCH);
         this.packSize = packSize;
     }
 

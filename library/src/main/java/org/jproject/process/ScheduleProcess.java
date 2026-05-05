@@ -25,25 +25,25 @@ public class ScheduleProcess extends BaseScheduleService {
         this.appParameters = appParameters;
         this.entityManagerFactory = entityManagerFactory;
 
-        add(EProcessType.FILE_FETCHING);
-        add(EProcessType.FILE_SCANNING);
-        add(EProcessType.FILE_GROUPING);
-        add(EProcessType.FILE_LINKING);
+        add(EProcessType.FETCH);
+        add(EProcessType.SCAN);
+        add(EProcessType.GROUP);
+        add(EProcessType.LINK);
         add(EProcessType.VACUUM);
     }
 
     public void add(EProcessType processType) throws NotSupportedException {
         switch (processType) {
-            case FILE_FETCHING -> {
+            case FETCH -> {
                 final Integer threadCount = appParameters.get(EAppParameters.PROCESS_FILE_FETCHING_COUNT, Integer.class);
                 final Integer packSize = appParameters.get(EAppParameters.PROCESS_PACK_SIZE, Integer.class);
                 add(new FileFetchProcess(entityManagerFactory, packSize), threadCount);
             }
-            case FILE_SCANNING -> {
+            case SCAN -> {
                 final Integer threadCount = appParameters.get(EAppParameters.PROCESS_FILE_SCANNING_COUNT, Integer.class);
                 add(new FileScanProcess(entityManagerFactory), threadCount);
             }
-            case FILE_GROUPING -> {
+            case GROUP -> {
                 // TODO Придумать механизм обновления кэша
                 final List<TFileGroup> fileGroupList = DaoUtils.withTransaction(
                                     () -> new DaoWorker(entityManagerFactory),
@@ -58,7 +58,7 @@ public class ScheduleProcess extends BaseScheduleService {
                 final Integer threadCount = appParameters.get(EAppParameters.PROCESS_FILE_GROUPING_COUNT, Integer.class);
                 add(new FileGroupProcess(entityManagerFactory, fileGroupList, fileGroupDefault), threadCount);
             }
-            case FILE_LINKING -> {
+            case LINK -> {
                 final Integer threadCount = appParameters.get(EAppParameters.PROCESS_FILE_LINKING_COUNT, Integer.class);
                 add(new LinkProcess(entityManagerFactory), threadCount);
             }

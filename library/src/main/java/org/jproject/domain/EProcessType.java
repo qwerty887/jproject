@@ -5,10 +5,10 @@ import java.util.Map;
 
 public enum EProcessType {
     UNKNOWN(0),
-    FILE_FETCHING(1),
-    FILE_SCANNING(2),
-    FILE_GROUPING(3),
-    FILE_LINKING(4),
+    FETCH(1),
+    SCAN(2),
+    GROUP(3),
+    LINK(4),
     VACUUM(5),
     ;
 

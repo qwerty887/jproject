@@ -11,11 +11,11 @@ public class FileLinkingProcessParameters extends BaseProcessParam {
     List<DtoLinkFileParameters> files;
 
     public FileLinkingProcessParameters() {
-        super(EProcessType.FILE_LINKING);
+        super(EProcessType.LINK);
     }
 
     public FileLinkingProcessParameters(List<DtoLinkFileParameters> files) {
-        super(EProcessType.FILE_LINKING);
+        super(EProcessType.LINK);
         this.files = files;
     }
 

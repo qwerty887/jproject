@@ -24,7 +24,7 @@ public class FileScanProcess extends BaseProcessActionService implements Runnabl
     private static final Logger logger = LoggerFactory.getLogger(FileScanProcess.class);
 
     public FileScanProcess(EntityManagerFactory entityManagerFactory) {
-        super(entityManagerFactory, EProcessType.FILE_SCANNING);
+        super(entityManagerFactory, EProcessType.SCAN);
     }
 
     @Override
