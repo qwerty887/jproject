@@ -1,4 +1,4 @@
-package org.jproject.service;
+package org.jproject.process;
 
 import jakarta.persistence.EntityManagerFactory;
 import org.jproject.dao.DaoWorker;
@@ -6,11 +6,10 @@ import org.jproject.domain.EProcessType;
 import org.jproject.domain.TProcess;
 import org.jproject.dto.parameters.DtoFetchFileParameters;
 import org.jproject.dto.parameters.DtoScanFileParameters;
-import org.jproject.parameters.AppParameters;
 import org.jproject.parameters.process.FileFetchingProcessParameters;
 import org.jproject.parameters.process.FileScanningProcessParameters;
 import org.jproject.exception.AppException;
-import org.jproject.service.base.BaseProcessActionService;
+import org.jproject.process.base.BaseProcessActionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,12 +19,12 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FileFetchService extends BaseProcessActionService implements Runnable {
+public class FileFetchProcess extends BaseProcessActionService implements Runnable {
 
-    private static final Logger logger = LoggerFactory.getLogger(FileFetchService.class);
+    private static final Logger logger = LoggerFactory.getLogger(FileFetchProcess.class);
     private final Integer packSize;
 
-    public FileFetchService(EntityManagerFactory entityManagerFactory, Integer packSize) {
+    public FileFetchProcess(EntityManagerFactory entityManagerFactory, Integer packSize) {
         super(entityManagerFactory, EProcessType.FILE_FETCHING);
         this.packSize = packSize;
     }

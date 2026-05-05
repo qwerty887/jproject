@@ -5,7 +5,6 @@ import org.jproject.domain.EFileStatus;
 import org.jproject.domain.TFile;
 import org.jproject.service.base.BaseFileActionService;
 
-import java.nio.file.Path;
 import java.util.List;
 
 public class FileDeleteService extends BaseFileActionService {

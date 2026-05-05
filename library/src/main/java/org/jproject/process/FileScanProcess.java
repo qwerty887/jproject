@@ -1,4 +1,4 @@
-package org.jproject.service;
+package org.jproject.process;
 
 import jakarta.persistence.EntityManagerFactory;
 import org.jproject.dao.DaoWorker;
@@ -9,7 +9,8 @@ import org.jproject.dto.parameters.DtoGroupFileParameters;
 import org.jproject.dto.parameters.DtoScanFileParameters;
 import org.jproject.parameters.process.FileGroupingProcessParameters;
 import org.jproject.parameters.process.FileScanningProcessParameters;
-import org.jproject.service.base.BaseProcessActionService;
+import org.jproject.process.base.BaseProcessActionService;
+import org.jproject.service.FileAddService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,11 +19,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class FileScanService extends BaseProcessActionService implements Runnable {
+public class FileScanProcess extends BaseProcessActionService implements Runnable {
 
-    private static final Logger logger = LoggerFactory.getLogger(FileScanService.class);
+    private static final Logger logger = LoggerFactory.getLogger(FileScanProcess.class);
 
-    public FileScanService(EntityManagerFactory entityManagerFactory) {
+    public FileScanProcess(EntityManagerFactory entityManagerFactory) {
         super(entityManagerFactory, EProcessType.FILE_SCANNING);
     }
 

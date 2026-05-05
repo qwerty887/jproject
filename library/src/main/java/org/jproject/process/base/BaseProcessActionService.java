@@ -1,4 +1,4 @@
-package org.jproject.service.base;
+package org.jproject.process.base;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;

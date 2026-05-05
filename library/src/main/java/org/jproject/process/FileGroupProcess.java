@@ -1,13 +1,11 @@
-package org.jproject.service;
+package org.jproject.process;
 
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.transaction.NotSupportedException;
 import org.jproject.dao.DaoWorker;
 import org.jproject.domain.EProcessType;
-import org.jproject.domain.FlegFleh;
 import org.jproject.domain.TFile;
 import org.jproject.domain.TFileGroup;
-import org.jproject.domain.TFileHist;
 import org.jproject.domain.TProcess;
 import org.jproject.dto.parameters.DtoGroupFileParameters;
 import org.jproject.dto.parameters.DtoLinkFileParameters;
@@ -15,7 +13,7 @@ import org.jproject.exception.NotSupportExceptionApp;
 import org.jproject.parameters.process.FileGroupingProcessParameters;
 import org.jproject.parameters.process.FileLinkingProcessParameters;
 import org.jproject.service.base.BaseGroupActionService;
-import org.jproject.service.base.BaseProcessActionService;
+import org.jproject.process.base.BaseProcessActionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,14 +21,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class FileGroupService extends BaseProcessActionService implements Runnable {
+public class FileGroupProcess extends BaseProcessActionService implements Runnable {
 
-    private static final Logger logger = LoggerFactory.getLogger(FileGroupService.class);
+    private static final Logger logger = LoggerFactory.getLogger(FileGroupProcess.class);
 
     private final List<TFileGroup> fileGroupList;
     private final Optional<TFileGroup> fileGroupDefault;
 
-    public FileGroupService(EntityManagerFactory entityManagerFactory, List<TFileGroup> fileGroupList, Optional<TFileGroup> fileGroupDefault) {
+    public FileGroupProcess(EntityManagerFactory entityManagerFactory, List<TFileGroup> fileGroupList, Optional<TFileGroup> fileGroupDefault) {
         super(entityManagerFactory, EProcessType.FILE_GROUPING);
         this.fileGroupList = fileGroupList;
         this.fileGroupDefault = fileGroupDefault;

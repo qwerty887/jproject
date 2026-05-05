@@ -1,22 +1,19 @@
-package org.jproject.service;
+package org.jproject.process;
 
 import jakarta.persistence.EntityManagerFactory;
 import org.jproject.dao.DaoWorker;
 import org.jproject.domain.EProcessType;
-import org.jproject.domain.FlegFleh;
 import org.jproject.domain.TProcess;
 import org.jproject.parameters.process.FileLinkingProcessParameters;
-import org.jproject.service.base.BaseProcessActionService;
+import org.jproject.process.base.BaseProcessActionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.List;
+public class LinkProcess extends BaseProcessActionService implements Runnable {
 
-public class LinkService extends BaseProcessActionService implements Runnable {
+    private static final Logger logger = LoggerFactory.getLogger(LinkProcess.class);
 
-    private static final Logger logger = LoggerFactory.getLogger(LinkService.class);
-
-    public LinkService(EntityManagerFactory entityManagerFactory) {
+    public LinkProcess(EntityManagerFactory entityManagerFactory) {
         super(entityManagerFactory, EProcessType.FILE_LINKING);
     }
 

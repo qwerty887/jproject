@@ -9,8 +9,8 @@ import org.jproject.parameters.AppParameters;
 import org.jproject.parameters.EAppParameters;
 import org.jproject.parameters.process.FileFetchingProcessParameters;
 import org.jproject.parameters.process.VacuumProcessParameters;
-import org.jproject.service.FileFetchService;
-import org.jproject.service.VacuumService;
+import org.jproject.process.FileFetchProcess;
+import org.jproject.process.VacuumProcess;
 import org.jproject.utils.DaoUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -42,7 +42,7 @@ public class ProcessController {
         final Integer packSize = appParameters.get(EAppParameters.PROCESS_PACK_SIZE, Integer.class);
         return DaoUtils.withTransaction(
                     () -> new DaoWorker(entityManagerFactory),
-                    dao -> DtoProcessStatus.of(new FileFetchService(entityManagerFactory, packSize).add(dao, parameters))
+                    dao -> DtoProcessStatus.of(new FileFetchProcess(entityManagerFactory, packSize).add(dao, parameters))
                     );
     }
 
@@ -52,7 +52,7 @@ public class ProcessController {
         final VacuumProcessParameters parameters = new VacuumProcessParameters(); // процесс без параметров
         return DaoUtils.withTransaction(
                 () -> new DaoWorker(entityManagerFactory),
-                dao -> DtoProcessStatus.of(new VacuumService(entityManagerFactory).add(dao, parameters))
+                dao -> DtoProcessStatus.of(new VacuumProcess(entityManagerFactory).add(dao, parameters))
         );
     }
 

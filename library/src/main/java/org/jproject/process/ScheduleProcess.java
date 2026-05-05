@@ -1,4 +1,4 @@
-package org.jproject.service;
+package org.jproject.process;
 
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.transaction.NotSupportedException;
@@ -15,12 +15,12 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class ScheduleService extends BaseScheduleService {
+public class ScheduleProcess extends BaseScheduleService {
 
     private final EntityManagerFactory entityManagerFactory;
     private final AppParameters appParameters;
 
-    public ScheduleService(EntityManagerFactory entityManagerFactory, AppParameters appParameters) throws NotSupportedException {
+    public ScheduleProcess(EntityManagerFactory entityManagerFactory, AppParameters appParameters) throws NotSupportedException {
         super(appParameters);
         this.appParameters = appParameters;
         this.entityManagerFactory = entityManagerFactory;
@@ -37,11 +37,11 @@ public class ScheduleService extends BaseScheduleService {
             case FILE_FETCHING -> {
                 final Integer threadCount = appParameters.get(EAppParameters.PROCESS_FILE_FETCHING_COUNT, Integer.class);
                 final Integer packSize = appParameters.get(EAppParameters.PROCESS_PACK_SIZE, Integer.class);
-                add(new FileFetchService(entityManagerFactory, packSize), threadCount);
+                add(new FileFetchProcess(entityManagerFactory, packSize), threadCount);
             }
             case FILE_SCANNING -> {
                 final Integer threadCount = appParameters.get(EAppParameters.PROCESS_FILE_SCANNING_COUNT, Integer.class);
-                add(new FileScanService(entityManagerFactory), threadCount);
+                add(new FileScanProcess(entityManagerFactory), threadCount);
             }
             case FILE_GROUPING -> {
                 // TODO Придумать механизм обновления кэша
@@ -56,14 +56,14 @@ public class ScheduleService extends BaseScheduleService {
                                     );
 
                 final Integer threadCount = appParameters.get(EAppParameters.PROCESS_FILE_GROUPING_COUNT, Integer.class);
-                add(new FileGroupService(entityManagerFactory, fileGroupList, fileGroupDefault), threadCount);
+                add(new FileGroupProcess(entityManagerFactory, fileGroupList, fileGroupDefault), threadCount);
             }
             case FILE_LINKING -> {
                 final Integer threadCount = appParameters.get(EAppParameters.PROCESS_FILE_LINKING_COUNT, Integer.class);
-                add(new LinkService(entityManagerFactory), threadCount);
+                add(new LinkProcess(entityManagerFactory), threadCount);
             }
             case VACUUM -> {
-                add(new VacuumService(entityManagerFactory), 1); // процесс vacuum выполняется только один
+                add(new VacuumProcess(entityManagerFactory), 1); // процесс vacuum выполняется только один
             }
             default -> throw new NotSupportedException("Process type " + processType + " not support");
         }

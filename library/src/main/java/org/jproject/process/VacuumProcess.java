@@ -1,4 +1,4 @@
-package org.jproject.service;
+package org.jproject.process;
 
 import jakarta.persistence.EntityManagerFactory;
 import org.jproject.dao.DaoWorker;
@@ -7,7 +7,7 @@ import org.jproject.domain.EProcessType;
 import org.jproject.domain.TProcess;
 import org.jproject.domain.TProcess_;
 import org.jproject.parameters.process.base.BaseProcessParam;
-import org.jproject.service.base.BaseProcessActionService;
+import org.jproject.process.base.BaseProcessActionService;
 import org.jproject.service.base.BaseVacuumService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,11 +15,11 @@ import org.springframework.data.jpa.domain.Specification;
 
 import java.util.List;
 
-public class VacuumService extends BaseProcessActionService implements Runnable {
+public class VacuumProcess extends BaseProcessActionService implements Runnable {
 
-    private static final Logger logger = LoggerFactory.getLogger(VacuumService.class);
+    private static final Logger logger = LoggerFactory.getLogger(VacuumProcess.class);
 
-    public VacuumService(EntityManagerFactory entityManagerFactory) {
+    public VacuumProcess(EntityManagerFactory entityManagerFactory) {
         super(entityManagerFactory, EProcessType.VACUUM);
     }
 

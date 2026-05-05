@@ -1,4 +1,4 @@
-package org.jproject.service.base;
+package org.jproject.process.base;
 
 import org.jproject.dao.DaoWorker;
 import org.jproject.domain.TProcess;
