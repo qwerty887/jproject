@@ -1,18 +1,14 @@
 package org.jproject.service.base;
 
-import org.apache.commons.io.FilenameUtils;
 import org.jproject.dao.DaoWorker;
 import org.jproject.domain.EFileStatus;
 import org.jproject.domain.FlegFleh;
-import org.jproject.domain.FlehLnk;
 import org.jproject.domain.TFileGroup;
 import org.jproject.domain.TFileHist;
 import org.jproject.domain.TLink;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.nio.file.Path;
 
 public class BaseLinkActionService implements IBaseLinkActionService {
 
@@ -45,10 +41,9 @@ public class BaseLinkActionService implements IBaseLinkActionService {
             return null;
         }
 
-        final TLink result = createLink();
         logger.debug("Link service: complete");
 
-        return result;
+        return null;
     }
 
     @Override
@@ -56,25 +51,4 @@ public class BaseLinkActionService implements IBaseLinkActionService {
         throw new RuntimeException("You need to override the run method");
     }
 
-    private TLink createLink() {
-        final String linkFolder = fileGroup.getLinkPath();
-        final String fileName = FilenameUtils.getName(fileHist.getPath().toAbsolutePath().toString());
-        final Path linkPath = Path.of(FilenameUtils.concat(linkFolder, fileName));
-
-        final TLink link = new TLink();
-        link.setPath(linkPath);
-        this.dao.persist(link);
-
-        final FlehLnk.PK pk = new FlehLnk.PK();
-        pk.setFlehFlehId(fileHist.getId());
-        pk.setLnkLnkId(link.getId());
-
-        final FlehLnk flehLnk = new FlehLnk();
-        flehLnk.setId(pk);
-        dao.persist(flehLnk);
-
-        action(link);
-
-        return link;
-    }
 }
