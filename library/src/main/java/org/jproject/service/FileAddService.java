@@ -10,7 +10,7 @@ import java.nio.file.Path;
 public class FileAddService extends BaseFileActionService {
 
     public FileAddService(DaoWorker dao, Path path) {
-        super(dao, path, EFileStatus.VALID);
+        super(dao, path, EFileStatus.ADDED);
     }
 
     @Override

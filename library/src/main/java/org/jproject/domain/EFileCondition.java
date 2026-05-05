@@ -11,10 +11,6 @@ public enum EFileCondition {
     LESS(4),
     GREATER(5),
     ;
-    //FILENAME
-    //EXT
-
-    // TODO добавить REGEXP сюда
 
     private final int id;
     private final static Map<Integer, EFileCondition> idToEnum = new HashMap<>(EFileCondition.values().length);

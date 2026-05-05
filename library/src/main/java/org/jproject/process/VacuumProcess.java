@@ -25,7 +25,7 @@ public class VacuumProcess extends BaseProcessActionService implements Runnable 
 
     public Specification<TProcess> getProcessSpec() {
         return (root, query, cb) -> cb.and(
-                        root.get(TProcess_.processStatus).in(EProcessStatus.WAIT, EProcessStatus.LOCK, EProcessStatus.PROCESS),
+                        root.get(TProcess_.processStatus).in(EProcessStatus.WAIT, EProcessStatus.LOCK),
                         cb.equal(root.get(TProcess_.processType), EProcessType.VACUUM)
                         );
     }

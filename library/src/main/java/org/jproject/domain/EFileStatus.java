@@ -5,11 +5,8 @@ import java.util.Map;
 
 public enum EFileStatus {
     UNKNOWN(0),
-    VALID(1),
-    INVALID(2), // TODO удалить?
-    MOVE(3), // TODO удалить?
-    DELETE(4),
-    UPDATE(5), // TODO удалить?
+    ADDED(1),
+    DELETED(2),
     ;
 
     private final int id;

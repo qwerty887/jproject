@@ -243,11 +243,6 @@ public class DaoWorker extends DaoBase {
                     update.set(root.get(TProcess_.processStatus), processStatus);
                     update.set(root.get(TProcess_.startDate), TimeUtils.getCurrentTime());
                 }
-                case PROCESS -> {
-                    update.set(root.get(TProcess_.processStatus), processStatus);
-                    update.set(root.get(TProcess_.startDate), TimeUtils.getCurrentTime());
-                    update.set(root.get(TProcess_.error), cb.nullLiteral(TError.class));
-                }
                 case ERROR -> {
                     update.set(root.get(TProcess_.processStatus), processStatus);
                     if (error != null) {

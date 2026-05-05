@@ -7,9 +7,8 @@ public enum EProcessStatus {
     UNKNOWN(0),
     WAIT(1),
     LOCK(2),
-    PROCESS(3),
-    ERROR(4),
-    COMPLETE(5),
+    ERROR(3),
+    COMPLETE(4),
     ;
 
     private final int id;

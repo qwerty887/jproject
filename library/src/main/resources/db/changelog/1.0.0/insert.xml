@@ -15,23 +15,11 @@
         </insert>
         <insert tableName="file_status">
             <column name="fles_id" value="1" />
-            <column name="name" value="valid" />
+            <column name="name" value="added" />
         </insert>
         <insert tableName="file_status">
             <column name="fles_id" value="2" />
-            <column name="name" value="invalid" />
-        </insert>
-        <insert tableName="file_status">
-            <column name="fles_id" value="3" />
-            <column name="name" value="move" />
-        </insert>
-        <insert tableName="file_status">
-            <column name="fles_id" value="4" />
-            <column name="name" value="delete" />
-        </insert>
-        <insert tableName="file_status">
-            <column name="fles_id" value="5" />
-            <column name="name" value="update" />
+            <column name="name" value="deleted" />
         </insert>
     </changeSet>
 
@@ -145,14 +133,10 @@
         </insert>
         <insert tableName="process_status">
             <column name="pcst_id" value="3" />
-            <column name="name" value="process" />
-        </insert>
-        <insert tableName="process_status">
-            <column name="pcst_id" value="4" />
             <column name="name" value="error" />
         </insert>
         <insert tableName="process_status">
-            <column name="pcst_id" value="5" />
+            <column name="pcst_id" value="4" />
             <column name="name" value="complete" />
         </insert>
     </changeSet>

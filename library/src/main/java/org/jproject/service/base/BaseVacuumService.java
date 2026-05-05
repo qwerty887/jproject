@@ -27,7 +27,7 @@ public class BaseVacuumService implements IBaseVacuumService {
     private Specification<TFile> getFileSpec() {
         return (root, query, cb) -> {
             final Join<TFile, TFileHist> joinHist = dao.getOrCreateJoin(root, TFile_.fileHist, JoinType.LEFT);
-            return joinHist.get(TFileHist_.fileStatus).in(EFileStatus.VALID);
+            return joinHist.get(TFileHist_.fileStatus).in(EFileStatus.ADDED);
         };
     }
 

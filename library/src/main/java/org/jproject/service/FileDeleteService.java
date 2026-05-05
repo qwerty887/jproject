@@ -12,7 +12,7 @@ public class FileDeleteService extends BaseFileActionService {
     private final DaoWorker dao;
 
     public FileDeleteService(DaoWorker dao, TFile file) {
-        super(dao, file, EFileStatus.DELETE);
+        super(dao, file, EFileStatus.DELETED);
         this.dao = dao;
     }
 
