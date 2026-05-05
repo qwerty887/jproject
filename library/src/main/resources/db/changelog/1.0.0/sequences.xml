@@ -40,4 +40,8 @@
         <createSequence sequenceName="prlk_seq" startValue="1" incrementBy="1"/>
     </changeSet>
 
+    <changeSet id="create sequence lnkh_seq" author="${author}">
+        <createSequence sequenceName="lnkh_seq" startValue="1" incrementBy="1"/>
+    </changeSet>
+
 </databaseChangeLog>

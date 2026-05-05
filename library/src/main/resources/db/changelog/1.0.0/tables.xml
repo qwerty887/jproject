@@ -26,6 +26,17 @@
         </createTable>
     </changeSet>
 
+    <changeSet id="create table link_status" author="${author}">
+        <createTable tableName="link_status">
+            <column name="lnks_id" type="int4">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar(2000)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
     <changeSet id="create table error" author="${author}">
         <createTable tableName="error">
             <column name="err_id" type="int4">
@@ -268,6 +279,29 @@
             </column>
             <column name="prcd_prcd_id" type="int4">
                 <constraints foreignKeyName="fk_process_block_process" references="process(prcd_id)"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create table link_hist" author="${author}">
+        <createTable tableName="link_hist">
+            <column name="lnkh_id" type="int4">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="lnk_lnk_id" type="int4">
+                <constraints nullable="false" foreignKeyName="fk_link_hist_link" references="link(lnk_id)"/>
+            </column>
+            <column name="path" type="varchar(2000)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="lnks_lnks_id" type="int4">
+                <constraints nullable="false" foreignKeyName="fk_link_hist_link_status" references="link_status(lnks_id)"/>
+            </column>
+            <column name="start_date" type="timestamptz" defaultValueDate="now()">
+                <constraints nullable="false"/>
+            </column>
+            <column name="end_date" type="timestamptz">
+                <constraints nullable="false"/>
             </column>
         </createTable>
     </changeSet>

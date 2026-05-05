@@ -40,8 +40,8 @@ public class BaseLinkActionService implements IBaseLinkActionService {
             return null;
         }
 
-        if (this.fileHist.getFileStatus().equals(EFileStatus.INVALID)) {
-            logger.debug("Nothing to change: file status: {}", EFileStatus.INVALID);
+        if (this.fileHist.getFileStatus().equals(EFileStatus.DELETED)) {
+            logger.debug("Nothing to change: file status: {}", EFileStatus.DELETED);
             return null;
         }
 

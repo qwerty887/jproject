@@ -209,7 +209,7 @@ public class BaseFileActionService implements IBaseFileActionService {
             action(tfile);
         } catch (AppException e) {
             e.printStackTrace();
-            fileHist.setFileStatus(EFileStatus.INVALID);
+            throw e;
         }
 
         return this.dao.persist(fileHist);
