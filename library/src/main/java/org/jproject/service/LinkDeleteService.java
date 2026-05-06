@@ -1,13 +1,13 @@
 package org.jproject.service;
 
 import org.jproject.dao.DaoWorker;
-import org.jproject.domain.FileGroupHist;
+import org.jproject.domain.TFileGroupHist;
 import org.jproject.domain.TLink;
 import org.jproject.service.base.BaseLinkActionService;
 
 public class LinkDeleteService extends BaseLinkActionService {
 
-    public LinkDeleteService(DaoWorker dao, FileGroupHist flegFleh) {
+    public LinkDeleteService(DaoWorker dao, TFileGroupHist flegFleh) {
         super(dao, flegFleh);
     }
 

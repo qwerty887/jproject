@@ -15,7 +15,7 @@ import org.hibernate.annotations.SQLRestriction;
 @Entity
 @Table(name = "FILE_GROUP_HIST")
 @SQLRestriction("now() between start_date and end_date and start_date < end_date") // TODO подумать как сделать более универсально
-public class FileGroupHist extends AbstractHistEntity<Integer> {
+public class TFileGroupHist extends AbstractHistEntity<Integer> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "flgh_seq")

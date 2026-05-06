@@ -16,7 +16,7 @@ import org.jproject.domain.EFileStatus;
 import org.jproject.domain.EFileType;
 import org.jproject.domain.EProcessStatus;
 import org.jproject.domain.EProcessType;
-import org.jproject.domain.FileGroupHist;
+import org.jproject.domain.TFileGroupHist;
 import org.jproject.domain.TError;
 import org.jproject.domain.TFile;
 import org.jproject.domain.TFileGroup;
@@ -318,10 +318,10 @@ public class DaoWorker extends DaoBase {
         return getEntityManager().createQuery(cq).getResultList();
     }
 
-    public TypedQuery<FileGroupHist> getFlegFleh(Specification<FileGroupHist> spec) {
+    public TypedQuery<TFileGroupHist> getFlegFleh(Specification<TFileGroupHist> spec) {
         final CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
-        final CriteriaQuery<FileGroupHist> cq = cb.createQuery(FileGroupHist.class);
-        final Root<FileGroupHist> root = cq.from(FileGroupHist.class);
+        final CriteriaQuery<TFileGroupHist> cq = cb.createQuery(TFileGroupHist.class);
+        final Root<TFileGroupHist> root = cq.from(TFileGroupHist.class);
         cq.where(spec.toPredicate(root, cq, cb));
         return getEntityManager().createQuery(cq);
     }

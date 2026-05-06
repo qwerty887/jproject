@@ -4,7 +4,6 @@ import jakarta.transaction.NotSupportedException;
 import org.jproject.dao.DaoWorker;
 import org.jproject.domain.EFileAttribute;
 import org.jproject.domain.EFileCondition;
-import org.jproject.domain.FileGroupHist;
 import org.jproject.domain.TFile;
 import org.jproject.domain.TFileGroup;
 import org.jproject.domain.TFileGroupRule;
