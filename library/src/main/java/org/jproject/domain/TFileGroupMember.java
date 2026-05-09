@@ -24,11 +24,11 @@ public class TFileGroupMember extends AbstractHistEntity<Integer> {
     private Integer id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "fleg_fleg_id", nullable = false)
+    @JoinColumn(name = "fleg_fleg_id")
     private TFileGroup fileGroup;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "fleh_fleh_id", nullable = false)
+    @JoinColumn(name = "fleh_fleh_id")
     private TFileHist fileHist;
 
     @Override

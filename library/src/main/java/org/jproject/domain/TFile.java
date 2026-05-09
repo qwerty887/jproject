@@ -28,7 +28,7 @@ public class TFile extends AbstractDeleteEntity<Integer> {
     @Column(name = "fle_id", nullable = false)
     private Integer id;
 
-    @Column(name = "path", nullable = false)
+    @Column(name = "path")
     @Convert(converter = ConverterPathToString.class)
     private Path path;
 

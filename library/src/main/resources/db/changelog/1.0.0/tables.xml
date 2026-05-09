@@ -118,9 +118,6 @@
             <column name="fle_id" type="int4">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="flet_flet_id" type="int4">
-                <constraints nullable="false" foreignKeyName="fk_file_file_type" references="file_type(flet_id)"/>
-            </column>
             <column name="path" type="varchar(2000)">
                 <constraints nullable="false"/>
             </column>
@@ -138,11 +135,14 @@
             <column name="fle_fle_id" type="int4">
                 <constraints nullable="false" foreignKeyName="fk_file_hist_file" references="file(fle_id)"/>
             </column>
+            <column name="flet_flet_id" type="int4">
+                <constraints nullable="false" foreignKeyName="fk_file_file_type" references="file_type(flet_id)"/>
+            </column>
             <column name="content_type" type="varchar(2000)">
                 <constraints nullable="true"/>
             </column>
             <column name="md5" type="varchar(2000)">
-                <constraints nullable="false"/>
+                <constraints nullable="true"/>
             </column>
             <column name="bytes" type="int8">
                 <constraints nullable="true"/>

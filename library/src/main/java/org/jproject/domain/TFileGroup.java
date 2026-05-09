@@ -29,10 +29,10 @@ public class TFileGroup extends AbstractDeleteEntity<Integer> {
     @Column(name = "fleg_id", nullable = false)
     private Integer id;
 
-    @Column(name = "name", nullable = false)
+    @Column(name = "name")
     private String name;
 
-    @Column(name = "link_path", nullable = false)
+    @Column(name = "link_path")
     private String linkPath;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)

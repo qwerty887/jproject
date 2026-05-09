@@ -30,11 +30,11 @@ public class TProcess extends AbstractHistEntity<Integer> {
     private TProcess process;
 
     @Enumerated(EnumType.ORDINAL)
-    @Column(name = "pctp_pctp_id", nullable = false)
+    @Column(name = "pctp_pctp_id")
     private EProcessType processType;
 
     @Enumerated(EnumType.ORDINAL)
-    @Column(name = "pcst_pcst_id", nullable = false)
+    @Column(name = "pcst_pcst_id")
     private EProcessStatus processStatus;
 
     @Column(name = "object_count")
@@ -43,7 +43,7 @@ public class TProcess extends AbstractHistEntity<Integer> {
     @Column(name = "attempts_remaining")
     private Integer attemptsRemaining;
 
-    @Column(name = "param", nullable = false)
+    @Column(name = "param")
     private String param;
 
     @Column(name = "create_date")

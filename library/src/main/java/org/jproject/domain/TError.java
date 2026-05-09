@@ -20,10 +20,10 @@ public class TError {
     @Column(name = "err_id", nullable = false)
     private Integer id;
 
-    @Column(name = "error_date", nullable = false)
+    @Column(name = "error_date")
     private Instant date;
 
-    @Column(name = "message", nullable = false)
+    @Column(name = "message")
     private String message;
 
     @Override

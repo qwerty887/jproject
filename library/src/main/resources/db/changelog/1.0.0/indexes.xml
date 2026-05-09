@@ -7,6 +7,7 @@
     <changeSet id="create index uk_fle_path" author="${author}">
         <createIndex indexName="uk_fle_path" tableName="file" unique="true">
             <column name="path"/>
+            <column name="del_date"/>
         </createIndex>
     </changeSet>
 

@@ -27,14 +27,14 @@ public class TFileGroupRule extends AbstractDeleteEntity<Integer> {
     private Integer id;
 
     @Enumerated(EnumType.ORDINAL)
-    @Column(name = "flat_flat_id", nullable = false)
+    @Column(name = "flat_flat_id")
     private EFileAttribute fileAttribute;
 
     @Enumerated(EnumType.ORDINAL)
-    @Column(name = "flgc_flgc_id", nullable = false)
+    @Column(name = "flgc_flgc_id")
     private EFileCondition fileCondition;
 
-    @Column(name = "value", nullable = false)
+    @Column(name = "value")
     private Object value;
 
     @Override

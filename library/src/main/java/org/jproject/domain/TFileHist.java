@@ -1,7 +1,6 @@
 package org.jproject.domain;
 
 import jakarta.persistence.Column;
-import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -16,7 +15,6 @@ import jakarta.persistence.Table;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.hibernate.annotations.SQLRestriction;
 
-import java.nio.file.Path;
 import java.time.Instant;
 
 @Entity
@@ -30,24 +28,24 @@ public class TFileHist extends AbstractHistEntity<Integer> {
     private Integer id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "fle_fle_id", nullable = false)
+    @JoinColumn(name = "fle_fle_id")
     private TFile file;
 
     @Enumerated(EnumType.ORDINAL)
-    @Column(name = "flet_flet_id", nullable = false)
+    @Column(name = "flet_flet_id")
     private EFileType fileType;
 
     @Column(name = "content_type")
     private String contentType;
 
-    @Column(name = "md5", nullable = false)
+    @Column(name = "md5")
     private String md5;
 
     @Column(name = "bytes")
     private Long bytes;
 
     @Enumerated(EnumType.ORDINAL)
-    @Column(name = "fles_fles_id", nullable = false)
+    @Column(name = "fles_fles_id")
     private EFileStatus fileStatus;
 
     @Column(name = "creation_time")
