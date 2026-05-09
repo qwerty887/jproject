@@ -10,6 +10,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -41,6 +42,10 @@ public class TFileGroup extends AbstractDeleteEntity<Integer> {
             inverseJoinColumns=@JoinColumn(name="flgr_flgr_id")
             )
     private List<TFileGroupRule> fileGroupRules = new ArrayList<>();
+
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "fleg_fleg_id")
+    private List<TFileGroupMember> fileGroupMembers = new ArrayList<>();
 
     @Override
     public boolean equals(Object o) {
@@ -89,5 +94,13 @@ public class TFileGroup extends AbstractDeleteEntity<Integer> {
 
     public void setFileGroupRules(List<TFileGroupRule> fileGroupRules) {
         this.fileGroupRules = fileGroupRules;
+    }
+
+    public List<TFileGroupMember> getFileGroupMembers() {
+        return fileGroupMembers;
+    }
+
+    public void setFileGroupMembers(List<TFileGroupMember> fileGroupMembers) {
+        this.fileGroupMembers = fileGroupMembers;
     }
 }

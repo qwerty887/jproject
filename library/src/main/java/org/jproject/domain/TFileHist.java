@@ -56,8 +56,7 @@ public class TFileHist extends AbstractHistEntity<Integer> {
 
         return new EqualsBuilder()
                     .append(getId(), that.getId())
-                    .isEquals()
-                    && that.getFile().equals(getFile());
+                    .isEquals();
     }
 
     @Override

@@ -6,7 +6,6 @@ import org.jproject.dao.DaoWorker;
 import org.jproject.domain.EProcessType;
 import org.jproject.domain.TFile;
 import org.jproject.domain.TFileGroup;
-import org.jproject.domain.TFileGroupMember;
 import org.jproject.domain.TProcess;
 import org.jproject.dto.parameters.DtoGroupFileParameters;
 import org.jproject.dto.parameters.DtoLinkFileParameters;
@@ -39,12 +38,11 @@ public class FileGroupProcess extends BaseProcessActionService implements Runnab
     public int action(DaoWorker dao, TProcess process) {
         final FileGroupingProcessParameters param = getParam(process.getParam(), FileGroupingProcessParameters.class);
         final List<TFile> files = dao.getFiles(param.getFiles(), DtoGroupFileParameters.class);
-        final List<TFileGroupMember> fileGroupMembers = dao.getFileGroupMembers(dao.getFileGroupMembersSpec(dao, files));
 
         final List<DtoLinkFileParameters> result = new ArrayList<>();
         for (TFile file: files) {
             try {
-                final List<TFileGroup> list = (new BaseGroupActionService(dao, file, fileGroupList, fileGroupDefault, fileGroupMembers)).apply();
+                final List<TFileGroup> list = (new BaseGroupActionService(dao, file, fileGroupList, fileGroupDefault)).apply();
                 result.add(DtoLinkFileParameters.of(file, list));
             } catch (NotSupportedException e) {
                 e.printStackTrace();

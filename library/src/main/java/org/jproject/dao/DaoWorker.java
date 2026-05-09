@@ -44,28 +44,44 @@ import java.util.Optional;
 
 public class DaoWorker extends DaoBase {
 
-    private final Integer DEFAULT_FILE_GROUP = 0;
     private final Integer PARTITION_SIZE = 1000;
 
     public DaoWorker(EntityManagerFactory entityManagerFactory) {
         super(entityManagerFactory);
     }
 
-    public List<TFileGroup> getFileGroups() {
-        final CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
-        final CriteriaQuery<TFileGroup> cq = cb.createQuery(TFileGroup.class);
-        final Root<TFileGroup> root = cq.from(TFileGroup.class);
-        root.fetch(TFileGroup_.FILE_GROUP_RULES,  JoinType.INNER);
-        cq.where(cb.greaterThan(root.get(TFileGroup_.ID), DEFAULT_FILE_GROUP));
-        return getEntityManager().createQuery(cq).getResultList();
+    private Specification<TFileGroup> getFileGroupSpec(Integer flegId) {
+        return (root, query, cb) ->
+            cb.equal(root.get(TFileGroup_.ID), flegId);
     }
 
-    public Optional<TFileGroup> getFileGroupDefault() {
-        final CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
-        final CriteriaQuery<TFileGroup> cq = cb.createQuery(TFileGroup.class);
-        final Root<TFileGroup> root = cq.from(TFileGroup.class);
-        cq.where(cb.equal(root.get(TFileGroup_.ID), DEFAULT_FILE_GROUP));
-        return getSingleResult(getEntityManager().createQuery(cq));
+    public List<TFileGroup> getFileGroups(Specification<TFileGroup> spec) {
+        List<TFileGroup> fileGroupList = null;
+
+        {
+            final CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+            final CriteriaQuery<TFileGroup> cq = cb.createQuery(TFileGroup.class);
+            final Root<TFileGroup> root = cq.from(TFileGroup.class);
+            root.fetch(TFileGroup_.fileGroupRules, JoinType.LEFT);
+            if (spec != null) {
+                cq.where(spec.toPredicate(root, cq, cb));
+            }
+            fileGroupList = getEntityManager().createQuery(cq).getResultList();
+        }
+
+        {
+            final CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+            final CriteriaQuery<TFileGroup> cq = cb.createQuery(TFileGroup.class);
+            final Root<TFileGroup> root = cq.from(TFileGroup.class);
+            root.fetch(TFileGroup_.fileGroupMembers, JoinType.LEFT)
+                .fetch(TFileGroupMember_.fileHist, JoinType.INNER);
+
+            cq.distinct(true);
+            cq.where(root.in(fileGroupList));
+            fileGroupList = getEntityManager().createQuery(cq).getResultList();
+        }
+
+        return fileGroupList;
     }
 
     public <T> List<TFile> getFiles(List<T> paramList, Class<T> clazz) {
@@ -331,82 +347,5 @@ public class DaoWorker extends DaoBase {
         final Root<TFileGroupMember> root = cq.from(TFileGroupMember.class);
         cq.where(spec.toPredicate(root, cq, cb));
         return getEntityManager().createQuery(cq);
-    }
-
-    public Specification<TFileGroupMember> getFileGroupMembersSpec(DaoWorker dao, List<TFile> fileList) {
-        return (root, query, cb) -> {
-            final List<TFileHist> fileHistList = fileList.stream()
-                    .filter(c -> c.getFileHist() != null)
-                    .map(TFile::getFileHist).toList();
-
-            final Join<TFileGroupMember, TFileHist> joinFileHist = dao.getOrCreateJoin(root, TFileGroupMember_.fileHist, JoinType.INNER);
-            return joinFileHist.in(fileHistList);
-
-            /*
-                        joinHist.on(cb.equal(joinHist.get(TFileHist_.path), path));
-            return cb.equal(root.get(TFile_.md5), md5);
-             */
-        };
-    }
-
-    public List<TFileGroupMember> getFileGroupMembers(Specification<TFileGroupMember> spec) {
-        final CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
-        final CriteriaQuery<Tuple> cq = cb.createQuery(Tuple.class);
-        final Root<TFileGroupMember> root = cq.from(TFileGroupMember.class);
-
-        final Join<TFileGroupMember, TFileHist> joinFileHist = root.join(TFileGroupMember_.fileHist, JoinType.INNER);
-        final Join<TFileGroupMember, TFileGroup> joinFileGroup = root.join(TFileGroupMember_.fileGroup, JoinType.INNER);
-
-        if (spec != null) {
-            cq.where(spec.toPredicate(root, cq, cb));
-        }
-
-        cq.multiselect(
-                root.get(TFileGroupMember_.ID).alias(TFileGroupMember_.ID),
-                root.get(TFileGroupMember_.START_DATE).alias(TFileGroupMember_.START_DATE),
-                root.get(TFileGroupMember_.END_DATE).alias(TFileGroupMember_.END_DATE),
-
-                joinFileHist.get(TFileHist_.ID).alias(TFileHist_.ID + "_HIST"),
-                joinFileHist.get(TFileHist_.PATH).alias(TFileHist_.PATH + "_HIST"),
-                joinFileHist.get(TFileHist_.FILE_STATUS).alias(TFileHist_.FILE_STATUS + "_HIST"),
-                joinFileHist.get(TFileHist_.CREATION_TIME).alias(TFileHist_.CREATION_TIME + "_HIST"),
-                joinFileHist.get(TFileHist_.LAST_MODIFIED_TIME).alias(TFileHist_.LAST_MODIFIED_TIME + "_HIST"),
-                joinFileHist.get(TFileHist_.START_DATE).alias(TFileHist_.START_DATE + "_HIST"),
-                joinFileHist.get(TFileHist_.END_DATE).alias(TFileHist_.END_DATE + "_HIST"),
-
-                joinFileGroup.get(TFileGroup_.ID).alias(TFileGroup_.ID + "_GROUP"),
-                joinFileGroup.get(TFileGroup_.NAME).alias(TFileGroup_.NAME + "_GROUP"),
-                joinFileGroup.get(TFileGroup_.LINK_PATH).alias(TFileGroup_.LINK_PATH + "_GROUP")
-        );
-
-        return getEntityManager()
-                .createQuery(cq)
-                .getResultStream()
-                .map(entity -> {
-
-                    final TFileGroup fileGroup = new TFileGroup();
-                    fileGroup.setId(entity.get(TFileGroup_.ID + "_GROUP", Integer.class));
-                    fileGroup.setName(entity.get(TFileGroup_.NAME + "_GROUP", String.class));
-                    fileGroup.setLinkPath(entity.get(TFileGroup_.LINK_PATH + "_GROUP", String.class));
-
-                    final TFileHist fileHist = new TFileHist();
-                    fileHist.setId(entity.get(TFileHist_.ID + "_HIST", Integer.class));
-                    fileHist.setPath(entity.get(TFileHist_.PATH + "_HIST", Path.class));
-                    fileHist.setFileStatus(entity.get(TFileHist_.FILE_STATUS + "_HIST", EFileStatus.class));
-                    fileHist.setCreationTime(entity.get(TFileHist_.CREATION_TIME + "_HIST", Instant.class));
-                    fileHist.setLastModifiedTime(entity.get(TFileHist_.LAST_MODIFIED_TIME + "_HIST", Instant.class));
-                    fileHist.setStartDate(entity.get(TFileHist_.START_DATE + "_HIST", Instant.class));
-                    fileHist.setEndDate(entity.get(TFileHist_.END_DATE + "_HIST", Instant.class));
-
-                    final TFileGroupMember fileGroupMember = new TFileGroupMember();
-                    fileGroupMember.setId(entity.get(TFileGroupMember_.ID, Integer.class));
-                    fileGroupMember.setFileGroup(fileGroup);
-                    fileGroupMember.setFileHist(fileHist);
-                    fileGroupMember.setStartDate(entity.get(TFileGroupMember_.START_DATE, Instant.class));
-                    fileGroupMember.setEndDate(entity.get(TFileGroupMember_.END_DATE, Instant.class));
-
-                    return fileGroupMember;
-                })
-                .toList();
     }
 }

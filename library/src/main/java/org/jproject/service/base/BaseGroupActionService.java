@@ -32,24 +32,21 @@ public class BaseGroupActionService implements IBaseGroupActionService {
     private final BaseResolveFileAttribute fileAttribute;
     private final List<TFileGroup> tFileGroups;
     private final TFileHist tFileHist;
+    private final TFile tFile;
     private final Optional<TFileGroup> tFileGroupDefault;
-    private final Map<Integer, List<TFileGroupMember>> tFileGroupMemberMap;
 
     // TODO добавить результаты валидации правил
     // TODO предусмотреть специальные группы: 30 последних файлов, 10 самых больших файлов и т.д.
     // TODO предусмотреть макроподстановку для времени как ${{ now() }}, ${{ now() - 1d }}
 
-    public BaseGroupActionService(DaoWorker dao, TFile tFile, List<TFileGroup> tFileGroups, Optional<TFileGroup> tFileGroupDefault, List<TFileGroupMember> tFileGroupMembers) {
+    public BaseGroupActionService(DaoWorker dao, TFile tFile, List<TFileGroup> tFileGroups, Optional<TFileGroup> tFileGroupDefault) {
         logger.debug("Group service: init");
         this.dao = dao;
         this.fileAttribute = new BaseResolveFileAttribute(tFile);
         this.tFileGroups = tFileGroups;
+        this.tFile = tFile;
         this.tFileHist = tFile.getFileHist();
         this.tFileGroupDefault = tFileGroupDefault;
-        this.tFileGroupMemberMap = tFileGroupMembers.stream().collect(Collectors.groupingBy(c -> c.getFileGroup().getId()));
-
-
-
     }
 
     @Override
@@ -58,32 +55,15 @@ public class BaseGroupActionService implements IBaseGroupActionService {
 
         final List<TFileGroup> matches = getMatches();
 
-        // TODO сначала закрыть все связки с fileHist, а после создать новые связки
-
-
-        // dao.closeGroupMember(fileGroupMember);
-
-
         for (TFileGroup fileGroup : matches) {
-            final Integer flegId = fileGroup.getId();
-            List<TFileGroupMember> fileGroupMemberList = tFileGroupMemberMap.get(flegId);
-            if (fileGroupMemberList == null) {
-                fileGroupMemberList = new ArrayList<>();
-            }
-
-            if (fileGroupMemberList.size() == 0) {
-                fileGroupMemberList.add(createFileGroupMember(fileGroup, tFileHist));
-                tFileGroupMemberMap.put(flegId, fileGroupMemberList);
-            } else {
-                final List<TFileGroupMember> newfileGroupMemberList = new ArrayList<>();
-                for (TFileGroupMember fileGroupMember: fileGroupMemberList) {
-                    if (fileGroupMember != null) {
-                        dao.closeGroupMember(fileGroupMember);
-                    }
-                    newfileGroupMemberList.add(createFileGroupMember(fileGroup, tFileHist));
-                }
-                tFileGroupMemberMap.put(flegId, newfileGroupMemberList);
-            }
+            // закрываем записи в fileGroupMember, связанные с историческим состоянием файла
+            fileGroup.getFileGroupMembers()
+                    .stream()
+                    // .filter(tFileHist::equals)
+                    .filter(c -> c.getFileHist().getFile().equals(tFile))
+                    .forEach(dao::closeGroupMember);
+            // создаем новые исторические записи для файла
+            createFileGroupMember(fileGroup, tFileHist);
         }
 
         logger.debug("Group service: complete");
@@ -100,10 +80,6 @@ public class BaseGroupActionService implements IBaseGroupActionService {
         // TODO добавить статус?
         dao.persist(fileGroupMember);
         return fileGroupMember;
-    }
-
-    private TFileGroupMember getFileGroupMember(TFileHist fileHist, TFileGroup fileGroup) {
-        return null;
     }
 
     private List<TFileGroup> getMatches() throws NotSupportedException {

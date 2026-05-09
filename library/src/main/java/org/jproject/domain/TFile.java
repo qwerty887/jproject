@@ -53,8 +53,6 @@ public class TFile extends AbstractDeleteEntity<Integer> {
 
         return new EqualsBuilder()
                 .append(getId(), that.getId())
-                .append(getFileType(), that.getFileType())
-                .append(getDelDate(), that.getDelDate())
                 .isEquals();
     }
 
