@@ -292,8 +292,8 @@
             <column name="fleg_fleg_id" type="int4">
                 <constraints nullable="false" foreignKeyName="fk_fleg_fleh_file_group" references="file_group(fleg_id)"/>
             </column>
-            <column name="fleh_fleh_id" type="int4">
-                <constraints nullable="false" foreignKeyName="fk_fleg_fleh_file_hist" references="file_hist(fleh_id)"/>
+            <column name="fle_fle_id" type="int4">
+                <constraints nullable="false" foreignKeyName="fk_fle_fle_file" references="file(fle_id)"/>
             </column>
             <column name="start_date" type="timestamptz" defaultValueDate="now()">
                 <constraints nullable="false"/>

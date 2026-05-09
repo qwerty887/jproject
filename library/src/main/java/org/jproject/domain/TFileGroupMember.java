@@ -29,8 +29,8 @@ public class TFileGroupMember extends AbstractHistEntity<Integer> {
     private TFileGroup fileGroup;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "fleh_fleh_id")
-    private TFileHist fileHist;
+    @JoinColumn(name = "fle_fle_id")
+    private TFile file;
 
     @Override
     public boolean equals(Object o) {
@@ -62,11 +62,11 @@ public class TFileGroupMember extends AbstractHistEntity<Integer> {
         this.fileGroup = fileGroup;
     }
 
-    public TFileHist getFileHist() {
-        return fileHist;
+    public TFile getFile() {
+        return file;
     }
 
-    public void setFileHist(TFileHist fileHist) {
-        this.fileHist = fileHist;
+    public void setFile(TFile file) {
+        this.file = file;
     }
 }

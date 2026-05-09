@@ -8,7 +8,6 @@ import org.jproject.domain.TFile;
 import org.jproject.domain.TFileGroup;
 import org.jproject.domain.TFileGroupMember;
 import org.jproject.domain.TFileGroupRule;
-import org.jproject.domain.TFileHist;
 import org.jproject.utils.TimeUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,13 +15,10 @@ import org.slf4j.LoggerFactory;
 import java.nio.file.Path;
 import java.time.Instant;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 public class BaseGroupActionService implements IBaseGroupActionService {
 
@@ -31,7 +27,6 @@ public class BaseGroupActionService implements IBaseGroupActionService {
     private final DaoWorker dao;
     private final BaseResolveFileAttribute fileAttribute;
     private final List<TFileGroup> tFileGroups;
-    private final TFileHist tFileHist;
     private final TFile tFile;
     private final Optional<TFileGroup> tFileGroupDefault;
 
@@ -45,7 +40,6 @@ public class BaseGroupActionService implements IBaseGroupActionService {
         this.fileAttribute = new BaseResolveFileAttribute(tFile);
         this.tFileGroups = tFileGroups;
         this.tFile = tFile;
-        this.tFileHist = tFile.getFileHist();
         this.tFileGroupDefault = tFileGroupDefault;
     }
 
@@ -55,15 +49,17 @@ public class BaseGroupActionService implements IBaseGroupActionService {
 
         final List<TFileGroup> matches = getMatches();
 
+        System.out.println("matches size = " + matches.size());
+
         for (TFileGroup fileGroup : matches) {
-            // закрываем записи в fileGroupMember, связанные с историческим состоянием файла
+            // закрываем записи в fileGroupMember, связанные с файлов
             fileGroup.getFileGroupMembers()
                     .stream()
                     // .filter(tFileHist::equals)
-                    .filter(c -> c.getFileHist().getFile().equals(tFile))
+                    .filter(c -> c.getFile().equals(this.tFile))
                     .forEach(dao::closeGroupMember);
             // создаем новые исторические записи для файла
-            createFileGroupMember(fileGroup, tFileHist);
+            createFileGroupMember(fileGroup, this.tFile);
         }
 
         logger.debug("Group service: complete");
@@ -71,13 +67,12 @@ public class BaseGroupActionService implements IBaseGroupActionService {
         return matches;
     }
 
-    private TFileGroupMember createFileGroupMember(TFileGroup fileGroup, TFileHist fileHist) {
+    private TFileGroupMember createFileGroupMember(TFileGroup fileGroup, TFile file) {
         final TFileGroupMember fileGroupMember = new TFileGroupMember();
-        fileGroupMember.setFileHist(fileHist);
+        fileGroupMember.setFile(file);
         fileGroupMember.setFileGroup(fileGroup);
         fileGroupMember.setStartDate(TimeUtils.getCurrentTime());
         fileGroupMember.setEndDate(TimeUtils.getMaxTime());
-        // TODO добавить статус?
         dao.persist(fileGroupMember);
         return fileGroupMember;
     }

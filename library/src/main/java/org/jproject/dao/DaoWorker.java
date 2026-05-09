@@ -33,7 +33,6 @@ import org.jproject.utils.TimeUtils;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.nio.file.Path;
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -44,11 +43,6 @@ public class DaoWorker extends DaoBase {
 
     public DaoWorker(EntityManagerFactory entityManagerFactory) {
         super(entityManagerFactory);
-    }
-
-    private Specification<TFileGroup> getFileGroupSpec(Integer flegId) {
-        return (root, query, cb) ->
-            cb.equal(root.get(TFileGroup_.ID), flegId);
     }
 
     public List<TFileGroup> getFileGroups(Specification<TFileGroup> spec) {
@@ -69,7 +63,8 @@ public class DaoWorker extends DaoBase {
             final CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
             final CriteriaQuery<TFileGroup> cq = cb.createQuery(TFileGroup.class);
             final Root<TFileGroup> root = cq.from(TFileGroup.class);
-            root.fetch(TFileGroup_.fileGroupMembers, JoinType.LEFT);
+            root.fetch(TFileGroup_.fileGroupMembers, JoinType.LEFT)
+                .fetch(TFileGroupMember_.file, JoinType.INNER);
 
             cq.distinct(true);
             cq.where(root.in(fileGroupList));
@@ -114,18 +109,6 @@ public class DaoWorker extends DaoBase {
 
     public Optional<TFile> getFile(Path path) {
         return getFiles(getFileSpec(path)).stream().findAny();
-    }
-
-    public List<TFile> getFiles(List<DtoGroupFileParameters> listParam) {
-        final List<List<DtoGroupFileParameters>> partitions = Lists.partition(listParam, PARTITION_SIZE);
-
-        final List<TFile> result = new ArrayList<>();
-        for (List<DtoGroupFileParameters> list: partitions) {
-            final List<Path> pathList = list.stream().map(DtoGroupFileParameters::getPath).toList();
-            result.addAll(getFiles(getFileSpec(pathList)));
-        }
-
-        return result;
     }
 
     private Specification<TFile> getFileSpec(Path path) {
