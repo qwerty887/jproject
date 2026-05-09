@@ -6,18 +6,23 @@ import org.jproject.domain.EFileAttribute;
 import org.jproject.domain.EFileCondition;
 import org.jproject.domain.TFile;
 import org.jproject.domain.TFileGroup;
+import org.jproject.domain.TFileGroupMember;
 import org.jproject.domain.TFileGroupRule;
 import org.jproject.domain.TFileHist;
+import org.jproject.utils.TimeUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.nio.file.Path;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class BaseGroupActionService implements IBaseGroupActionService {
 
@@ -28,18 +33,23 @@ public class BaseGroupActionService implements IBaseGroupActionService {
     private final List<TFileGroup> tFileGroups;
     private final TFileHist tFileHist;
     private final Optional<TFileGroup> tFileGroupDefault;
+    private final Map<Integer, List<TFileGroupMember>> tFileGroupMemberMap;
 
     // TODO добавить результаты валидации правил
     // TODO предусмотреть специальные группы: 30 последних файлов, 10 самых больших файлов и т.д.
     // TODO предусмотреть макроподстановку для времени как ${{ now() }}, ${{ now() - 1d }}
 
-    public BaseGroupActionService(DaoWorker dao, TFile tFile, List<TFileGroup> tFileGroups, Optional<TFileGroup> tFileGroupDefault) {
+    public BaseGroupActionService(DaoWorker dao, TFile tFile, List<TFileGroup> tFileGroups, Optional<TFileGroup> tFileGroupDefault, List<TFileGroupMember> tFileGroupMembers) {
         logger.debug("Group service: init");
         this.dao = dao;
         this.fileAttribute = new BaseResolveFileAttribute(tFile);
         this.tFileGroups = tFileGroups;
         this.tFileHist = tFile.getFileHist();
         this.tFileGroupDefault = tFileGroupDefault;
+        this.tFileGroupMemberMap = tFileGroupMembers.stream().collect(Collectors.groupingBy(c -> c.getFileGroup().getId()));
+
+
+
     }
 
     @Override
@@ -48,22 +58,52 @@ public class BaseGroupActionService implements IBaseGroupActionService {
 
         final List<TFileGroup> matches = getMatches();
 
-        /*
-        for (TFileGroup entity: matches) {
-            final FileGroupHist.PK pk = new FileGroupHist.PK();
-            pk.setFlegFlegId(entity.getId());
-            pk.setFlehFlehId(this.tFileHist.getId());
+        // TODO сначала закрыть все связки с fileHist, а после создать новые связки
 
-            final FileGroupHist flegFleh = new FileGroupHist();
-            flegFleh.setId(pk);
 
-            dao.persist(flegFleh);
+        // dao.closeGroupMember(fileGroupMember);
+
+
+        for (TFileGroup fileGroup : matches) {
+            final Integer flegId = fileGroup.getId();
+            List<TFileGroupMember> fileGroupMemberList = tFileGroupMemberMap.get(flegId);
+            if (fileGroupMemberList == null) {
+                fileGroupMemberList = new ArrayList<>();
+            }
+
+            if (fileGroupMemberList.size() == 0) {
+                fileGroupMemberList.add(createFileGroupMember(fileGroup, tFileHist));
+                tFileGroupMemberMap.put(flegId, fileGroupMemberList);
+            } else {
+                final List<TFileGroupMember> newfileGroupMemberList = new ArrayList<>();
+                for (TFileGroupMember fileGroupMember: fileGroupMemberList) {
+                    if (fileGroupMember != null) {
+                        dao.closeGroupMember(fileGroupMember);
+                    }
+                    newfileGroupMemberList.add(createFileGroupMember(fileGroup, tFileHist));
+                }
+                tFileGroupMemberMap.put(flegId, newfileGroupMemberList);
+            }
         }
-        */
 
         logger.debug("Group service: complete");
 
         return matches;
+    }
+
+    private TFileGroupMember createFileGroupMember(TFileGroup fileGroup, TFileHist fileHist) {
+        final TFileGroupMember fileGroupMember = new TFileGroupMember();
+        fileGroupMember.setFileHist(fileHist);
+        fileGroupMember.setFileGroup(fileGroup);
+        fileGroupMember.setStartDate(TimeUtils.getCurrentTime());
+        fileGroupMember.setEndDate(TimeUtils.getMaxTime());
+        // TODO добавить статус?
+        dao.persist(fileGroupMember);
+        return fileGroupMember;
+    }
+
+    private TFileGroupMember getFileGroupMember(TFileHist fileHist, TFileGroup fileGroup) {
+        return null;
     }
 
     private List<TFileGroup> getMatches() throws NotSupportedException {

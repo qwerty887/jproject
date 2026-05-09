@@ -284,16 +284,16 @@
         </createTable>
     </changeSet>
 
-    <changeSet id="create table file_group_hist" author="${author}">
-        <createTable tableName="file_group_hist">
-            <column name="flgh_id" type="int4">
+    <changeSet id="create table file_group_member" author="${author}">
+        <createTable tableName="file_group_member">
+            <column name="flgm_id" type="int4">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="fleg_fleg_id" type="int4">
-                <constraints foreignKeyName="fk_fleg_fleh_file_group" references="file_group(fleg_id)"/>
+                <constraints nullable="false" foreignKeyName="fk_fleg_fleh_file_group" references="file_group(fleg_id)"/>
             </column>
             <column name="fleh_fleh_id" type="int4">
-                <constraints foreignKeyName="fk_fleg_fleh_file_hist" references="file_hist(fleh_id)"/>
+                <constraints nullable="false" foreignKeyName="fk_fleg_fleh_file_hist" references="file_hist(fleh_id)"/>
             </column>
             <column name="start_date" type="timestamptz" defaultValueDate="now()">
                 <constraints nullable="false"/>

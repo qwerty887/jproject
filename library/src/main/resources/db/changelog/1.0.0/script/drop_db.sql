@@ -22,6 +22,8 @@ BEGIN
     drop table if exists process cascade;
     drop table if exists process_lock cascade;
     drop table if exists fleh_lnk cascade;
+    drop table if exists file_group_member cascade;
+
 
     drop sequence if exists fle_seq;
     drop sequence if exists lnk_seq;
@@ -35,5 +37,6 @@ BEGIN
     drop sequence if exists flgr_seq;
     drop sequence if exists prcd_seq;
     drop sequence if exists prlk_seq;
+    drop sequence if exists flgm_seq;
 
 END $$;

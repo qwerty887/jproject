@@ -8,7 +8,7 @@ BEGIN
 	from process p
 	into lv_prcd_id
 	where p.pctp_pctp_id = p_pctp_id
-		  and ( p.pcst_pcst_id = 1 or (p.pcst_pcst_id = 4 and p.attempts_remaining > 0))
+		  and ( p.pcst_pcst_id = 1 or (p.pcst_pcst_id = 3 and p.attempts_remaining > 0))
 	order by random()
 	limit 1
 	for update nowait;

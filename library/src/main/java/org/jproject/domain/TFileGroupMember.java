@@ -13,14 +13,14 @@ import jakarta.persistence.Table;
 import org.hibernate.annotations.SQLRestriction;
 
 @Entity
-@Table(name = "FILE_GROUP_HIST")
+@Table(name = "FILE_GROUP_MEMBER")
 @SQLRestriction("now() between start_date and end_date and start_date < end_date") // TODO подумать как сделать более универсально
-public class TFileGroupHist extends AbstractHistEntity<Integer> {
+public class TFileGroupMember extends AbstractHistEntity<Integer> {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "flgh_seq")
-    @SequenceGenerator(name = "flgh_seq", sequenceName = "flgh_seq", allocationSize = 1)
-    @Column(name = "flgh_id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "flgm_seq")
+    @SequenceGenerator(name = "flgm_seq", sequenceName = "flgm_seq", allocationSize = 1)
+    @Column(name = "flgm_id", nullable = false)
     private Integer id;
 
     @ManyToOne(fetch = FetchType.LAZY)
