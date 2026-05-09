@@ -8,6 +8,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
+import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.hibernate.annotations.SQLRestriction;
 
 import java.nio.file.Path;
@@ -25,6 +26,18 @@ public class TLink extends AbstractDeleteEntity<Integer> {
     @Column(name = "path")
     @Convert(converter = ConverterPathToString.class)
     private Path path;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        TLink that = (TLink) o;
+
+        return new EqualsBuilder()
+                .append(getId(), that.getId())
+                .isEquals();
+    }
 
     @Override
     public Integer getId() {

@@ -34,9 +34,7 @@ public class TError {
         TError that = (TError) o;
 
         return new EqualsBuilder()
-                .append(id, that.id)
-                .append(date, that.date)
-                .append(message, that.message)
+                .append(getId(), that.getId())
                 .isEquals();
     }
 

@@ -56,9 +56,6 @@ public class TFileGroup extends AbstractDeleteEntity<Integer> {
 
         return new EqualsBuilder()
                 .append(getId(), that.getId())
-                .append(getName(), that.getName())
-                .append(getLinkPath(), that.getLinkPath())
-                .append(getDelDate(), that.getDelDate())
                 .isEquals();
     }
 

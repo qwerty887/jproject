@@ -34,8 +34,7 @@ public class TProcessLock implements IBaseEntity<Integer> {
 
         return new EqualsBuilder()
                 .append(getId(), that.getId())
-                .isEquals()
-                && getProcess().equals(that.getProcess());
+                .isEquals();
     }
 
     @Override

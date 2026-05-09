@@ -46,10 +46,6 @@ public class TFileGroupRule extends AbstractDeleteEntity<Integer> {
 
         return new EqualsBuilder()
                 .append(getId(), that.getId())
-                .append(getFileAttribute(), that.getFileAttribute())
-                .append(getFileCondition(), that.getFileCondition())
-                .append(getValue(), that.getValue())
-                .append(getDelDate(), that.getDelDate())
                 .isEquals();
     }
 

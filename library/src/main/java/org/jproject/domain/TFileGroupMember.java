@@ -10,6 +10,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
+import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.hibernate.annotations.SQLRestriction;
 
 @Entity
@@ -30,6 +31,18 @@ public class TFileGroupMember extends AbstractHistEntity<Integer> {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fleh_fleh_id")
     private TFileHist fileHist;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        TFileGroupMember that = (TFileGroupMember) o;
+
+        return new EqualsBuilder()
+                .append(getId(), that.getId())
+                .isEquals();
+    }
 
     @Override
     public Integer getId() {

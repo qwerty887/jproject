@@ -62,15 +62,7 @@ public class TProcess extends AbstractHistEntity<Integer> {
 
         return new EqualsBuilder()
                 .append(getId(), that.getId())
-                .append(getProcessStatus(), that.getProcessStatus())
-                .append(getProcessType(), that.getProcessType())
-                .append(getParam(), that.getParam())
-                .append(getStartDate(), that.getStartDate())
-                .append(getEndDate(), that.getEndDate())
-                .append(getCreateDate(), that.getCreateDate())
-                .append(getObjectCount(), that.getObjectCount())
-                .isEquals()
-                && getError().equals(that.getError());
+                .isEquals();
     }
 
     @Override
