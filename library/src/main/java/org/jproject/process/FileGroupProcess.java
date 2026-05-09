@@ -10,6 +10,8 @@ import org.jproject.domain.TProcess;
 import org.jproject.dto.parameters.DtoGroupFileParameters;
 import org.jproject.dto.parameters.DtoLinkFileParameters;
 import org.jproject.exception.NotSupportExceptionApp;
+import org.jproject.parameters.AppParameters;
+import org.jproject.parameters.EAppParameters;
 import org.jproject.parameters.process.FileGroupingProcessParameters;
 import org.jproject.parameters.process.FileLinkingProcessParameters;
 import org.jproject.service.base.BaseGroupActionService;
@@ -25,19 +27,20 @@ public class FileGroupProcess extends BaseProcessActionService implements Runnab
 
     private static final Logger logger = LoggerFactory.getLogger(FileGroupProcess.class);
 
-    private final List<TFileGroup> fileGroupList;
-    private final Optional<TFileGroup> fileGroupDefault;
+    private final AppParameters appParameters;
 
-    public FileGroupProcess(EntityManagerFactory entityManagerFactory, List<TFileGroup> fileGroupList, Optional<TFileGroup> fileGroupDefault) {
+    public FileGroupProcess(EntityManagerFactory entityManagerFactory, AppParameters appParameters) {
         super(entityManagerFactory, EProcessType.GROUP);
-        this.fileGroupList = fileGroupList;
-        this.fileGroupDefault = fileGroupDefault;
+        this.appParameters = appParameters;
     }
 
     @Override
     public int action(DaoWorker dao, TProcess process) {
         final FileGroupingProcessParameters param = getParam(process.getParam(), FileGroupingProcessParameters.class);
         final List<TFile> files = dao.getFiles(param.getFiles(), DtoGroupFileParameters.class);
+        final List<TFileGroup> fileGroupList = dao.getFileGroups(null); // TODO указать условие фильтрации по файлам
+        final Integer fileGroupDefaultId = appParameters.get(EAppParameters.FILE_GROUP_DEFAULT_ID, Integer.class);
+        final Optional<TFileGroup> fileGroupDefault = fileGroupList.stream().filter(c -> c.getId().equals(fileGroupDefaultId)).findAny();
 
         final List<DtoLinkFileParameters> result = new ArrayList<>();
         for (TFile file: files) {
