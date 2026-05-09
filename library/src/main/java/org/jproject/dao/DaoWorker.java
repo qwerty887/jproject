@@ -3,17 +3,13 @@ package org.jproject.dao;
 import com.google.common.collect.Lists;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Query;
-import jakarta.persistence.Tuple;
 import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaDelete;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.CriteriaUpdate;
-import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.JoinType;
 import jakarta.persistence.criteria.Root;
-import org.jproject.domain.EFileStatus;
-import org.jproject.domain.EFileType;
 import org.jproject.domain.EProcessStatus;
 import org.jproject.domain.EProcessType;
 import org.jproject.domain.TFileGroupMember;
@@ -94,8 +90,7 @@ public class DaoWorker extends DaoBase {
             if (clazz.equals(DtoGroupFileParameters.class)) {
                 final List<DtoGroupFileParameters> list2 = list.stream().map(c -> (DtoGroupFileParameters) c).toList();
                 final List<Path> pathList = list2.stream().map(DtoGroupFileParameters::getPath).toList();
-                final List<String> md5List = list2.stream().map(DtoGroupFileParameters::getMd5).toList();
-                result.addAll(getFiles(getFileSpec(pathList, md5List)));
+                result.addAll(getFiles(getFileSpec(pathList)));
                 continue;
             }
 
@@ -118,12 +113,8 @@ public class DaoWorker extends DaoBase {
         return result;
     }
 
-    public Optional<TFile> getFile(Path path, String md5) {
-        return getFiles(getFileSpec(path, md5)).stream().findAny();
-    }
-
-    public List<TFile> getFiles(List<Path> pathList, List<String> md5List) {
-        return getFiles(getFileSpec(pathList, md5List));
+    public Optional<TFile> getFile(Path path) {
+        return getFiles(getFileSpec(path)).stream().findAny();
     }
 
     public List<TFile> getFiles(List<DtoGroupFileParameters> listParam) {
@@ -132,95 +123,30 @@ public class DaoWorker extends DaoBase {
         final List<TFile> result = new ArrayList<>();
         for (List<DtoGroupFileParameters> list: partitions) {
             final List<Path> pathList = list.stream().map(DtoGroupFileParameters::getPath).toList();
-            final List<String> md5List = list.stream().map(DtoGroupFileParameters::getMd5).toList();
-            result.addAll(getFiles(pathList, md5List));
+            result.addAll(getFiles(getFileSpec(pathList)));
         }
 
         return result;
     }
 
     private Specification<TFile> getFileSpec(Path path) {
-        return (root, query, cb) -> {
-            final Join<TFile, TFileHist> joinHist = getOrCreateJoin(root, TFile_.fileHist, JoinType.INNER);
-            return cb.equal(joinHist.get(TFileHist_.path), path);
-        };
+        return (root, query, cb) -> cb.equal(root.get(TFile_.path), path);
     }
 
     private Specification<TFile> getFileSpec(List<Path> pathList) {
-        return (root, query, cb) -> {
-            final Join<TFile, TFileHist> joinHist = getOrCreateJoin(root, TFile_.fileHist, JoinType.INNER);
-            return joinHist.get(TFileHist_.path).in(pathList);
-        };
-    }
-
-    private Specification<TFile> getFileSpec(Path path, String md5) {
-        return (root, query, cb) -> {
-            final Join<TFile, TFileHist> joinHist = getOrCreateJoin(root, TFile_.fileHist, JoinType.LEFT);
-            joinHist.on(cb.equal(joinHist.get(TFileHist_.path), path));
-            return cb.equal(root.get(TFile_.md5), md5);
-        };
-    }
-
-    private Specification<TFile> getFileSpec(List<Path> pathList, List<String> md5List) {
-        return (root, query, cb) -> {
-            final Join<TFile, TFileHist> joinHist = getOrCreateJoin(root, TFile_.fileHist, JoinType.LEFT);
-            joinHist.on(joinHist.get(TFileHist_.path).in(pathList));
-            return root.get(TFile_.md5).in(md5List);
-        };
+        return (root, query, cb) -> root.get(TFile_.path).in(pathList);
     }
 
     public List<TFile> getFiles(Specification<TFile> spec) {
         final CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
-        final CriteriaQuery<Tuple> cq = cb.createQuery(Tuple.class);
+        final CriteriaQuery<TFile> cq = cb.createQuery(TFile.class);
         final Root<TFile> root = cq.from(TFile.class);
-
-        final Join<TFile, TFileHist> joinHist = root.join(TFile_.FILE_HIST, JoinType.LEFT);
-
+        root.fetch(TFile_.fileHist, JoinType.INNER);
         if (spec != null) {
             cq.where(spec.toPredicate(root, cq, cb));
         }
 
-        cq.multiselect(
-                root.get(TFile_.ID).alias(TFile_.ID),
-                root.get(TFile_.FILE_TYPE).alias(TFile_.FILE_TYPE),
-                root.get(TFile_.CONTENT_TYPE).alias(TFile_.CONTENT_TYPE),
-                root.get(TFile_.MD5).alias(TFile_.MD5),
-                root.get(TFile_.BYTES).alias(TFile_.BYTES),
-
-                joinHist.get(TFileHist_.ID).alias(TFileHist_.ID + "_HIST"),
-                joinHist.get(TFileHist_.PATH).alias(TFileHist_.PATH),
-                joinHist.get(TFileHist_.FILE_STATUS).alias(TFileHist_.FILE_STATUS),
-                joinHist.get(TFileHist_.CREATION_TIME).alias(TFileHist_.CREATION_TIME),
-                joinHist.get(TFileHist_.LAST_MODIFIED_TIME).alias(TFileHist_.LAST_MODIFIED_TIME),
-                joinHist.get(TFileHist_.START_DATE).alias(TFileHist_.START_DATE),
-                joinHist.get(TFileHist_.END_DATE).alias(TFileHist_.END_DATE)
-        );
-
-        return getEntityManager()
-                .createQuery(cq)
-                .getResultStream()
-                .map(entity -> {
-                    final TFile tfile = new TFile();
-                    tfile.setId(entity.get(TFile_.ID, Integer.class));
-                    tfile.setFileType(entity.get(TFile_.FILE_TYPE, EFileType.class));
-                    tfile.setContentType(entity.get(TFile_.CONTENT_TYPE, String.class));
-                    tfile.setMd5(entity.get(TFile_.MD5, String.class));
-                    tfile.setBytes(entity.get(TFile_.BYTES, Long.class));
-
-                    final TFileHist tFileHist = new TFileHist();
-                    tFileHist.setFile(tfile);
-                    tFileHist.setId(entity.get(TFileHist_.ID + "_HIST", Integer.class));
-                    tFileHist.setPath(entity.get(TFileHist_.PATH, Path.class));
-                    tFileHist.setFileStatus(entity.get(TFileHist_.FILE_STATUS, EFileStatus.class));
-                    tFileHist.setCreationTime(entity.get(TFileHist_.CREATION_TIME, Instant.class));
-                    tFileHist.setLastModifiedTime(entity.get(TFileHist_.LAST_MODIFIED_TIME, Instant.class));
-                    tFileHist.setStartDate(entity.get(TFileHist_.START_DATE, Instant.class));
-                    tFileHist.setEndDate(entity.get(TFileHist_.END_DATE, Instant.class));
-                    tfile.setFileHist(tFileHist);
-
-                    return tfile;
-                })
-                .toList();
+        return getEntityManager().createQuery(cq).getResultList();
     }
 
 

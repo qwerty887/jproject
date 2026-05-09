@@ -4,9 +4,9 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
 
-    <changeSet id="create index uk_fle_md5" author="${author}">
-        <createIndex indexName="uk_fle_md5" tableName="file" unique="true">
-            <column name="md5"/>
+    <changeSet id="create index uk_fle_path" author="${author}">
+        <createIndex indexName="uk_fle_path" tableName="file" unique="true">
+            <column name="path"/>
         </createIndex>
     </changeSet>
 

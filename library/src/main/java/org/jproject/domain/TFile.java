@@ -1,9 +1,8 @@
 package org.jproject.domain;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -16,6 +15,8 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.hibernate.annotations.Immutable;
 import org.hibernate.annotations.SQLRestriction;
 
+import java.nio.file.Path;
+
 @Entity
 @Table(name = "FILE")
 @Immutable
@@ -27,18 +28,9 @@ public class TFile extends AbstractDeleteEntity<Integer> {
     @Column(name = "fle_id", nullable = false)
     private Integer id;
 
-    @Enumerated(EnumType.ORDINAL)
-    @Column(name = "flet_flet_id", nullable = false)
-    private EFileType fileType;
-
-    @Column(name = "content_type")
-    private String contentType;
-
-    @Column(name = "md5", nullable = false)
-    private String md5;
-
-    @Column(name = "bytes")
-    private Long bytes;
+    @Column(name = "path", nullable = false)
+    @Convert(converter = ConverterPathToString.class)
+    private Path path;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fle_id", referencedColumnName = "fle_fle_id", nullable = false, insertable=false, updatable=false)
@@ -66,36 +58,12 @@ public class TFile extends AbstractDeleteEntity<Integer> {
         this.id = id;
     }
 
-    public EFileType getFileType() {
-        return fileType;
+    public Path getPath() {
+        return path;
     }
 
-    public void setFileType(EFileType fileType) {
-        this.fileType = fileType;
-    }
-
-    public String getContentType() {
-        return contentType;
-    }
-
-    public void setContentType(String contentType) {
-        this.contentType = contentType;
-    }
-
-    public String getMd5() {
-        return md5;
-    }
-
-    public void setMd5(String md5) {
-        this.md5 = md5;
-    }
-
-    public Long getBytes() {
-        return bytes;
-    }
-
-    public void setBytes(Long bytes) {
-        this.bytes = bytes;
+    public void setPath(Path path) {
+        this.path = path;
     }
 
     public TFileHist getFileHist() {

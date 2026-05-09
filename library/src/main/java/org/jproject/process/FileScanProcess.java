@@ -35,7 +35,7 @@ public class FileScanProcess extends BaseProcessActionService implements Runnabl
                 .getFiles(param.getFiles(), DtoScanFileParameters.class)
                 .stream()
                 .filter(f -> f.getFileHist() != null)
-                .collect(Collectors.toMap(f -> f.getFileHist().getPath(), c -> c));
+                .collect(Collectors.toMap(TFile::getPath, c -> c));
 
         final List<DtoGroupFileParameters> result = param.getFiles()
                 .stream()

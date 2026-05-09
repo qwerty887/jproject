@@ -121,14 +121,8 @@
             <column name="flet_flet_id" type="int4">
                 <constraints nullable="false" foreignKeyName="fk_file_file_type" references="file_type(flet_id)"/>
             </column>
-            <column name="content_type" type="varchar(2000)">
-                <constraints nullable="true"/>
-            </column>
-            <column name="md5" type="varchar(2000)">
+            <column name="path" type="varchar(2000)">
                 <constraints nullable="false"/>
-            </column>
-            <column name="bytes" type="int8">
-                <constraints nullable="true"/>
             </column>
             <column name="del_date" type="timestamptz">
                 <constraints nullable="true"/>
@@ -144,8 +138,14 @@
             <column name="fle_fle_id" type="int4">
                 <constraints nullable="false" foreignKeyName="fk_file_hist_file" references="file(fle_id)"/>
             </column>
-            <column name="path" type="varchar(2000)">
+            <column name="content_type" type="varchar(2000)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="md5" type="varchar(2000)">
                 <constraints nullable="false"/>
+            </column>
+            <column name="bytes" type="int8">
+                <constraints nullable="true"/>
             </column>
             <column name="creation_time" type="timestamptz">
                 <constraints nullable="true"/>

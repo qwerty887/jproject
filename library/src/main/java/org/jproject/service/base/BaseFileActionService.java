@@ -39,16 +39,16 @@ public class BaseFileActionService implements IBaseFileActionService {
         logger.debug("File service: init");
 
         this.dao = dao;
-        this.path = tfile.getFileHist().getPath();
+        this.path = tfile.getPath();
         this.targetStatus = targetStatus;
-        this.md5 = tfile.getMd5();
-        this.bytes = tfile.getBytes();
-        this.contentType = tfile.getContentType();
+        this.md5 = Optional.ofNullable(tfile.getFileHist()).map(TFileHist::getMd5).orElse(null);
+        this.bytes = Optional.ofNullable(tfile.getFileHist()).map(TFileHist::getBytes).orElse(null);
+        this.contentType = Optional.ofNullable(tfile.getFileHist()).map(TFileHist::getContentType).orElse(null);
 
         this.tgfile = tfile;
-        this.creationTime = tfile.getFileHist().getCreationTime();
-        this.lastModifiedTime = tfile.getFileHist().getLastModifiedTime();
-        this.fileType = tfile.getFileType();
+        this.creationTime = Optional.ofNullable(tfile.getFileHist()).map(TFileHist::getCreationTime).orElse(null);
+        this.lastModifiedTime = Optional.ofNullable(tfile.getFileHist()).map(TFileHist::getLastModifiedTime).orElse(null);
+        this.fileType = Optional.ofNullable(tfile.getFileHist()).map(TFileHist::getFileType).orElse(null);
     }
 
     public BaseFileActionService(DaoWorker dao, Path path, EFileStatus targetStatus) {
@@ -58,7 +58,7 @@ public class BaseFileActionService implements IBaseFileActionService {
         this.dao = dao;
         this.path = path;
         this.targetStatus = targetStatus;
-        this.md5 = getMD5(path);
+        this.md5 = null; // TODO реализовать управление в параметрах //getMD5(path);
         this.bytes = getSize(path);
         this.contentType = getContentType(path); // TODO не всегда определяет тип контента
 
@@ -73,7 +73,7 @@ public class BaseFileActionService implements IBaseFileActionService {
     @Override
     public TFile apply() {
         logger.debug("File service: start: path " + this.path);
-        final TFile result = updateFile(this.path, this.md5);
+        final TFile result = updateFile(this.path);
         logger.debug("File service: complete");
         return result;
     }
@@ -155,12 +155,12 @@ public class BaseFileActionService implements IBaseFileActionService {
         return eFileType;
     }
 
-    private TFile updateFile(Path path, String md5) {
+    private TFile updateFile(Path path) {
         TFile tfile = null;
         if (this.tgfile != null) {
             tfile = this.tgfile;
         } else {
-            tfile = this.dao.getFile(path, md5).orElse(null);
+            tfile = this.dao.getFile(path).orElse(null);
         }
 
         if (tfile != null) {
@@ -184,10 +184,7 @@ public class BaseFileActionService implements IBaseFileActionService {
 
     private TFile createFile(Path path) {
         final TFile tfile = new TFile();
-        tfile.setFileType(this.fileType);
-        tfile.setMd5(this.md5);
-        tfile.setContentType(this.contentType);
-        tfile.setBytes(this.bytes);
+        tfile.setPath(path);
         this.dao.persist(tfile);
 
         final TFileHist fileHist = createFileHist(tfile, path.toAbsolutePath());
@@ -203,7 +200,10 @@ public class BaseFileActionService implements IBaseFileActionService {
             fileHist.setStartDate(TimeUtils.getCurrentTime());
             fileHist.setEndDate(TimeUtils.getMaxTime());
             fileHist.setFileStatus(this.targetStatus);
-            fileHist.setPath(path);
+            fileHist.setFileType(this.fileType);
+            fileHist.setMd5(this.md5);
+            fileHist.setContentType(this.contentType);
+            fileHist.setBytes(this.bytes);
             fileHist.setCreationTime(this.creationTime);
             fileHist.setLastModifiedTime(this.lastModifiedTime);
             action(tfile);

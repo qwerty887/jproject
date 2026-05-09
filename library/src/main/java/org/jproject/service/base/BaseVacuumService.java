@@ -13,7 +13,6 @@ import org.springframework.data.jpa.domain.Specification;
 
 import java.nio.file.Path;
 import java.util.List;
-import java.util.Optional;
 
 public class BaseVacuumService implements IBaseVacuumService {
 
@@ -38,10 +37,7 @@ public class BaseVacuumService implements IBaseVacuumService {
 
         int count = 0;
         for (TFile file: files) {
-            final Path path = Optional.ofNullable(file.getFileHist().getPath()).orElse(null);
-            if (path == null) {
-                continue;
-            }
+            final Path path = file.getPath();
 
             if (!path.toFile().exists()) {
                 final FileDeleteService fileDeleteService = new FileDeleteService(dao, file);

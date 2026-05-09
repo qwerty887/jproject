@@ -33,9 +33,18 @@ public class TFileHist extends AbstractHistEntity<Integer> {
     @JoinColumn(name = "fle_fle_id", nullable = false)
     private TFile file;
 
-    @Column(name = "path", nullable = false)
-    @Convert(converter = ConverterPathToString.class)
-    private Path path;
+    @Enumerated(EnumType.ORDINAL)
+    @Column(name = "flet_flet_id", nullable = false)
+    private EFileType fileType;
+
+    @Column(name = "content_type")
+    private String contentType;
+
+    @Column(name = "md5", nullable = false)
+    private String md5;
+
+    @Column(name = "bytes")
+    private Long bytes;
 
     @Enumerated(EnumType.ORDINAL)
     @Column(name = "fles_fles_id", nullable = false)
@@ -77,12 +86,36 @@ public class TFileHist extends AbstractHistEntity<Integer> {
         this.file = file;
     }
 
-    public Path getPath() {
-        return path;
+    public EFileType getFileType() {
+        return fileType;
     }
 
-    public void setPath(Path path) {
-        this.path = path;
+    public void setFileType(EFileType fileType) {
+        this.fileType = fileType;
+    }
+
+    public String getContentType() {
+        return contentType;
+    }
+
+    public void setContentType(String contentType) {
+        this.contentType = contentType;
+    }
+
+    public String getMd5() {
+        return md5;
+    }
+
+    public void setMd5(String md5) {
+        this.md5 = md5;
+    }
+
+    public Long getBytes() {
+        return bytes;
+    }
+
+    public void setBytes(Long bytes) {
+        this.bytes = bytes;
     }
 
     public EFileStatus getFileStatus() {

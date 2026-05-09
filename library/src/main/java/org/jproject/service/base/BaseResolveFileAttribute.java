@@ -41,18 +41,13 @@ public class BaseResolveFileAttribute {
     }
 
     private Path getPath() {
-        final Path result = Optional.ofNullable(this.tFile.getFileHist())
-                .map(TFileHist::getPath)
-                .orElse(null);
+        final Path result = this.tFile.getPath();
         logger.debug("Resolve attribute file: {} = {}", EFileAttribute.PATH, result);
         return result;
     }
 
     private String getAbsolutePath() {
-        final String result = Optional.ofNullable(this.tFile.getFileHist())
-                .map(TFileHist::getPath)
-                .map(c -> c.toAbsolutePath().toString())
-                .orElse(null);
+        final String result = this.tFile.getPath().toAbsolutePath().toString();
         logger.debug("Resolve attribute file: {} = {}", EFileAttribute.ABSOLUTE_PATH, result);
         return result;
     }
@@ -74,25 +69,29 @@ public class BaseResolveFileAttribute {
     }
 
     private long getBytes() {
-        final long result = this.tFile.getBytes();
+        final long result = Optional.ofNullable(this.tFile.getFileHist())
+                .map(TFileHist::getBytes)
+                .orElse(null);
         logger.debug("Resolve attribute file: {} = {}", EFileAttribute.BYTES, result);
         return result;
     }
 
     private String getContentType() {
-        final String result = this.tFile.getContentType();
+        final String result = Optional.ofNullable(this.tFile.getFileHist())
+                .map(TFileHist::getContentType)
+                .orElse(null);
         logger.debug("Resolve attribute file: {} = {}", EFileAttribute.CONTENT_TYPE, result);
         return result;
     }
 
     private String getFileName() {
-        final String result = FilenameUtils.getName(this.tFile.getFileHist().getPath().toString());
+        final String result = FilenameUtils.getName(this.tFile.getPath().toString());
         logger.debug("Resolve attribute file: {} = {}", EFileAttribute.FILE_NAME, result);
         return result;
     }
 
     private String getFileExtension() {
-        final String result = FilenameUtils.getExtension(this.tFile.getFileHist().getPath().toString());
+        final String result = FilenameUtils.getExtension(this.tFile.getPath().toString());
         logger.debug("Resolve attribute file: {} = {}", EFileAttribute.FILE_EXTENSION, result);
         return result;
     }
