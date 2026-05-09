@@ -49,15 +49,13 @@ public class BaseGroupActionService implements IBaseGroupActionService {
 
         final List<TFileGroup> matches = getMatches();
 
-        System.out.println("matches size = " + matches.size());
-
         for (TFileGroup fileGroup : matches) {
             // закрываем записи в fileGroupMember, связанные с файлов
-            fileGroup.getFileGroupMembers()
-                    .stream()
-                    // .filter(tFileHist::equals)
-                    .filter(c -> c.getFile().equals(this.tFile))
-                    .forEach(dao::closeGroupMember);
+            for (TFileGroupMember fileGroupMember : fileGroup.getFileGroupMembers()) {
+                if (fileGroupMember.getFile().equals(this.tFile)) {
+                    this.dao.closeGroupMember(fileGroupMember);
+                }
+            }
             // создаем новые исторические записи для файла
             createFileGroupMember(fileGroup, this.tFile);
         }

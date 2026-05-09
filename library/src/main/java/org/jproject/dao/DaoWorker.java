@@ -64,7 +64,7 @@ public class DaoWorker extends DaoBase {
             final CriteriaQuery<TFileGroup> cq = cb.createQuery(TFileGroup.class);
             final Root<TFileGroup> root = cq.from(TFileGroup.class);
             root.fetch(TFileGroup_.fileGroupMembers, JoinType.LEFT)
-                .fetch(TFileGroupMember_.file, JoinType.INNER);
+                .fetch(TFileGroupMember_.file, JoinType.LEFT);
 
             cq.distinct(true);
             cq.where(root.in(fileGroupList));
