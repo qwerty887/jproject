@@ -55,9 +55,6 @@ public class ApplicationConfig {
     @Value( "${process.pack.size:1}" )
     private Integer packSize;
 
-    @Value( "${fileGroup.default.id:0}" )
-    private Integer fileGroupDefaultId;
-
     @Bean
     public DataSource dataSource() {
         return DataSourceBuilder.create()
@@ -100,7 +97,6 @@ public class ApplicationConfig {
         appParameters.set(EAppParameters.PROCESS_FILE_VERIFICATION_COUNT, processFileVerificationCount);
         appParameters.set(EAppParameters.PROCESS_FILE_GROUPING_COUNT, processFileGroupingCount);
         appParameters.set(EAppParameters.PROCESS_FILE_LINKING_COUNT, processFileLinkingCount);
-        appParameters.set(EAppParameters.FILE_GROUP_DEFAULT_ID, fileGroupDefaultId);
         return appParameters;
     }
 }

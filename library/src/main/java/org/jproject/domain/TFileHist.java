@@ -44,10 +44,6 @@ public class TFileHist extends AbstractHistEntity<Integer> {
     @Column(name = "bytes")
     private Long bytes;
 
-    @Enumerated(EnumType.ORDINAL)
-    @Column(name = "fles_fles_id")
-    private EFileStatus fileStatus;
-
     @Column(name = "creation_time")
     private Instant creationTime;
 
@@ -114,14 +110,6 @@ public class TFileHist extends AbstractHistEntity<Integer> {
 
     public void setBytes(Long bytes) {
         this.bytes = bytes;
-    }
-
-    public EFileStatus getFileStatus() {
-        return fileStatus;
-    }
-
-    public void setFileStatus(EFileStatus fileStatus) {
-        this.fileStatus = fileStatus;
     }
 
     public Instant getCreationTime() {

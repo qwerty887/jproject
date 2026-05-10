@@ -2,7 +2,6 @@ package org.jproject.service.base;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.jproject.dao.DaoWorker;
-import org.jproject.domain.EFileStatus;
 import org.jproject.domain.EFileType;
 import org.jproject.domain.TFile;
 import org.jproject.domain.TFileHist;
@@ -26,7 +25,6 @@ public class BaseFileActionService implements IBaseFileActionService {
 
     private final DaoWorker dao;
     private final Path path;
-    private final EFileStatus targetStatus;
     private final String md5;
     private final Long bytes;
     private final String contentType;
@@ -35,12 +33,11 @@ public class BaseFileActionService implements IBaseFileActionService {
     private final EFileType fileType;
     private final TFile tgfile;
 
-    public BaseFileActionService(DaoWorker dao, TFile tfile, EFileStatus targetStatus) {
+    public BaseFileActionService(DaoWorker dao, TFile tfile) {
         logger.debug("File service: init");
 
         this.dao = dao;
         this.path = tfile.getPath();
-        this.targetStatus = targetStatus;
         this.md5 = Optional.ofNullable(tfile.getFileHist()).map(TFileHist::getMd5).orElse(null);
         this.bytes = Optional.ofNullable(tfile.getFileHist()).map(TFileHist::getBytes).orElse(null);
         this.contentType = Optional.ofNullable(tfile.getFileHist()).map(TFileHist::getContentType).orElse(null);
@@ -51,13 +48,12 @@ public class BaseFileActionService implements IBaseFileActionService {
         this.fileType = Optional.ofNullable(tfile.getFileHist()).map(TFileHist::getFileType).orElse(null);
     }
 
-    public BaseFileActionService(DaoWorker dao, Path path, EFileStatus targetStatus) {
+    public BaseFileActionService(DaoWorker dao, Path path) {
         logger.debug("File service: init");
 
         // TODO предусмотреть вариант сканирования директорий
         this.dao = dao;
         this.path = path;
-        this.targetStatus = targetStatus;
         this.md5 = null; // TODO реализовать управление в параметрах //getMD5(path);
         this.bytes = getSize(path);
         this.contentType = getContentType(path); // TODO не всегда определяет тип контента
@@ -199,7 +195,6 @@ public class BaseFileActionService implements IBaseFileActionService {
             fileHist.setFile(tfile);
             fileHist.setStartDate(TimeUtils.getCurrentTime());
             fileHist.setEndDate(TimeUtils.getMaxTime());
-            fileHist.setFileStatus(this.targetStatus);
             fileHist.setFileType(this.fileType);
             fileHist.setMd5(this.md5);
             fileHist.setContentType(this.contentType);

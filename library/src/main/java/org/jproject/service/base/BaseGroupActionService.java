@@ -28,44 +28,33 @@ public class BaseGroupActionService implements IBaseGroupActionService {
     private final BaseResolveFileAttribute fileAttribute;
     private final List<TFileGroup> tFileGroups;
     private final TFile tFile;
-    private final Optional<TFileGroup> tFileGroupDefault;
 
     // TODO добавить результаты валидации правил
     // TODO предусмотреть специальные группы: 30 последних файлов, 10 самых больших файлов и т.д.
     // TODO предусмотреть макроподстановку для времени как ${{ now() }}, ${{ now() - 1d }}
 
-    public BaseGroupActionService(DaoWorker dao, TFile tFile, List<TFileGroup> tFileGroups, Optional<TFileGroup> tFileGroupDefault) {
+    public BaseGroupActionService(DaoWorker dao, TFile tFile, List<TFileGroup> tFileGroups) {
         logger.debug("Group service: init");
         this.dao = dao;
         this.fileAttribute = new BaseResolveFileAttribute(tFile);
         this.tFileGroups = tFileGroups;
         this.tFile = tFile;
-        this.tFileGroupDefault = tFileGroupDefault;
+    }
+
+    public BaseGroupActionService(DaoWorker dao, TFile tFile) {
+        logger.debug("Group service: init");
+        this.dao = dao;
+        this.fileAttribute = null;
+        this.tFileGroups = null;
+        this.tFile = tFile;
     }
 
     @Override
     public List<TFileGroup> apply() throws NotSupportedException {
-        logger.debug("Group service: start");
-
-        final List<TFileGroup> matches = getMatches();
-
-        for (TFileGroup fileGroup : matches) {
-            // закрываем записи в fileGroupMember, связанные с файлов
-            for (TFileGroupMember fileGroupMember : fileGroup.getFileGroupMembers()) {
-                if (fileGroupMember.getFile().equals(this.tFile)) {
-                    this.dao.closeGroupMember(fileGroupMember);
-                }
-            }
-            // создаем новые исторические записи для файла
-            createFileGroupMember(fileGroup, this.tFile);
-        }
-
-        logger.debug("Group service: complete");
-
-        return matches;
+        throw new RuntimeException("You need to override the run action method");
     }
 
-    private TFileGroupMember createFileGroupMember(TFileGroup fileGroup, TFile file) {
+    protected TFileGroupMember createFileGroupMember(TFileGroup fileGroup, TFile file) {
         final TFileGroupMember fileGroupMember = new TFileGroupMember();
         fileGroupMember.setFile(file);
         fileGroupMember.setFileGroup(fileGroup);
@@ -75,7 +64,7 @@ public class BaseGroupActionService implements IBaseGroupActionService {
         return fileGroupMember;
     }
 
-    private List<TFileGroup> getMatches() throws NotSupportedException {
+    protected List<TFileGroup> getMatches() throws NotSupportedException {
         final List<TFileGroup> results = new ArrayList<>();
 
         for (TFileGroup tFileGroup : this.tFileGroups) {
@@ -84,15 +73,12 @@ public class BaseGroupActionService implements IBaseGroupActionService {
             }
         }
 
-        // если не нашли группу для файла, то назначаем ему группу по умолчанию
-        if (results.isEmpty()) {
-            this.tFileGroupDefault.map(results::add);
-        }
+        // если не нашли группу для файла, то назначаем ему группу по умолчанию ???
 
         return results;
     }
 
-    private boolean isMatches(TFileGroup tFileGroup) throws NotSupportedException {
+    protected boolean isMatches(TFileGroup tFileGroup) throws NotSupportedException {
         logger.debug("Resolve: fleg_id = {}", tFileGroup.getId());
 
         final List<TFileGroupRule> fileGroupRules = Optional.ofNullable(tFileGroup)
@@ -104,7 +90,7 @@ public class BaseGroupActionService implements IBaseGroupActionService {
         return result;
     }
 
-    private boolean isMatches(List<TFileGroupRule> tFileGroupRules) throws NotSupportedException {
+    protected boolean isMatches(List<TFileGroupRule> tFileGroupRules) throws NotSupportedException {
         long trueCnt = 0;
         for (TFileGroupRule tFileGroupRule : tFileGroupRules) {
             if (isMatches(tFileGroupRule)) {
@@ -115,7 +101,7 @@ public class BaseGroupActionService implements IBaseGroupActionService {
         return tFileGroupRules.stream().count() == trueCnt;
     }
 
-    private boolean isMatches(TFileGroupRule tFileGroupRule) throws NotSupportedException {
+    protected boolean isMatches(TFileGroupRule tFileGroupRule) throws NotSupportedException {
         logger.debug("Resolve group rule: flgr_id = {}", tFileGroupRule.getId());
 
         final EFileAttribute eFileAttribute = tFileGroupRule.getFileAttribute();
@@ -154,7 +140,7 @@ public class BaseGroupActionService implements IBaseGroupActionService {
         return result;
     }
 
-    private <T extends String> boolean isMatcher(T attrValue, EFileCondition eFileCondition, T targetValue) throws NotSupportedException {
+    protected <T extends String> boolean isMatcher(T attrValue, EFileCondition eFileCondition, T targetValue) throws NotSupportedException {
         return switch (eFileCondition) {
             case REGEXP -> getRegExpResult(targetValue, attrValue);
             case EQUAL -> attrValue.compareTo(targetValue) == 0;
@@ -163,7 +149,7 @@ public class BaseGroupActionService implements IBaseGroupActionService {
         };
     }
 
-    private <T extends Integer> boolean isMatcher(T attrValue, EFileCondition eFileCondition, T targetValue) throws NotSupportedException {
+    protected <T extends Integer> boolean isMatcher(T attrValue, EFileCondition eFileCondition, T targetValue) throws NotSupportedException {
         return switch (eFileCondition) {
             case EQUAL -> attrValue.compareTo(targetValue) == 0;
             case NOT_EQUAL -> attrValue.compareTo(targetValue) != 0;
@@ -173,7 +159,7 @@ public class BaseGroupActionService implements IBaseGroupActionService {
         };
     }
 
-    private <T extends Instant> boolean isMatcher(T attrValue, EFileCondition eFileCondition, T targetValue) throws NotSupportedException {
+    protected <T extends Instant> boolean isMatcher(T attrValue, EFileCondition eFileCondition, T targetValue) throws NotSupportedException {
         return switch (eFileCondition) {
             case EQUAL -> attrValue.compareTo(targetValue) == 0;
             case NOT_EQUAL -> attrValue.compareTo(targetValue) != 0;
@@ -183,7 +169,7 @@ public class BaseGroupActionService implements IBaseGroupActionService {
         };
     }
 
-    private <T extends Path> boolean isMatcher(T attrValue, EFileCondition eFileCondition, T targetValue) throws NotSupportedException {
+    protected <T extends Path> boolean isMatcher(T attrValue, EFileCondition eFileCondition, T targetValue) throws NotSupportedException {
         return switch (eFileCondition) {
             case EQUAL -> attrValue.compareTo(targetValue) == 0;
             case NOT_EQUAL -> attrValue.compareTo(targetValue) != 0;
@@ -191,7 +177,7 @@ public class BaseGroupActionService implements IBaseGroupActionService {
         };
     }
 
-    private boolean getRegExpResult(String regexp, String value) {
+    protected boolean getRegExpResult(String regexp, String value) {
         final Pattern pattern = Pattern.compile(regexp);
         final Matcher matcher = pattern.matcher(value);
         return matcher.matches();

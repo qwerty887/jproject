@@ -1,7 +1,6 @@
 package org.jproject.service.base;
 
 import org.jproject.dao.DaoWorker;
-import org.jproject.domain.EFileStatus;
 import org.jproject.domain.TFileGroupMember;
 import org.jproject.domain.TFileGroup;
 import org.jproject.domain.TFileHist;
@@ -33,11 +32,6 @@ public class BaseLinkActionService implements IBaseLinkActionService {
 
         if (this.fileHist == null) {
             logger.debug("Nothing to change: file hist is null");
-            return null;
-        }
-
-        if (this.fileHist.getFileStatus().equals(EFileStatus.DELETED)) {
-            logger.debug("Nothing to change: file status: {}", EFileStatus.DELETED);
             return null;
         }
 

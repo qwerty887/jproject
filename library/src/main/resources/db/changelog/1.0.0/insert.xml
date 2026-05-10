@@ -4,21 +4,6 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
 
-    <changeSet id="Fill dict file_status" author="${author}">
-        <insert tableName="file_status">
-            <column name="fles_id" value="0" />
-            <column name="name" value="?" />
-        </insert>
-        <insert tableName="file_status">
-            <column name="fles_id" value="1" />
-            <column name="name" value="added" />
-        </insert>
-        <insert tableName="file_status">
-            <column name="fles_id" value="2" />
-            <column name="name" value="deleted" />
-        </insert>
-    </changeSet>
-
     <changeSet id="Fill dict file_type" author="${author}">
         <insert tableName="file_type">
             <column name="flet_id" value="0" />
@@ -161,21 +146,6 @@
         <insert tableName="process_type">
             <column name="pctp_id" value="5" />
             <column name="name" value="vacuum" />
-        </insert>
-    </changeSet>
-
-    <changeSet id="Fill dict link_status" author="${author}">
-        <insert tableName="link_status">
-            <column name="lnks_id" value="0" />
-            <column name="name" value="?" />
-        </insert>
-        <insert tableName="link_status">
-            <column name="lnks_id" value="1" />
-            <column name="name" value="added" />
-        </insert>
-        <insert tableName="link_status">
-            <column name="lnks_id" value="2" />
-            <column name="name" value="deleted" />
         </insert>
     </changeSet>
 

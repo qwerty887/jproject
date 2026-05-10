@@ -52,7 +52,7 @@ public class DaoWorker extends DaoBase {
             final CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
             final CriteriaQuery<TFileGroup> cq = cb.createQuery(TFileGroup.class);
             final Root<TFileGroup> root = cq.from(TFileGroup.class);
-            root.fetch(TFileGroup_.fileGroupRules, JoinType.LEFT);
+            root.fetch(TFileGroup_.fileGroupRules, JoinType.INNER);
             if (spec != null) {
                 cq.where(spec.toPredicate(root, cq, cb));
             }
@@ -207,6 +207,12 @@ public class DaoWorker extends DaoBase {
         closeEntity(entity,
                 (root, cq, cb) -> cb.equal(root.get(TFileGroupMember_.ID), entity.getId()),
                 TFileGroupMember.class);
+    }
+
+    public int closeGroupMember(TFile file) {
+        return closeEntity(
+                (root, cq, cb) -> cb.equal(root.get(TFileGroupMember_.file), file)
+                , TFileGroupMember.class);
     }
 
     public void closeFileHist(TFileHist entity) {

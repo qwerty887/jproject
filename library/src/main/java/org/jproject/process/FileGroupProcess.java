@@ -14,7 +14,7 @@ import org.jproject.parameters.AppParameters;
 import org.jproject.parameters.EAppParameters;
 import org.jproject.parameters.process.FileGroupingProcessParameters;
 import org.jproject.parameters.process.FileLinkingProcessParameters;
-import org.jproject.service.base.BaseGroupActionService;
+import org.jproject.service.GroupAddService;
 import org.jproject.process.base.BaseProcessActionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,14 +38,12 @@ public class FileGroupProcess extends BaseProcessActionService implements Runnab
     public int action(DaoWorker dao, TProcess process) {
         final FileGroupingProcessParameters param = getParam(process.getParam(), FileGroupingProcessParameters.class);
         final List<TFile> files = dao.getFiles(param.getFiles(), DtoGroupFileParameters.class);
-        final List<TFileGroup> fileGroupList = dao.getFileGroups(null); // TODO указать условие фильтрации по файлам
-        final Integer fileGroupDefaultId = appParameters.get(EAppParameters.FILE_GROUP_DEFAULT_ID, Integer.class);
-        final Optional<TFileGroup> fileGroupDefault = fileGroupList.stream().filter(c -> c.getId().equals(fileGroupDefaultId)).findAny();
+        final List<TFileGroup> fileGroupList = dao.getFileGroups(null);
 
         final List<DtoLinkFileParameters> result = new ArrayList<>();
         for (TFile file: files) {
             try {
-                final List<TFileGroup> list = (new BaseGroupActionService(dao, file, fileGroupList, fileGroupDefault)).apply();
+                final List<TFileGroup> list = (new GroupAddService(dao, file, fileGroupList)).apply();
                 result.add(DtoLinkFileParameters.of(file, list));
             } catch (NotSupportedException e) {
                 e.printStackTrace();
