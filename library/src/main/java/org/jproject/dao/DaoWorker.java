@@ -13,7 +13,6 @@ import jakarta.persistence.criteria.Root;
 import org.jproject.domain.EProcessStatus;
 import org.jproject.domain.EProcessType;
 import org.jproject.domain.TFileGroupMember;
-import org.jproject.domain.TError;
 import org.jproject.domain.TFile;
 import org.jproject.domain.TFileGroup;
 import org.jproject.domain.TFileGroupMember_;
@@ -150,7 +149,7 @@ public class DaoWorker extends DaoBase {
         getEntityManager().createQuery(cd).executeUpdate();
     }
 
-    public void updateProcessStatus(TProcess process, EProcessStatus processStatus, Integer objectCount, TError error) {
+    public void updateProcessStatus(TProcess process, EProcessStatus processStatus, Integer objectCount, String errMsg) {
         if (process == null) {
             return;
         }
@@ -164,11 +163,12 @@ public class DaoWorker extends DaoBase {
                 case LOCK -> {
                     update.set(root.get(TProcess_.processStatus), processStatus);
                     update.set(root.get(TProcess_.startDate), TimeUtils.getCurrentTime());
+                    update.set(root.get(TProcess_.errMsg), cb.nullLiteral(String.class));
                 }
                 case ERROR -> {
                     update.set(root.get(TProcess_.processStatus), processStatus);
-                    if (error != null) {
-                        update.set(root.get(TProcess_.error), error);
+                    if (errMsg != null) {
+                        update.set(root.get(TProcess_.errMsg), errMsg);
                     }
                     update.set(root.get(TProcess_.endDate), TimeUtils.getCurrentTime());
                 }
@@ -176,6 +176,7 @@ public class DaoWorker extends DaoBase {
                     update.set(root.get(TProcess_.objectCount), objectCount);
                     update.set(root.get(TProcess_.processStatus), processStatus);
                     update.set(root.get(TProcess_.endDate), TimeUtils.getCurrentTime());
+                    update.set(root.get(TProcess_.errMsg), cb.nullLiteral(String.class));
                 }
                 default -> {
                     throw new NotSupportExceptionApp("Process status " + processStatus + " not support");

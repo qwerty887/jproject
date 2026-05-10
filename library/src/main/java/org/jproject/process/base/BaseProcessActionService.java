@@ -6,7 +6,6 @@ import jakarta.persistence.EntityManagerFactory;
 import org.jproject.dao.DaoWorker;
 import org.jproject.domain.EProcessStatus;
 import org.jproject.domain.EProcessType;
-import org.jproject.domain.TError;
 import org.jproject.domain.TProcess;
 import org.jproject.parameters.process.base.BaseProcessParam;
 import org.jproject.exception.NotSupportExceptionApp;
@@ -60,7 +59,7 @@ public class BaseProcessActionService implements IBaseProcessActionService {
                             DaoUtils.withTransactionVoid(
                                     () -> new DaoWorker(entityManagerFactory),
                                     daoIn -> {
-                                        daoIn.updateProcessStatus(process, EProcessStatus.ERROR, 0, createError(daoIn, e.getMessage()));
+                                        daoIn.updateProcessStatus(process, EProcessStatus.ERROR, 0, e.getMessage());
                                         daoIn.deleteProcessLock(process);
                                     }
                             );
@@ -106,13 +105,6 @@ public class BaseProcessActionService implements IBaseProcessActionService {
             e.printStackTrace();
             throw new NotSupportExceptionApp(e.getMessage());
         }
-    }
-
-    protected TError createError(DaoWorker dao, String errMessage) {
-        final TError error = new TError();
-        error.setDate(TimeUtils.getCurrentTime());
-        error.setMessage(errMessage);
-        return dao.persist(error);
     }
 
     protected EProcessType getProcessType() {

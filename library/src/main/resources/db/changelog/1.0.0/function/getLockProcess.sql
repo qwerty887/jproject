@@ -19,7 +19,7 @@ BEGIN
 
     lv_prlk_id := nextval('prlk_seq');
 	insert into process_lock(prlk_id, prcd_prcd_id) values(lv_prlk_id, lv_prcd_id);
-	update process set pcst_pcst_id = 2, start_date = now(), end_date = null, err_err_id = null, attempts_remaining = attempts_remaining - 1
+	update process set pcst_pcst_id = 2, start_date = now(), end_date = null, err_msg = null, attempts_remaining = attempts_remaining - 1
 	where prcd_id = lv_prcd_id;
 
     return lv_prcd_id;

@@ -24,10 +24,6 @@
         <createSequence sequenceName="fleg_seq" startValue="1" incrementBy="1"/>
     </changeSet>
 
-    <changeSet id="create sequence err_seq" author="${author}">
-        <createSequence sequenceName="err_seq" startValue="1" incrementBy="1"/>
-    </changeSet>
-
     <changeSet id="create sequence flgr_seq" author="${author}">
         <createSequence sequenceName="flgr_seq" startValue="1" incrementBy="1"/>
     </changeSet>

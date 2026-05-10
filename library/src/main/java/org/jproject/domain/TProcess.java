@@ -49,9 +49,8 @@ public class TProcess extends AbstractHistEntity<Integer> {
     @Column(name = "create_date")
     private Instant createDate;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "err_err_id")
-    private TError error;
+    @Column(name = "err_msg")
+    private String errMsg;
 
     @Override
     public boolean equals(Object o) {
@@ -123,12 +122,12 @@ public class TProcess extends AbstractHistEntity<Integer> {
         this.createDate = createDate;
     }
 
-    public TError getError() {
-        return error;
+    public String getErrMsg() {
+        return errMsg;
     }
 
-    public void setError(TError error) {
-        this.error = error;
+    public void setErrMsg(String errMsg) {
+        this.errMsg = errMsg;
     }
 
     public Integer getAttemptsRemaining() {

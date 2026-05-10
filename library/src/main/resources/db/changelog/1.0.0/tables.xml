@@ -15,20 +15,6 @@
         </createTable>
     </changeSet>
 
-    <changeSet id="create table error" author="${author}">
-        <createTable tableName="error">
-            <column name="err_id" type="int4">
-                <constraints primaryKey="true" nullable="false"/>
-            </column>
-            <column name="error_date" type="timestamptz">
-                <constraints nullable="false"/>
-            </column>
-            <column name="message" type="varchar(2000)">
-                <constraints nullable="false"/>
-            </column>
-        </createTable>
-    </changeSet>
-
     <changeSet id="create table file_group" author="${author}">
         <createTable tableName="file_group">
             <column name="fleg_id" type="int4">
@@ -219,8 +205,8 @@
             <column name="end_date" type="timestamptz">
                 <constraints nullable="true"/>
             </column>
-            <column name="err_err_id" type="int4">
-                <constraints foreignKeyName="fk_process_error" references="error(err_id)"/>
+            <column name="err_msg" type="text">
+                <constraints nullable="true"/>
             </column>
         </createTable>
     </changeSet>
