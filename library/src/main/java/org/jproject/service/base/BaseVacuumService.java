@@ -1,12 +1,7 @@
 package org.jproject.service.base;
 
-import jakarta.persistence.criteria.Join;
-import jakarta.persistence.criteria.JoinType;
 import org.jproject.dao.DaoWorker;
 import org.jproject.domain.TFile;
-import org.jproject.domain.TFileHist;
-import org.jproject.domain.TFileHist_;
-import org.jproject.domain.TFile_;
 import org.jproject.service.FileDeleteService;
 import org.jproject.service.GroupDeleteService;
 import org.springframework.data.jpa.domain.Specification;
