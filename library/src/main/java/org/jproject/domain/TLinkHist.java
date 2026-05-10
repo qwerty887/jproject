@@ -1,6 +1,7 @@
 package org.jproject.domain;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -13,26 +14,32 @@ import jakarta.persistence.Table;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.hibernate.annotations.SQLRestriction;
 
+import java.nio.file.Path;
+
 @Entity
-@Table(name = "LINK")
+@Table(name = "LINK_HIST")
 @SQLRestriction("del_date is null")
-public class TLink extends AbstractDeleteEntity<Integer> {
+public class TLinkHist extends AbstractHistEntity<Integer> {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "lnk_seq")
-    @SequenceGenerator(name = "lnk_seq", sequenceName = "lnk_seq", allocationSize = 1)
-    @Column(name = "lnk_id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "lnkh_seq")
+    @SequenceGenerator(name = "lnkh_seq", sequenceName = "lnkh_seq", allocationSize = 1)
+    @Column(name = "lnkh_id", nullable = false)
     private Integer id;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "fle_fle_id")
-    private TFile file;
+    @JoinColumn(name = "lnk_lnk_id")
+    private TLink link;
+
+    @Column(name = "path")
+    @Convert(converter = ConverterPathToString.class)
+    private Path path;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        TLink that = (TLink) o;
+        TLinkHist that = (TLinkHist) o;
 
         return new EqualsBuilder()
                 .append(getId(), that.getId())
@@ -49,11 +56,19 @@ public class TLink extends AbstractDeleteEntity<Integer> {
         this.id = id;
     }
 
-    public TFile getFile() {
-        return file;
+    public TLink getLink() {
+        return link;
     }
 
-    public void setFile(TFile file) {
-        this.file = file;
+    public void setLink(TLink link) {
+        this.link = link;
+    }
+
+    public Path getPath() {
+        return path;
+    }
+
+    public void setPath(Path path) {
+        this.path = path;
     }
 }

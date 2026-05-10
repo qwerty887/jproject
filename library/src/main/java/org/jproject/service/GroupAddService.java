@@ -25,24 +25,20 @@ public class GroupAddService extends BaseGroupActionService {
     }
 
     @Override
-    public List<TFileGroup> apply() {
-        try {
-            logger.debug("Group service: start");
-            final List<TFileGroup> matches = super.getMatches();
+    public List<TFileGroup> apply() throws NotSupportedException {
+        logger.debug("Group service: start");
+        final List<TFileGroup> matches = super.getMatches();
 
-            for (TFileGroup fileGroup : matches) {
-                for (TFileGroupMember fileGroupMember : fileGroup.getFileGroupMembers()) {
-                    if (fileGroupMember.getFile().equals(this.file)) {
-                        this.dao.closeGroupMember(fileGroupMember);
-                    }
+        for (TFileGroup fileGroup : matches) {
+            for (TFileGroupMember fileGroupMember : fileGroup.getFileGroupMembers()) {
+                if (fileGroupMember.getFile().equals(this.file)) {
+                    this.dao.closeGroupMember(fileGroupMember);
                 }
-                super.createFileGroupMember(fileGroup, this.file);
             }
-
-            logger.debug("Group service: complete");
-            return matches;
-        } catch (NotSupportedException e) {
-            throw new RuntimeException(e);
+            super.createFileGroupMember(fileGroup, this.file);
         }
+
+        logger.debug("Group service: complete");
+        return matches;
     }
 }

@@ -50,7 +50,7 @@ public class BaseGroupActionService implements IBaseGroupActionService {
     }
 
     @Override
-    public List<TFileGroup> apply() {
+    public List<TFileGroup> apply() throws NotSupportedException {
         throw new RuntimeException("You need to override the run action method");
     }
 

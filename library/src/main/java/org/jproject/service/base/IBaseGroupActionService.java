@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface IBaseGroupActionService {
 
-    List<TFileGroup> apply();
+    List<TFileGroup> apply() throws NotSupportedException;
 }

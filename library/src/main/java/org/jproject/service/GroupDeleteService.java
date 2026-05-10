@@ -25,7 +25,7 @@ public class GroupDeleteService extends BaseGroupActionService {
     @Override
     public List<TFileGroup> apply() {
         logger.debug("Group service: start");
-        dao.closeGroupMember(this.file); // TODO вернуть группы
+        dao.closeGroupMember(this.file); // TODO вернуть fileGroupsMembers
         logger.debug("Group service: complete");
         return null;
     }
