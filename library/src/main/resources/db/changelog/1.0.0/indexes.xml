@@ -7,7 +7,6 @@
     <changeSet id="create index uk_fle_path" author="${author}">
         <createIndex indexName="uk_fle_path" tableName="file" unique="true">
             <column name="path"/>
-            <column name="del_date"/>
         </createIndex>
     </changeSet>
 
@@ -36,7 +35,6 @@
     <changeSet id="create index uk_link_file" author="${author}">
         <createIndex indexName="uk_link_file" tableName="link" unique="true">
             <column name="fle_fle_id"/>
-            <column name="del_date"/>
         </createIndex>
     </changeSet>
 

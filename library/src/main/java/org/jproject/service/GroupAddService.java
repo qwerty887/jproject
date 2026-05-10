@@ -29,6 +29,7 @@ public class GroupAddService extends BaseGroupActionService {
         logger.debug("Group service: start");
         final List<TFileGroup> matches = super.getMatches();
 
+        // TODO если ничего не поменялось, не нужно закрывать и вновь открывать запись в file_group_member
         for (TFileGroup fileGroup : matches) {
             for (TFileGroupMember fileGroupMember : fileGroup.getFileGroupMembers()) {
                 if (fileGroupMember.getFile().equals(this.file)) {

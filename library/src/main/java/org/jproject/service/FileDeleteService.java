@@ -3,18 +3,26 @@ package org.jproject.service;
 import org.jproject.dao.DaoWorker;
 import org.jproject.domain.TFile;
 import org.jproject.service.base.BaseFileActionService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class FileDeleteService extends BaseFileActionService {
 
-    private final DaoWorker dao;
+    private static final Logger logger = LoggerFactory.getLogger(FileDeleteService.class);
+
+    private final TFile file;
 
     public FileDeleteService(DaoWorker dao, TFile file) {
         super(dao, file);
-        this.dao = dao;
+        this.file = file;
     }
 
     @Override
-    public void action(TFile tFile) {
-        // TODO удалить связку с линком
+    public TFile apply() {
+        logger.debug("File service: start: path " + file.getPath());
+        super.closeFileHist(this.file);
+        logger.debug("File service: complete");
+        return this.file;
     }
+
 }

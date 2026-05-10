@@ -60,7 +60,7 @@ public class ProcessController {
     public DtoProcessStatus getStatus(@PathVariable int id) {
         return DaoUtils.withTransaction(
                 () -> new DaoWorker(entityManagerFactory),
-                dao -> dao.getProcess(dao.getProcessSpec(id))
+                dao -> dao.getProcess(id)
                         .map(DtoProcessStatus::of)
                         .orElse(new DtoProcessStatus())
         );
@@ -70,7 +70,7 @@ public class ProcessController {
     public List<DtoProcessStatus> getStatuses(@PathVariable EProcessStatus processStatus) {
         return DaoUtils.withTransaction(
                 () -> new DaoWorker(entityManagerFactory),
-                dao -> dao.getProcesses(dao.getProcessSpec(processStatus))
+                dao -> dao.getProcesses(processStatus)
                         .stream()
                         .map(DtoProcessStatus::of)
                         .toList()

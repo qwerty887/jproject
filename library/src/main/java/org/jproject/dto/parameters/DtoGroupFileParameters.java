@@ -16,8 +16,8 @@ public class DtoGroupFileParameters {
         this.path = path;
     }
 
-    public static DtoGroupFileParameters of(TFile tfile) {
-        return new DtoGroupFileParameters(tfile.getPath());
+    public static DtoGroupFileParameters of(TFile file) {
+        return new DtoGroupFileParameters(file.getPath());
     }
 
 

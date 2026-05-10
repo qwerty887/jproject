@@ -39,7 +39,7 @@ public class ScheduleProcess extends BaseScheduleService {
             }
             case GROUP -> {
                 final Integer threadCount = appParameters.get(EAppParameters.PROCESS_FILE_GROUPING_COUNT, Integer.class);
-                add(new FileGroupProcess(entityManagerFactory, appParameters), threadCount);
+                add(new FileGroupProcess(entityManagerFactory), threadCount);
             }
             case LINK -> {
                 final Integer threadCount = appParameters.get(EAppParameters.PROCESS_FILE_LINKING_COUNT, Integer.class);

@@ -40,9 +40,4 @@ public class BaseLinkActionService implements IBaseLinkActionService {
         return null;
     }
 
-    @Override
-    public boolean action(TLink link) {
-        throw new RuntimeException("You need to override the run method");
-    }
-
 }

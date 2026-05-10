@@ -11,12 +11,10 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.hibernate.annotations.SQLRestriction;
 
 @Entity
 @Table(name = "LINK")
-@SQLRestriction("del_date is null")
-public class TLink extends AbstractDeleteEntity<Integer> {
+public class TLink implements IBaseEntity<Integer> {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "lnk_seq")
     @SequenceGenerator(name = "lnk_seq", sequenceName = "lnk_seq", allocationSize = 1)

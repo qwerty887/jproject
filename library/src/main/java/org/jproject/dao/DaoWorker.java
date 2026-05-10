@@ -2,8 +2,6 @@ package org.jproject.dao;
 
 import com.google.common.collect.Lists;
 import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.Query;
-import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaDelete;
 import jakarta.persistence.criteria.CriteriaQuery;
@@ -20,12 +18,12 @@ import org.jproject.domain.TFileGroup_;
 import org.jproject.domain.TFileHist;
 import org.jproject.domain.TFileHist_;
 import org.jproject.domain.TFile_;
-import org.jproject.domain.TLink;
 import org.jproject.domain.TProcess;
 import org.jproject.domain.TProcessLock;
 import org.jproject.domain.TProcessLock_;
 import org.jproject.domain.TProcess_;
 import org.jproject.dto.parameters.DtoGroupFileParameters;
+import org.jproject.dto.parameters.DtoLinkFileParameters;
 import org.jproject.dto.parameters.DtoScanFileParameters;
 import org.jproject.exception.NotSupportExceptionApp;
 import org.jproject.utils.TimeUtils;
@@ -44,6 +42,7 @@ public class DaoWorker extends DaoBase {
         super(entityManagerFactory);
     }
 
+    // TODO адаптировать под findEntities
     public List<TFileGroup> getFileGroups(Specification<TFileGroup> spec) {
         List<TFileGroup> fileGroupList = null;
 
@@ -94,6 +93,13 @@ public class DaoWorker extends DaoBase {
                 continue;
             }
 
+            if (clazz.equals(DtoLinkFileParameters.class)) {
+                final List<DtoLinkFileParameters> list2 = list.stream().map(c -> (DtoLinkFileParameters) c).toList();
+                final List<Path> pathList = list2.stream().map(DtoLinkFileParameters::getPath).toList();
+                result.addAll(getFiles(getFileSpec(pathList)));
+                continue;
+            }
+
             if (clazz.equals(Path.class)) {
                 final List<Path> list2 = list.stream().map(c -> (Path) c).toList();
                 result.addAll(getFiles(getFileSpec(list2)));
@@ -130,30 +136,22 @@ public class DaoWorker extends DaoBase {
         return getEntityManager().createQuery(cq).getResultList();
     }
 
-
     public Integer getPrcdLock(EProcessType processType) {
-        Query query = getEntityManager().createNativeQuery("select getLockProcess(?)");
-        query.setParameter(1, processType.getId());
-        return (Integer) query.getSingleResult();
+        return (Integer) getEntityManager()
+                .createNativeQuery("select getLockProcess(?)")
+                .setParameter(1, processType.getId())
+                .getSingleResult();
     }
 
     public void deleteProcessLock(TProcess process) {
-        if (process == null) {
-            return;
-        }
-
         final CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
         final CriteriaDelete<TProcessLock> cd = cb.createCriteriaDelete(TProcessLock.class);
         final Root<TProcessLock> root = cd.from(TProcessLock.class);
-        cd.where(cb.equal(root.get(TProcessLock_.process).get(TProcess_.id), process.getId()));
+        cd.where(cb.equal(root.get(TProcessLock_.process), process));
         getEntityManager().createQuery(cd).executeUpdate();
     }
 
     public void updateProcessStatus(TProcess process, EProcessStatus processStatus, Integer objectCount, String errMsg) {
-        if (process == null) {
-            return;
-        }
-
         {
             final CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
             final CriteriaUpdate<TProcess> update = cb.createCriteriaUpdate(TProcess.class);
@@ -188,79 +186,58 @@ public class DaoWorker extends DaoBase {
         }
     }
 
-    // TODO возможно придется переделать так же как то реализовано для файлов
-    public Optional<TLink> getLink(TFile file) {
-        final CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
-        final CriteriaQuery<TLink> cq = cb.createQuery(TLink.class);
-        final Root<TLink> root = cq.from(TLink.class);
-        // root.fetch(TLink_.LINK_HIST, JoinType.INNER);
-        // cq.where(cb.equal(root.get(TLink_.FILE), file));
-        return getSingleResult(getEntityManager().createQuery(cq));
-    }
-
-    public Optional<TFileGroup> getFileGroup(TFileGroup entity) {
-        return findEntity(
-                    (root, cq, cb) -> cb.equal(root.get(TFileGroup_.id), entity),
-                    TFileGroup.class);
-    }
-
-    public void closeGroupMember(TFileGroupMember entity) {
-        closeEntity(entity,
+    public int closeGroupMember(TFileGroupMember entity) {
+        return closeEntity(
                 (root, cq, cb) -> cb.equal(root.get(TFileGroupMember_.ID), entity.getId()),
                 TFileGroupMember.class);
     }
 
     public int closeGroupMember(TFile file) {
         return closeEntity(
-                (root, cq, cb) -> cb.equal(root.get(TFileGroupMember_.file), file)
-                , TFileGroupMember.class);
+                (root, cq, cb) -> cb.equal(root.get(TFileGroupMember_.file), file),
+                TFileGroupMember.class);
     }
 
-    public void closeFileHist(TFileHist entity) {
-        closeEntity(entity,
-                   (root, cq, cb) -> cb.equal(root.get(TFileHist_.ID), entity.getId()),
-                    TFileHist.class);
+    public int closeFileHist(TFileHist entity) {
+        return closeEntity(
+                (root, cq, cb) -> cb.equal(root.get(TFileHist_.ID), entity.getId()),
+                TFileHist.class);
     }
 
-    public Specification<TProcess> getProcessSpec(Integer id) {
-        return (root, query, cb) ->
-                cb.equal(root.get(TProcess_.id), id);
+    public Optional<TProcess> getProcess(Integer id) {
+        return findEntity(
+                (root, cq, cb) -> cb.equal(root.get(TProcess_.id), id),
+                TProcess.class);
     }
 
-    public Specification<TProcess> getProcessSpec(Integer id, EProcessStatus processStatus) {
-        return (root, query, cb) ->
-                cb.and(
-                        cb.equal(root.get(TProcess_.id), id),
-                        cb.equal(root.get(TProcess_.processStatus), processStatus)
-                );
+    public Optional<TProcess> getProcess(Integer id, EProcessStatus processStatus) {
+        return findEntity(
+                (root, cq, cb) -> cb.and( cb.equal(root.get(TProcess_.id), id), cb.equal(root.get(TProcess_.processStatus), processStatus)),
+                TProcess.class);
     }
 
-    public Specification<TProcess> getProcessSpec(EProcessStatus processStatus) {
-        return (root, query, cb) ->
-                cb.equal(root.get(TProcess_.processStatus), processStatus);
+    public List<TProcess> getProcesses(EProcessStatus processStatus) {
+        return findEntities(
+                (root, cq, cb) -> cb.equal(root.get(TProcess_.processStatus), processStatus),
+                TProcess.class);
     }
 
-    public Optional<TProcess> getProcess(Specification<TProcess> spec) {
-        final CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
-        final CriteriaQuery<TProcess> cq = cb.createQuery(TProcess.class);
-        final Root<TProcess> root = cq.from(TProcess.class);
-        cq.where(spec.toPredicate(root, cq, cb));
-        return getSingleResult(getEntityManager().createQuery(cq));
+    public List<TProcess> getProcesses(List<EProcessType> processTypeList, List<EProcessStatus> processStatusList) {
+        return findEntities(
+                (root, query, cb) -> cb.and(
+                        root.get(TProcess_.processStatus).in(processStatusList),
+                        root.get(TProcess_.processType).in(processTypeList)),
+                TProcess.class);
     }
 
-    public List<TProcess> getProcesses(Specification<TProcess> spec) {
-        final CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
-        final CriteriaQuery<TProcess> cq = cb.createQuery(TProcess.class);
-        final Root<TProcess> root = cq.from(TProcess.class);
-        cq.where(spec.toPredicate(root, cq, cb));
-        return getEntityManager().createQuery(cq).getResultList();
-    }
-
-    public TypedQuery<TFileGroupMember> getFlegFleh(Specification<TFileGroupMember> spec) {
-        final CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
-        final CriteriaQuery<TFileGroupMember> cq = cb.createQuery(TFileGroupMember.class);
-        final Root<TFileGroupMember> root = cq.from(TFileGroupMember.class);
-        cq.where(spec.toPredicate(root, cq, cb));
-        return getEntityManager().createQuery(cq);
+    public List<TFileGroupMember> getFileGroupMembers(List<Path> pathList) {
+        return findEntities(
+                (root, cq, cb) ->
+                {
+                    root.fetch(TFileGroupMember_.file, JoinType.INNER);
+                    root.fetch(TFileGroupMember_.fileGroup, JoinType.INNER);
+                    return root.get(TFileGroupMember_.file).get(TFile_.path).in(pathList);
+                },
+                TFileGroupMember.class);
     }
 }

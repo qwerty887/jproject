@@ -18,7 +18,7 @@ import java.nio.file.Path;
 
 @Entity
 @Table(name = "LINK_HIST")
-@SQLRestriction("del_date is null")
+@SQLRestriction("now() between start_date and end_date and start_date < end_date") // TODO подумать как сделать более универсально
 public class TLinkHist extends AbstractHistEntity<Integer> {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "lnkh_seq")

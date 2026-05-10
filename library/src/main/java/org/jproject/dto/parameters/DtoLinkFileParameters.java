@@ -1,46 +1,30 @@
 package org.jproject.dto.parameters;
 
 import org.jproject.domain.TFile;
-import org.jproject.domain.TFileGroup;
-import org.jproject.dto.controllers.DtoFile;
-import org.jproject.dto.controllers.DtoFileGroup;
 
-import java.util.List;
+import java.nio.file.Path;
 
 public class DtoLinkFileParameters {
 
-    DtoFile file;
-    List<DtoFileGroup> fileGroupList;
+    Path path;
 
     public DtoLinkFileParameters() {
 
     }
 
-    public DtoLinkFileParameters(DtoFile file, List<DtoFileGroup> fileGroupList) {
-        this.file = file;
-        this.fileGroupList = fileGroupList;
+    public DtoLinkFileParameters(Path path) {
+        this.path = path;
     }
 
-    public static DtoLinkFileParameters of(TFile tFile, List<TFileGroup> tFileGroupList) {
-        return new DtoLinkFileParameters(
-                DtoFile.of(tFile),
-                tFileGroupList.stream().map(DtoFileGroup::of).toList()
-        );
+    public static DtoLinkFileParameters of(TFile file) {
+        return new DtoLinkFileParameters(file.getPath());
     }
 
-    public DtoFile getFile() {
-        return file;
+    public Path getPath() {
+        return path;
     }
 
-    public void setFile(DtoFile file) {
-        this.file = file;
-    }
-
-    public List<DtoFileGroup> getFileGroupList() {
-        return fileGroupList;
-    }
-
-    public void setFileGroupList(List<DtoFileGroup> fileGroupList) {
-        this.fileGroupList = fileGroupList;
+    public void setPath(Path path) {
+        this.path = path;
     }
 }

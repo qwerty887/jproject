@@ -85,9 +85,6 @@
             <column name="path" type="varchar(2000)">
                 <constraints nullable="false"/>
             </column>
-            <column name="del_date" type="timestamptz">
-                <constraints nullable="true"/>
-            </column>
         </createTable>
     </changeSet>
 
@@ -133,9 +130,6 @@
             </column>
             <column name="fle_fle_id" type="int4">
                 <constraints foreignKeyName="fk_link_file" references="file(fle_id)"/>
-            </column>
-            <column name="del_date" type="timestamptz">
-                <constraints nullable="true"/>
             </column>
         </createTable>
     </changeSet>

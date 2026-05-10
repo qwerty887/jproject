@@ -13,15 +13,13 @@ import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.hibernate.annotations.Immutable;
-import org.hibernate.annotations.SQLRestriction;
 
 import java.nio.file.Path;
 
 @Entity
 @Table(name = "FILE")
 @Immutable
-@SQLRestriction("del_date is null")
-public class TFile extends AbstractDeleteEntity<Integer> {
+public class TFile implements IBaseEntity<Integer> {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "fle_seq")
     @SequenceGenerator(name = "fle_seq", sequenceName = "fle_seq", allocationSize = 1)

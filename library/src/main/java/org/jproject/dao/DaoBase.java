@@ -84,7 +84,9 @@ public class DaoBase implements IDao {
         CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
         CriteriaQuery<R> query = cb.createQuery(resultClass);
         Root<T> root = query.from(entityClass);
-        query.where(specification.toPredicate(root, query, cb));
+        if (specification != null) {
+            query.where(specification.toPredicate(root, query, cb));
+        }
         TypedQuery<R> result = getEntityManager().createQuery(query);
         queryModifier.accept(result);
         return result;
@@ -113,16 +115,6 @@ public class DaoBase implements IDao {
         final CriteriaUpdate<T> update = cb.createCriteriaUpdate(clazz);
         final Root<T> root = update.from(clazz);
         update.set(root.get(AbstractDeleteEntity_.delDate), TimeUtils.getCurrentTime());
-        update.where(specification.toPredicate(root, cb.createQuery(), cb));
-        getEntityManager().createQuery(update).executeUpdate();
-    }
-
-    // TODO удалить????
-    public <T extends AbstractHistEntity<?>> void closeEntity(T entity, Specification<T> specification, Class<T> clazz) {
-        final CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
-        final CriteriaUpdate<T> update = cb.createCriteriaUpdate(clazz);
-        final Root<T> root = update.from(clazz);
-        update.set(root.get(AbstractHistEntity_.endDate), TimeUtils.getCurrentTime());
         update.where(specification.toPredicate(root, cb.createQuery(), cb));
         getEntityManager().createQuery(update).executeUpdate();
     }

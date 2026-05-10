@@ -68,14 +68,6 @@ public class BaseFileActionService implements IBaseFileActionService {
 
     @Override
     public TFile apply() {
-        logger.debug("File service: start: path " + this.path);
-        final TFile result = updateFile(this.path);
-        logger.debug("File service: complete");
-        return result;
-    }
-
-    @Override
-    public void action(TFile tfile) {
         throw new RuntimeException("You need to override the run action method");
     }
 
@@ -151,7 +143,7 @@ public class BaseFileActionService implements IBaseFileActionService {
         return eFileType;
     }
 
-    private TFile updateFile(Path path) {
+    protected TFile updateFile(Path path) {
         TFile tfile = null;
         if (this.tgfile != null) {
             tfile = this.tgfile;
@@ -161,13 +153,7 @@ public class BaseFileActionService implements IBaseFileActionService {
 
         if (tfile != null) {
             logger.debug("Action: file updated: fle_id = {}", tfile.getId());
-
-            final TFileHist fileHist = tfile.getFileHist();
-
-            if (fileHist != null) {
-                this.dao.closeFileHist(fileHist);
-            }
-
+            closeFileHist(tfile);
             tfile.setFileHist(createFileHist(tfile, path));
             return tfile;
         } else {
@@ -175,6 +161,13 @@ public class BaseFileActionService implements IBaseFileActionService {
             final TFile result = createFile(path);
             logger.debug("Action: file created: fle_id = {}", result.getId());
             return result;
+        }
+    }
+
+    protected void closeFileHist(TFile file) {
+        final TFileHist fileHist = file.getFileHist();
+        if (fileHist != null) {
+            this.dao.closeFileHist(fileHist);
         }
     }
 
@@ -201,16 +194,12 @@ public class BaseFileActionService implements IBaseFileActionService {
             fileHist.setBytes(this.bytes);
             fileHist.setCreationTime(this.creationTime);
             fileHist.setLastModifiedTime(this.lastModifiedTime);
-            action(tfile);
+            //action(tfile);
         } catch (AppException e) {
             e.printStackTrace();
             throw e;
         }
 
         return this.dao.persist(fileHist);
-    }
-
-    protected DaoWorker getDao() {
-        return dao;
     }
 }

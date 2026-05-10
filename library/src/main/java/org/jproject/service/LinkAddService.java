@@ -11,9 +11,4 @@ public class LinkAddService extends BaseLinkActionService {
         super(dao, flegFleh);
     }
 
-    @Override
-    public boolean action(TLink link) {
-        // TODO определить логику добавления линка
-        return false;
-    }
 }

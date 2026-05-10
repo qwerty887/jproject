@@ -10,8 +10,6 @@ import org.jproject.domain.TProcess;
 import org.jproject.dto.parameters.DtoGroupFileParameters;
 import org.jproject.dto.parameters.DtoLinkFileParameters;
 import org.jproject.exception.NotSupportExceptionApp;
-import org.jproject.parameters.AppParameters;
-import org.jproject.parameters.EAppParameters;
 import org.jproject.parameters.process.FileGroupingProcessParameters;
 import org.jproject.parameters.process.FileLinkingProcessParameters;
 import org.jproject.service.GroupAddService;
@@ -21,17 +19,13 @@ import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 public class FileGroupProcess extends BaseProcessActionService implements Runnable {
 
     private static final Logger logger = LoggerFactory.getLogger(FileGroupProcess.class);
 
-    private final AppParameters appParameters;
-
-    public FileGroupProcess(EntityManagerFactory entityManagerFactory, AppParameters appParameters) {
+    public FileGroupProcess(EntityManagerFactory entityManagerFactory) {
         super(entityManagerFactory, EProcessType.GROUP);
-        this.appParameters = appParameters;
     }
 
     @Override
@@ -43,8 +37,8 @@ public class FileGroupProcess extends BaseProcessActionService implements Runnab
         final List<DtoLinkFileParameters> result = new ArrayList<>();
         for (TFile file: files) {
             try {
-                final List<TFileGroup> list = (new GroupAddService(dao, file, fileGroupList)).apply();
-                result.add(DtoLinkFileParameters.of(file, list));
+                (new GroupAddService(dao, file, fileGroupList)).apply();
+                result.add(DtoLinkFileParameters.of(file));
             } catch (NotSupportedException e) {
                 e.printStackTrace();
                 throw new NotSupportExceptionApp(e.getMessage());
