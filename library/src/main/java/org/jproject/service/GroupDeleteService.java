@@ -1,6 +1,5 @@
 package org.jproject.service;
 
-import jakarta.transaction.NotSupportedException;
 import org.jproject.dao.DaoWorker;
 import org.jproject.domain.TFile;
 import org.jproject.domain.TFileGroup;
@@ -24,9 +23,9 @@ public class GroupDeleteService extends BaseGroupActionService {
     }
 
     @Override
-    public List<TFileGroup> apply() throws NotSupportedException {
+    public List<TFileGroup> apply() {
         logger.debug("Group service: start");
-        dao.closeGroupMember(this.file);
+        dao.closeGroupMember(this.file); // TODO вернуть группы
         logger.debug("Group service: complete");
         return null;
     }

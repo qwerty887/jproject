@@ -8,6 +8,7 @@ import org.jproject.domain.TFileHist;
 import org.jproject.domain.TFileHist_;
 import org.jproject.domain.TFile_;
 import org.jproject.service.FileDeleteService;
+import org.jproject.service.GroupDeleteService;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.nio.file.Path;
@@ -23,7 +24,6 @@ public class BaseVacuumService implements IBaseVacuumService {
 
     @Override
     public int apply() {
-        // TODO искать файлы только в активном статусе
         final List<TFile> files = dao.getFiles((Specification) null);
 
         int count = 0;
@@ -31,13 +31,12 @@ public class BaseVacuumService implements IBaseVacuumService {
             final Path path = file.getPath();
 
             if (!path.toFile().exists()) {
-                final FileDeleteService fileDeleteService = new FileDeleteService(dao, file);
-                fileDeleteService.apply();
+                (new FileDeleteService(dao, file)).apply();
+                (new GroupDeleteService(dao, file)).apply();
                 count++;
             }
         }
 
-        // TODO удаление связок с группами
         // TODO удаление связок с линками
         // TODO удаление линков
         return count;
