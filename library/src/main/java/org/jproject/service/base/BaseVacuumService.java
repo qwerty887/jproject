@@ -1,6 +1,6 @@
 package org.jproject.service.base;
 
-import org.jproject.dao.DaoWorker;
+import org.jproject.dao.Dao;
 import org.jproject.domain.TFile;
 import org.jproject.service.FileDeleteService;
 import org.jproject.service.GroupDeleteService;
@@ -11,9 +11,9 @@ import java.util.List;
 
 public class BaseVacuumService implements IBaseVacuumService {
 
-    private final DaoWorker dao;
+    private final Dao dao;
 
-    public BaseVacuumService(DaoWorker dao) {
+    public BaseVacuumService(Dao dao) {
         this.dao = dao;
     }
 

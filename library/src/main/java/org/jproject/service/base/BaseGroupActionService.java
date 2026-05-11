@@ -1,7 +1,7 @@
 package org.jproject.service.base;
 
 import jakarta.transaction.NotSupportedException;
-import org.jproject.dao.DaoWorker;
+import org.jproject.dao.Dao;
 import org.jproject.domain.EFileAttribute;
 import org.jproject.domain.EFileCondition;
 import org.jproject.domain.TFile;
@@ -24,7 +24,7 @@ public class BaseGroupActionService implements IBaseGroupActionService {
 
     private static final Logger logger = LoggerFactory.getLogger(BaseGroupActionService.class);
 
-    private final DaoWorker dao;
+    private final Dao dao;
     private final BaseResolveFileAttribute fileAttribute;
     private final List<TFileGroup> tFileGroups;
     private final TFile tFile;
@@ -33,7 +33,7 @@ public class BaseGroupActionService implements IBaseGroupActionService {
     // TODO предусмотреть специальные группы: 30 последних файлов, 10 самых больших файлов и т.д.
     // TODO предусмотреть макроподстановку для времени как ${{ now() }}, ${{ now() - 1d }}
 
-    public BaseGroupActionService(DaoWorker dao, TFile tFile, List<TFileGroup> tFileGroups) {
+    public BaseGroupActionService(Dao dao, TFile tFile, List<TFileGroup> tFileGroups) {
         logger.debug("Group service: init");
         this.dao = dao;
         this.fileAttribute = new BaseResolveFileAttribute(tFile);
@@ -41,7 +41,7 @@ public class BaseGroupActionService implements IBaseGroupActionService {
         this.tFile = tFile;
     }
 
-    public BaseGroupActionService(DaoWorker dao, TFile tFile) {
+    public BaseGroupActionService(Dao dao, TFile tFile) {
         logger.debug("Group service: init");
         this.dao = dao;
         this.fileAttribute = null;

@@ -1,7 +1,7 @@
 package org.jproject.service.base;
 
 import org.apache.commons.codec.digest.DigestUtils;
-import org.jproject.dao.DaoWorker;
+import org.jproject.dao.Dao;
 import org.jproject.domain.EFileType;
 import org.jproject.domain.TFile;
 import org.jproject.domain.TFileHist;
@@ -23,7 +23,7 @@ public class BaseFileActionService implements IBaseFileActionService {
 
     private static final Logger logger = LoggerFactory.getLogger(BaseFileActionService.class);
 
-    private final DaoWorker dao;
+    private final Dao dao;
     private final Path path;
     private final String md5;
     private final Long bytes;
@@ -33,7 +33,7 @@ public class BaseFileActionService implements IBaseFileActionService {
     private final EFileType fileType;
     private final TFile tgfile;
 
-    public BaseFileActionService(DaoWorker dao, TFile tfile) {
+    public BaseFileActionService(Dao dao, TFile tfile) {
         logger.debug("File service: init");
 
         this.dao = dao;
@@ -48,7 +48,7 @@ public class BaseFileActionService implements IBaseFileActionService {
         this.fileType = Optional.ofNullable(tfile.getFileHist()).map(TFileHist::getFileType).orElse(null);
     }
 
-    public BaseFileActionService(DaoWorker dao, Path path) {
+    public BaseFileActionService(Dao dao, Path path) {
         logger.debug("File service: init");
 
         // TODO предусмотреть вариант сканирования директорий
@@ -147,8 +147,6 @@ public class BaseFileActionService implements IBaseFileActionService {
         TFile tfile = null;
         if (this.tgfile != null) {
             tfile = this.tgfile;
-        } else {
-            tfile = this.dao.getFile(path).orElse(null);
         }
 
         if (tfile != null) {

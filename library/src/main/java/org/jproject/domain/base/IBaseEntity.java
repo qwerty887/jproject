@@ -1,4 +1,4 @@
-package org.jproject.domain;
+package org.jproject.domain.base;
 
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;

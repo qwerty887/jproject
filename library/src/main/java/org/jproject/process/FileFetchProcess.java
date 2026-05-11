@@ -1,7 +1,7 @@
 package org.jproject.process;
 
 import jakarta.persistence.EntityManagerFactory;
-import org.jproject.dao.DaoWorker;
+import org.jproject.dao.Dao;
 import org.jproject.domain.EProcessType;
 import org.jproject.domain.TProcess;
 import org.jproject.dto.parameters.DtoFetchFileParameters;
@@ -30,7 +30,7 @@ public class FileFetchProcess extends BaseProcessActionService implements Runnab
     }
 
     @Override
-    public int action(DaoWorker dao, TProcess process) {
+    public int action(Dao dao, TProcess process) {
         final FileFetchingProcessParameters param = getParam(process.getParam(), FileFetchingProcessParameters.class);
 
         int count=0;
@@ -40,7 +40,7 @@ public class FileFetchProcess extends BaseProcessActionService implements Runnab
         return count;
     }
 
-    private int createScanProcess(DaoWorker dao, TProcess process, DtoFetchFileParameters param) {
+    private int createScanProcess(Dao dao, TProcess process, DtoFetchFileParameters param) {
         try {
             // TODO правила группировки:
             // TODO файлы с одинаковым размеров в одну пачку, чтобы снизить количество возникающих ошибок unique constraint

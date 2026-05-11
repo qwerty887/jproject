@@ -1,4 +1,4 @@
-package org.jproject.dao;
+package org.jproject.dao.base;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
@@ -12,10 +12,10 @@ import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.JoinType;
 import jakarta.persistence.criteria.Root;
 import jakarta.persistence.metamodel.SingularAttribute;
-import org.jproject.domain.AbstractDeleteEntity;
-import org.jproject.domain.AbstractDeleteEntity_;
-import org.jproject.domain.AbstractHistEntity_;
-import org.jproject.domain.AbstractHistEntity;
+import org.jproject.domain.base.AbstractDeleteEntity;
+import org.jproject.domain.base.AbstractDeleteEntity_;
+import org.jproject.domain.base.AbstractHistEntity;
+import org.jproject.domain.base.AbstractHistEntity_;
 import org.jproject.utils.TimeUtils;
 import org.springframework.data.jpa.domain.Specification;
 

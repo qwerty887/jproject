@@ -1,4 +1,4 @@
-package org.jproject.domain;
+package org.jproject.domain.base;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.MappedSuperclass;

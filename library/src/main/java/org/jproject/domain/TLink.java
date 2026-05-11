@@ -1,16 +1,17 @@
 package org.jproject.domain;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.jproject.domain.base.IBaseEntity;
+
+import java.nio.file.Path;
 
 @Entity
 @Table(name = "LINK")
@@ -21,9 +22,9 @@ public class TLink implements IBaseEntity<Integer> {
     @Column(name = "lnk_id", nullable = false)
     private Integer id;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "fle_fle_id")
-    private TFile file;
+    @Column(name = "path")
+    @Convert(converter = ConverterPathToString.class)
+    private Path path;
 
     @Override
     public boolean equals(Object o) {
@@ -47,11 +48,11 @@ public class TLink implements IBaseEntity<Integer> {
         this.id = id;
     }
 
-    public TFile getFile() {
-        return file;
+    public Path getPath() {
+        return path;
     }
 
-    public void setFile(TFile file) {
-        this.file = file;
+    public void setPath(Path path) {
+        this.path = path;
     }
 }

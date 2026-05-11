@@ -1,4 +1,4 @@
-package org.jproject.dao;
+package org.jproject.dao.base;
 
 public interface IPureCloseable extends AutoCloseable {
 

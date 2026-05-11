@@ -1,7 +1,7 @@
 package org.jproject.process;
 
 import jakarta.persistence.EntityManagerFactory;
-import org.jproject.dao.DaoWorker;
+import org.jproject.dao.Dao;
 import org.jproject.domain.EProcessStatus;
 import org.jproject.domain.EProcessType;
 import org.jproject.domain.TProcess;
@@ -22,7 +22,7 @@ public class VacuumProcess extends BaseProcessActionService implements Runnable 
     }
 
     @Override
-    public <T extends BaseProcessParam> TProcess add(DaoWorker dao, T param) {
+    public <T extends BaseProcessParam> TProcess add(Dao dao, T param) {
         List<Integer> prcdList = dao.getProcesses(List.of(EProcessType.VACUUM), List.of(EProcessStatus.WAIT, EProcessStatus.LOCK))
                                 .stream().map(TProcess::getId).toList();
 
@@ -34,7 +34,7 @@ public class VacuumProcess extends BaseProcessActionService implements Runnable 
     }
 
     @Override
-    public int action(DaoWorker dao, TProcess process) {
+    public int action(Dao dao, TProcess process) {
         return (new BaseVacuumService(dao)).apply();
     }
 

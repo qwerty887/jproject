@@ -1,6 +1,6 @@
 package org.jproject.service;
 
-import org.jproject.dao.DaoWorker;
+import org.jproject.dao.Dao;
 import org.jproject.domain.TFile;
 import org.jproject.service.base.BaseFileActionService;
 import org.slf4j.Logger;
@@ -14,7 +14,7 @@ public class FileAddService extends BaseFileActionService {
 
     private final Path path;
 
-    public FileAddService(DaoWorker dao, Path path) {
+    public FileAddService(Dao dao, Path path) {
         super(dao, path);
         this.path = path;
     }

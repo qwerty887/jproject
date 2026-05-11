@@ -1,6 +1,6 @@
 package org.jproject.service;
 
-import org.jproject.dao.DaoWorker;
+import org.jproject.dao.Dao;
 import org.jproject.domain.TFile;
 import org.jproject.service.base.BaseFileActionService;
 import org.slf4j.Logger;
@@ -12,7 +12,7 @@ public class FileDeleteService extends BaseFileActionService {
 
     private final TFile file;
 
-    public FileDeleteService(DaoWorker dao, TFile file) {
+    public FileDeleteService(Dao dao, TFile file) {
         super(dao, file);
         this.file = file;
     }

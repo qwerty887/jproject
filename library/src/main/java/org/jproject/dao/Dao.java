@@ -8,6 +8,7 @@ import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.CriteriaUpdate;
 import jakarta.persistence.criteria.JoinType;
 import jakarta.persistence.criteria.Root;
+import org.jproject.dao.base.DaoBase;
 import org.jproject.domain.EProcessStatus;
 import org.jproject.domain.EProcessType;
 import org.jproject.domain.TFileGroupMember;
@@ -34,11 +35,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class DaoWorker extends DaoBase {
+public class Dao extends DaoBase {
 
     private final Integer PARTITION_SIZE = 1000;
 
-    public DaoWorker(EntityManagerFactory entityManagerFactory) {
+    public Dao(EntityManagerFactory entityManagerFactory) {
         super(entityManagerFactory);
     }
 
@@ -62,7 +63,8 @@ public class DaoWorker extends DaoBase {
             final CriteriaQuery<TFileGroup> cq = cb.createQuery(TFileGroup.class);
             final Root<TFileGroup> root = cq.from(TFileGroup.class);
             root.fetch(TFileGroup_.fileGroupMembers, JoinType.LEFT)
-                .fetch(TFileGroupMember_.file, JoinType.LEFT);
+                .fetch(TFileGroupMember_.file, JoinType.LEFT)
+                .fetch(TFile_.fileHist, JoinType.LEFT);
 
             cq.distinct(true);
             cq.where(root.in(fileGroupList));
@@ -234,7 +236,8 @@ public class DaoWorker extends DaoBase {
         return findEntities(
                 (root, cq, cb) ->
                 {
-                    root.fetch(TFileGroupMember_.file, JoinType.INNER);
+                    root.fetch(TFileGroupMember_.file, JoinType.INNER)
+                        .fetch(TFile_.fileHist, JoinType.LEFT);
                     root.fetch(TFileGroupMember_.fileGroup, JoinType.INNER);
                     return root.get(TFileGroupMember_.file).get(TFile_.path).in(pathList);
                 },

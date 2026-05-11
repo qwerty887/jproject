@@ -1,4 +1,4 @@
-package org.jproject.domain;
+package org.jproject.domain.base;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.MappedSuperclass;
@@ -8,7 +8,7 @@ import java.time.Instant;
 
 @MappedSuperclass
 @SQLRestriction("del_date is null")
-public abstract class AbstractDeleteEntity<K> implements IBaseEntity<K>  {
+public abstract class AbstractDeleteEntity<K> implements IBaseEntity<K> {
 
     @Column(name = "del_date")
     private Instant delDate;

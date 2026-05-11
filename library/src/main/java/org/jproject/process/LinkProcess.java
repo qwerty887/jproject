@@ -1,7 +1,7 @@
 package org.jproject.process;
 
 import jakarta.persistence.EntityManagerFactory;
-import org.jproject.dao.DaoWorker;
+import org.jproject.dao.Dao;
 import org.jproject.domain.EProcessType;
 import org.jproject.domain.TFileGroupMember;
 import org.jproject.domain.TProcess;
@@ -23,7 +23,7 @@ public class LinkProcess extends BaseProcessActionService implements Runnable {
     }
 
     @Override
-    public int action(DaoWorker dao, TProcess process) {
+    public int action(Dao dao, TProcess process) {
         final FileLinkingProcessParameters param = getParam(process.getParam(), FileLinkingProcessParameters.class);
         final List<Path> pathList = param.getFiles().stream().map(DtoLinkFileParameters::getPath).toList();
         final List<TFileGroupMember> fileGroupMemberList = dao.getFileGroupMembers(pathList);

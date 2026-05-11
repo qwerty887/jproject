@@ -1,6 +1,6 @@
 package org.jproject.service.base;
 
-import org.jproject.dao.DaoWorker;
+import org.jproject.dao.Dao;
 import org.jproject.domain.TFileGroupMember;
 import org.jproject.domain.TFileGroup;
 import org.jproject.domain.TFileHist;
@@ -13,12 +13,12 @@ public class BaseLinkActionService implements IBaseLinkActionService {
 
     private static final Logger logger = LoggerFactory.getLogger(BaseLinkActionService.class);
 
-    private final DaoWorker dao;
+    private final Dao dao;
 
     private final TFileGroup fileGroup;
     private final TFileHist fileHist;
 
-    public BaseLinkActionService(DaoWorker dao, TFileGroupMember flegFleh) {
+    public BaseLinkActionService(Dao dao, TFileGroupMember flegFleh) {
         logger.debug("Link service: init");
 
         this.dao = dao;

@@ -1,7 +1,7 @@
 package org.jproject.controller;
 
 import jakarta.persistence.EntityManagerFactory;
-import org.jproject.dao.DaoWorker;
+import org.jproject.dao.Dao;
 import org.jproject.domain.EProcessStatus;
 import org.jproject.dto.controllers.DtoProcessStatus;
 import org.jproject.dto.parameters.DtoFetchFileParameters;
@@ -41,7 +41,7 @@ public class ProcessController {
         final FileFetchingProcessParameters parameters = new FileFetchingProcessParameters(params);
         final Integer packSize = appParameters.get(EAppParameters.PROCESS_PACK_SIZE, Integer.class);
         return DaoUtils.withTransaction(
-                    () -> new DaoWorker(entityManagerFactory),
+                    () -> new Dao(entityManagerFactory),
                     dao -> DtoProcessStatus.of(new FileFetchProcess(entityManagerFactory, packSize).add(dao, parameters))
                     );
     }
@@ -51,7 +51,7 @@ public class ProcessController {
     public DtoProcessStatus addVacuum() {
         final VacuumProcessParameters parameters = new VacuumProcessParameters(); // процесс без параметров
         return DaoUtils.withTransaction(
-                () -> new DaoWorker(entityManagerFactory),
+                () -> new Dao(entityManagerFactory),
                 dao -> DtoProcessStatus.of(new VacuumProcess(entityManagerFactory).add(dao, parameters))
         );
     }
@@ -59,7 +59,7 @@ public class ProcessController {
     @GetMapping(path = "/{id}", produces = "application/json")
     public DtoProcessStatus getStatus(@PathVariable int id) {
         return DaoUtils.withTransaction(
-                () -> new DaoWorker(entityManagerFactory),
+                () -> new Dao(entityManagerFactory),
                 dao -> dao.getProcess(id)
                         .map(DtoProcessStatus::of)
                         .orElse(new DtoProcessStatus())
@@ -69,7 +69,7 @@ public class ProcessController {
     @GetMapping(path = "/status/{processStatus}", produces = "application/json")
     public List<DtoProcessStatus> getStatuses(@PathVariable EProcessStatus processStatus) {
         return DaoUtils.withTransaction(
-                () -> new DaoWorker(entityManagerFactory),
+                () -> new Dao(entityManagerFactory),
                 dao -> dao.getProcesses(processStatus)
                         .stream()
                         .map(DtoProcessStatus::of)

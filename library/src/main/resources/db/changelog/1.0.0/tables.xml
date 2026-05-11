@@ -128,8 +128,8 @@
             <column name="lnk_id" type="int4">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="fle_fle_id" type="int4">
-                <constraints foreignKeyName="fk_link_file" references="file(fle_id)"/>
+            <column name="path" type="varchar(2000)">
+                <constraints nullable="false"/>
             </column>
         </createTable>
     </changeSet>
@@ -216,26 +216,6 @@
         </createTable>
     </changeSet>
 
-    <changeSet id="create table link_hist" author="${author}">
-        <createTable tableName="link_hist">
-            <column name="lnkh_id" type="int4">
-                <constraints primaryKey="true" nullable="false"/>
-            </column>
-            <column name="lnk_lnk_id" type="int4">
-                <constraints nullable="false" foreignKeyName="fk_link_hist_link" references="link(lnk_id)"/>
-            </column>
-            <column name="path" type="varchar(2000)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="start_date" type="timestamptz" defaultValueDate="now()">
-                <constraints nullable="false"/>
-            </column>
-            <column name="end_date" type="timestamptz">
-                <constraints nullable="false"/>
-            </column>
-        </createTable>
-    </changeSet>
-
     <changeSet id="create table file_group_member" author="${author}">
         <createTable tableName="file_group_member">
             <column name="flgm_id" type="int4">
@@ -246,6 +226,26 @@
             </column>
             <column name="fle_fle_id" type="int4">
                 <constraints nullable="false" foreignKeyName="fk_fle_fle_file" references="file(fle_id)"/>
+            </column>
+            <column name="start_date" type="timestamptz" defaultValueDate="now()">
+                <constraints nullable="false"/>
+            </column>
+            <column name="end_date" type="timestamptz">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create table link_hist" author="${author}">
+        <createTable tableName="link_hist">
+            <column name="lnkh_id" type="int4">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="lnk_lnk_id" type="int4">
+                <constraints nullable="false" foreignKeyName="fk_link_hist_link" references="link(lnk_id)"/>
+            </column>
+            <column name="flgm_flgm_id" type="int4">
+                <constraints nullable="false" foreignKeyName="fk_link_hist_file_group_member" references="file_group_member(flgm_id)"/>
             </column>
             <column name="start_date" type="timestamptz" defaultValueDate="now()">
                 <constraints nullable="false"/>

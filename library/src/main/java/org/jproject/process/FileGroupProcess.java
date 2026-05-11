@@ -2,7 +2,7 @@ package org.jproject.process;
 
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.transaction.NotSupportedException;
-import org.jproject.dao.DaoWorker;
+import org.jproject.dao.Dao;
 import org.jproject.domain.EProcessType;
 import org.jproject.domain.TFile;
 import org.jproject.domain.TFileGroup;
@@ -29,7 +29,7 @@ public class FileGroupProcess extends BaseProcessActionService implements Runnab
     }
 
     @Override
-    public int action(DaoWorker dao, TProcess process) {
+    public int action(Dao dao, TProcess process) {
         final FileGroupingProcessParameters param = getParam(process.getParam(), FileGroupingProcessParameters.class);
         final List<TFile> files = dao.getFiles(param.getFiles(), DtoGroupFileParameters.class);
         final List<TFileGroup> fileGroupList = dao.getFileGroups(null);

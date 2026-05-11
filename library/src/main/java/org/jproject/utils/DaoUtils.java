@@ -1,8 +1,8 @@
 package org.jproject.utils;
 
 import jakarta.persistence.EntityTransaction;
-import org.jproject.dao.DaoWorker;
-import org.jproject.dao.IPureCloseable;
+import org.jproject.dao.Dao;
+import org.jproject.dao.base.IPureCloseable;
 
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -10,7 +10,7 @@ import java.util.function.Supplier;
 
 public class DaoUtils {
 
-    public static <T, D extends DaoWorker> T withTransaction(Supplier<D> daoBuilder, Function<D, ? extends T> transactionCalculation) {
+    public static <T, D extends Dao> T withTransaction(Supplier<D> daoBuilder, Function<D, ? extends T> transactionCalculation) {
         try(D dao = daoBuilder.get()) {
             final EntityTransaction tx = dao.getEntityManager().getTransaction();
             if (!tx.isActive())  {
@@ -42,7 +42,7 @@ public class DaoUtils {
         }
     }
 
-    public static <T, D extends DaoWorker> void withTransactionVoid(Supplier<D> daoBuilder, Consumer<D> transactionAction) {
+    public static <T, D extends Dao> void withTransactionVoid(Supplier<D> daoBuilder, Consumer<D> transactionAction) {
         withTransaction(
                 daoBuilder,
                 dao -> {

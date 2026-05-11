@@ -1,7 +1,7 @@
 package org.jproject.service;
 
 import jakarta.transaction.NotSupportedException;
-import org.jproject.dao.DaoWorker;
+import org.jproject.dao.Dao;
 import org.jproject.domain.TFile;
 import org.jproject.domain.TFileGroup;
 import org.jproject.domain.TFileGroupMember;
@@ -15,10 +15,10 @@ public class GroupAddService extends BaseGroupActionService {
 
     private static final Logger logger = LoggerFactory.getLogger(GroupAddService.class);
 
-    private final DaoWorker dao;
+    private final Dao dao;
     private final TFile file;
 
-    public GroupAddService(DaoWorker dao, TFile file, List<TFileGroup> tFileGroups) {
+    public GroupAddService(Dao dao, TFile file, List<TFileGroup> tFileGroups) {
         super(dao, file, tFileGroups);
         this.dao = dao;
         this.file = file;

@@ -3,7 +3,7 @@ package org.jproject.process.base;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.EntityManagerFactory;
-import org.jproject.dao.DaoWorker;
+import org.jproject.dao.Dao;
 import org.jproject.domain.EProcessStatus;
 import org.jproject.domain.EProcessType;
 import org.jproject.domain.TProcess;
@@ -32,10 +32,10 @@ public class BaseProcessActionService implements IBaseProcessActionService {
 
         while (result) {
             result = DaoUtils.withTransaction(
-                    () -> new DaoWorker(entityManagerFactory),
+                    () -> new Dao(entityManagerFactory),
                     dao -> {
                         final Integer prcdIdLock = DaoUtils.withTransaction(
-                                () -> new DaoWorker(entityManagerFactory),
+                                () -> new Dao(entityManagerFactory),
                                 daoIn -> daoIn.getPrcdLock(this.processType)
                                 );
 
@@ -57,7 +57,7 @@ public class BaseProcessActionService implements IBaseProcessActionService {
                             e.printStackTrace();
                             logger.error("Process service: error: prcd_id = " + prcdIdLock);
                             DaoUtils.withTransactionVoid(
-                                    () -> new DaoWorker(entityManagerFactory),
+                                    () -> new Dao(entityManagerFactory),
                                     daoIn -> {
                                         daoIn.updateProcessStatus(process, EProcessStatus.ERROR, 0, e.getMessage());
                                         daoIn.deleteProcessLock(process);
@@ -73,7 +73,7 @@ public class BaseProcessActionService implements IBaseProcessActionService {
     }
 
     @Override
-    public int action(DaoWorker dao, TProcess process) {
+    public int action(Dao dao, TProcess process) {
         throw new RuntimeException("You need to override the run action method");
     }
 
@@ -86,11 +86,11 @@ public class BaseProcessActionService implements IBaseProcessActionService {
         }
     }
 
-    public <T extends BaseProcessParam> TProcess add(DaoWorker dao, T param) {
+    public <T extends BaseProcessParam> TProcess add(Dao dao, T param) {
         return add(dao, null, param);
     }
 
-    public <T extends BaseProcessParam> TProcess add(DaoWorker dao, TProcess parentProcess, T param) {
+    public <T extends BaseProcessParam> TProcess add(Dao dao, TProcess parentProcess, T param) {
         try {
             final TProcess process = new TProcess();
             process.setProcess(parentProcess);

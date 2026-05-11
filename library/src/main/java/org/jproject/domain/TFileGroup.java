@@ -15,6 +15,7 @@ import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.hibernate.annotations.SQLRestriction;
+import org.jproject.domain.base.AbstractDeleteEntity;
 
 import java.util.ArrayList;
 import java.util.List;

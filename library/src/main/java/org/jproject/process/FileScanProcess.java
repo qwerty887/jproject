@@ -1,7 +1,7 @@
 package org.jproject.process;
 
 import jakarta.persistence.EntityManagerFactory;
-import org.jproject.dao.DaoWorker;
+import org.jproject.dao.Dao;
 import org.jproject.domain.EProcessType;
 import org.jproject.domain.TFile;
 import org.jproject.domain.TProcess;
@@ -28,7 +28,7 @@ public class FileScanProcess extends BaseProcessActionService implements Runnabl
     }
 
     @Override
-    public int action(DaoWorker dao, TProcess process) {
+    public int action(Dao dao, TProcess process) {
         final FileScanningProcessParameters param = getParam(process.getParam(), FileScanningProcessParameters.class);
 
         final Map<Path, TFile> fileMap = dao

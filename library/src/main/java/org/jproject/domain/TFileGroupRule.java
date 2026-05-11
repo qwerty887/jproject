@@ -12,6 +12,7 @@ import jakarta.persistence.Table;
 import jakarta.transaction.NotSupportedException;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.hibernate.annotations.SQLRestriction;
+import org.jproject.domain.base.AbstractDeleteEntity;
 
 import java.nio.file.Path;
 import java.time.Instant;
