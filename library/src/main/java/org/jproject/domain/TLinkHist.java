@@ -1,6 +1,7 @@
 package org.jproject.domain;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -13,6 +14,8 @@ import jakarta.persistence.Table;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.hibernate.annotations.SQLRestriction;
 import org.jproject.domain.base.AbstractHistEntity;
+
+import java.nio.file.Path;
 
 @Entity
 @Table(name = "LINK_HIST")
@@ -29,8 +32,12 @@ public class TLinkHist extends AbstractHistEntity<Integer> {
     private TLink link;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "flgm_flgm_id")
-    private TFileGroupMember fileGroupMember;
+    @JoinColumn(name = "fleg_fleg_id")
+    private TFileGroup fileGroup;
+
+    @Column(name = "path")
+    @Convert(converter = ConverterPathToString.class)
+    private Path path;
 
     @Override
     public boolean equals(Object o) {
@@ -62,11 +69,19 @@ public class TLinkHist extends AbstractHistEntity<Integer> {
         this.link = link;
     }
 
-    public TFileGroupMember getFileGroupMember() {
-        return fileGroupMember;
+    public TFileGroup getFileGroup() {
+        return fileGroup;
     }
 
-    public void setFileGroupMember(TFileGroupMember fileGroupMember) {
-        this.fileGroupMember = fileGroupMember;
+    public void setFileGroup(TFileGroup fileGroup) {
+        this.fileGroup = fileGroup;
+    }
+
+    public Path getPath() {
+        return path;
+    }
+
+    public void setPath(Path path) {
+        this.path = path;
     }
 }

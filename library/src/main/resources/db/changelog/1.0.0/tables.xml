@@ -128,8 +128,8 @@
             <column name="lnk_id" type="int4">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="path" type="varchar(2000)">
-                <constraints nullable="false"/>
+            <column name="fle_fle_id" type="int4">
+                <constraints foreignKeyName="fk_link_file" references="file(fle_id)"/>
             </column>
         </createTable>
     </changeSet>
@@ -244,8 +244,11 @@
             <column name="lnk_lnk_id" type="int4">
                 <constraints nullable="false" foreignKeyName="fk_link_hist_link" references="link(lnk_id)"/>
             </column>
-            <column name="flgm_flgm_id" type="int4">
-                <constraints nullable="false" foreignKeyName="fk_link_hist_file_group_member" references="file_group_member(flgm_id)"/>
+            <column name="fleg_fleg_id" type="int4">
+                <constraints nullable="false" foreignKeyName="fk_link_hist_file_group" references="file_group(fleg_id)"/>
+            </column>
+            <column name="path" type="varchar(2000)">
+                <constraints nullable="false"/>
             </column>
             <column name="start_date" type="timestamptz" defaultValueDate="now()">
                 <constraints nullable="false"/>

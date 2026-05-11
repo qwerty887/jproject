@@ -1,39 +1,45 @@
 package org.jproject.service.base;
 
 import org.jproject.dao.Dao;
-import org.jproject.domain.TFileGroupMember;
+import org.jproject.domain.TFile;
 import org.jproject.domain.TFileGroup;
-import org.jproject.domain.TFileHist;
 import org.jproject.domain.TLink;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.List;
 
 public class BaseLinkActionService implements IBaseLinkActionService {
 
     private static final Logger logger = LoggerFactory.getLogger(BaseLinkActionService.class);
 
     private final Dao dao;
+    private final List<TFileGroup> fileGroupList;
+    private final TFile file;
+    private final TLink link;
 
-    private final TFileGroup fileGroup;
-    private final TFileHist fileHist;
-
-    public BaseLinkActionService(Dao dao, TFileGroupMember flegFleh) {
+    public BaseLinkActionService(Dao dao, TFile file, List<TFileGroup> fileGroupList) {
         logger.debug("Link service: init");
 
         this.dao = dao;
-        this.fileGroup = null;
-        this.fileHist = null;
+        this.fileGroupList = fileGroupList;
+        this.file = file;
+        this.link = null;
+    }
+
+    public BaseLinkActionService(Dao dao, TLink link, List<TFileGroup> fileGroupList) {
+        logger.debug("Link service: init");
+
+        this.dao = dao;
+        this.fileGroupList = fileGroupList;
+        this.file = null;
+        this.link = link;
     }
 
     @Override
     public TLink apply() {
         logger.debug("Link service: start");
-
-        if (this.fileHist == null) {
-            logger.debug("Nothing to change: file hist is null");
-            return null;
-        }
 
         logger.debug("Link service: complete");
 
