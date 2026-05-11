@@ -39,11 +39,7 @@ public class BaseLinkActionService implements IBaseLinkActionService {
 
     @Override
     public TLink apply() {
-        logger.debug("Link service: start");
-
-        logger.debug("Link service: complete");
-
-        return null;
+        throw new RuntimeException("You need to override the run action method");
     }
 
 }
