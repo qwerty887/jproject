@@ -31,6 +31,7 @@ public class LinkProcess extends BaseProcessActionService implements Runnable {
     public int action(Dao dao, TProcess process) {
         final FileLinkingProcessParameters param = getParam(process.getParam(), FileLinkingProcessParameters.class);
         final List<Path> pathList = param.getFiles().stream().map(DtoLinkFileParameters::getPath).toList();
+        // TODO попробовать реализовать в SQL-запросе?
         final Map<TFile, List<TFileGroupMember>> fileGroupMap =
                         dao.getFileGroupMembers(pathList)
                         .stream()
